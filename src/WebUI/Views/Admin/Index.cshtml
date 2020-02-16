@@ -9,6 +9,7 @@
             <div class="col-12">
                 <div class="page-title text-center">
                     <h2>Reservations list</h2>
+
                 </div>
             </div>
         </div>
@@ -23,8 +24,9 @@
             <h6 class="tx-13 tx-uppercase tx-inverse tx-semibold tx-spacing-1">Newly Registered Users</h6>
             <p class="mg-b-0"><i class="icon ion-calendar mg-r-5"></i> From October 2017 - December 2017</p>
         </div>
-        <a href=""
-           class="btn btn-outline-info btn-oblong tx-11 tx-uppercase tx-mont tx-medium tx-spacing-1 pd-x-30 bd-2">Create new</a>
+        <a asp-controller="Admin" asp-action="Create"
+
+         class="btn btn-outline-info btn-oblong tx-11 tx-uppercase tx-mont tx-medium tx-spacing-1 pd-x-30 bd-2">Create new</a>
     </div><!-- d-flex -->
 
     <table class="table table-valign-middle mg-b-0">
@@ -102,5 +104,14 @@
         </tbody>
     </table>
 </div>
+@section Styles {
+    <link href="lib/Ionicons/css/ionicons.css" rel="stylesheet">
+    <link href="lib/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet">
+    <link href="lib/jquery-switchbutton/jquery.switchButton.css" rel="stylesheet">
+    <link href="lib/rickshaw/rickshaw.min.css" rel="stylesheet">
+    <link href="lib/chartist/chartist.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bracket.css">
+
+}
 
 

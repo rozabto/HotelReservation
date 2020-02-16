@@ -11,33 +11,9 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500" rel="stylesheet" />
     <link href="css/main.css" rel="stylesheet" />
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="css/util.css">
-    <link rel="stylesheet" type="text/css" href="css/main-contacts.css">
-    <!--===============================================================================================-->
-    <link href="lib/font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="lib/Ionicons/css/ionicons.css" rel="stylesheet">
-    <link href="lib/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet">
-    <link href="lib/jquery-switchbutton/jquery.switchButton.css" rel="stylesheet">
-    <link href="lib/rickshaw/rickshaw.min.css" rel="stylesheet">
-    <link href="lib/chartist/chartist.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/bracket.css">
+  
+
+    @RenderSection("Styles", required: false)
 
 </head>
 <body>
@@ -46,10 +22,10 @@
             <!-- Classy Menu -->
             <nav class="classy-navbar" id="essenceNav">
                 <!-- Logo -->
-                <a class="nav-brand" href="index.html"><img src="img/core-img/Logo.png" alt=""></a>
+                <a class="nav-brand" asp-controller="Home" asp-action="Index"><img src="img/core-img/Logo.png" alt=""></a>
                 <!-- Navbar Toggler -->
                 <div class="classy-navbar-toggler">
-                    <span class="navbarToggler"><span></span><span></span><span></span></span>
+                    <span class="navbarToggler"></span>
                 </div>
                 <!-- Menu -->
                 <div class="classy-menu">
@@ -60,9 +36,21 @@
                     <!-- Nav Start -->
                     <div class="classynav">
                         <ul>
-                            <li><a href="#">Home</a></li>
-                            <li><a href="#">Destinations</a></li>
-                            <li><a href="contact.html">Contacts</a></li>
+                            <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li><a asp-controller="Home" asp-action="Search">Destinations</a></li>
+                            <li><a asp-controller="Home" asp-action="Contacts">Contacts</a></li>
+                            @if (currentUser.IsAuthenticated)
+                            {
+                                if (currentUser.User.UsersRoles.Any(f => f.Role.Name == "Employee"|| f.Role.Name == "Admin"))
+                                {
+                                    <li><a asp-controller="Employee" asp-action="Create">Employee</a></li>
+                                }
+                                if (currentUser.User.UsersRoles.Any(f => f.Role.Name == "Admin"))
+                                {
+                                    <li><a asp-controller="Admin" asp-action="Index">Admin</a></li>
+                                }
+
+                            }
                         </ul>
                     </div>
                 </div>
@@ -83,7 +71,15 @@
                 </div>
                 <!-- User Login Info -->
                 <div class="user-login-info">
-                    <a href="#"><img src="img/core-img/user.svg" alt=""></a>
+                    @if (currentUser.IsAuthenticated)
+                    {
+                        <a asp-area="Identity" asp-page="/Account/Manage/Index"><img src="img/core-img/user.svg" alt=""></a>
+                    }
+                    else
+                    {
+                        <a asp-area="Identity" asp-page="/Account/Login"><img src="img/core-img/user.svg" alt=""></a>
+                    }
+
                 </div>
 
             </div>
@@ -107,9 +103,9 @@
                         <!-- Footer Menu -->
                         <div class="footer_menu">
                             <ul>
-                                <li><a href="">Home</a></li>
-                                <li><a href="">Destinations</a></li>
-                                <li><a href="">Contacts</a></li>
+                                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                                <li><a asp-controller="Home" asp-action="Search">Destinations</a></li>
+                                <li><a asp-controller="Home" asp-action="Contacts">Contacts</a></li>
                             </ul>
                         </div>
                     </div>
@@ -120,7 +116,7 @@
                         <ul class="footer_widget_menu">
                             <li><a href="#">About us</a></li>
                             <li><a href="#">User terms & Privacy</a></li>
-                            <li><a href="#">Contacts</a></li>
+                            <li><a asp-controller="Home" asp-action="Contacts"+>Contacts</a></li>
                             <li><a href="#">Top destinations</a></li>
                             <li><a href="#">Support & FAQs</a></li>
                             <li><a href="#">Website feedback</a></li>
