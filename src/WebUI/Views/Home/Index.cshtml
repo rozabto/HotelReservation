@@ -1,0 +1,42 @@
+﻿@model Application.Home.Queries.GetHomePage.GetGomePageResponse
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Image
+            </th>
+            <th>
+                Price
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var room in Model.HotelRooms)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => room.Id)
+                </td>
+                <td>
+                    <img src="~/@room.Image" alt="room image" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => room.PriceForAdults)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { room.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

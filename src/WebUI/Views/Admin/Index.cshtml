@@ -1,0 +1,53 @@
+﻿@model Application.Admin.Queries.ListOfEmployees.ListOfEmployeesResponse
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Full Name</th>
+            <th>EGN</th>
+            <th>User Id</th>
+            <th>Hired By Username</th>
+            <th>Hired On Date</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in Model.Employees)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => employee.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => employee.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => employee.EGN)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => employee.UserId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => employee.HiredByUsername)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => employee.HiredOnDate)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { employee.Id }) |
+                    @Html.ActionLink("Details", "Details", new { employee.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { employee.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

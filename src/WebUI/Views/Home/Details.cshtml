@@ -1,0 +1,67 @@
+﻿@model Application.Home.Queries.GetHotelRoom.GetHotelRoomResponse
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>HotelRoomVm</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Room.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Room.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Room.Capacity)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Room.Capacity)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Room.RoomType)
+        </dt>
+        <dd class="col-sm-10">
+            @string.Join(' ', Regex.Split(Model.Room.RoomType.ToString(), "(?<!^)(?=[A-Z0-9])"))
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Room.IsEmpty)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Room.IsEmpty)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Room.PriceForAdults)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Room.PriceForAdults)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Room.PriceForChildren)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Room.PriceForChildren)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Room.RoomNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Room.RoomNumber)
+        </dd>
+        @foreach (var image in Model.Room.Images)
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => Model.Room.Images)
+            </dt>
+            <dd class="col-sm-10">
+                <img src="~/@image" alt="room image" />
+            </dd>
+        }
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
