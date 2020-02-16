@@ -3,40 +3,279 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Id
-            </th>
-            <th>
-                Image
-            </th>
-            <th>
-                Price
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var room in Model.HotelRooms)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => room.Id)
-                </td>
-                <td>
-                    <img src="~/@room.Image" alt="room image" />
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => room.PriceForAdults)
-                </td>
-                <td>
-                    @Html.ActionLink("Details", "Details", new { room.Id })
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+
+
+<!-- ##### SEARCH ##### -->
+<div class="s002">
+    <form>
+        <fieldset>
+            <legend>SEARCH HOTEL</legend>
+        </fieldset>
+        <div class="inner-form">
+            <div class="input-field first-wrap">
+                <div class="icon-wrap">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z">
+                        </path>
+                    </svg>
+                </div>
+                <input id="search" type="text" placeholder="What are you looking for?" />
+            </div>
+            <div class="input-field second-wrap">
+                <div class="icon-wrap">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z">
+                        </path>
+                    </svg>
+                </div>
+                <input class="datepicker" id="depart" type="text" placeholder="29 Aug 2018" />
+            </div>
+            <div class="input-field third-wrap">
+                <div class="icon-wrap">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z">
+                        </path>
+                    </svg>
+                </div>
+                <input class="datepicker" id="return" type="text" placeholder="30 Aug 2018" />
+            </div>
+            <div class="input-field fouth-wrap">
+                <div class="icon-wrap">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z">
+                        </path>
+                    </svg>
+                </div>
+                <select data-trigger="" name="choices-single-defaul">
+                    <option placeholder="">2 Adults</option>
+                    <option>3 Adults</option>
+                    <option>4 Adults</option>
+                    <option>5 Adults</option>
+                </select>
+            </div>
+            <div class="input-field fifth-wrap">
+                <button class="btn-search" type="button">SEARCH</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+
+
+<!-- ##### New Arrivals Area Start ##### -->
+<section class="new_arrivals_area section-padding-80 clearfix">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-heading text-center">
+                    <h2>We do more than just hotels</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="popular-products-slides owl-carousel">
+
+                    <!-- Single Product -->
+                    <div class="single-product-wrapper">
+                        <!-- Product Image -->
+                        <div class="product-img">
+                            <img src="img/HomePage/apar2.jpg" alt="">
+                            <!-- Hover Thumb -->
+                            <img class="hover-img" src="img/HomePage/apart1.jpg" alt="">
+                            <!-- Favourite -->
+                            <div class="product-favourite">
+                                <a href="#" class="favme fa fa-heart"></a>
+                            </div>
+                        </div>
+                        <!-- Product Description -->
+                        <div class="product-description">
+                            <a href="single-product-details.html">
+                                <h6>Apartments</h6>
+                            </a>
+
+
+                            <!-- Hover Content -->
+                            <div class="hover-content">
+                                <!-- Add to Cart -->
+                                <div class="add-to-cart-btn">
+                                    <a href="#" class="btn essence-btn">More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Single Product -->
+                    <div class="single-product-wrapper">
+                        <!-- Product Image -->
+                        <div class="product-img">
+                            <img src="img/HomePage/cityhome1.jpg" alt="">
+                            <!-- Hover Thumb -->
+                            <img class="hover-img" src="img/HomePage/cityhome2.jpg" alt="">
+                            <!-- Favourite -->
+                            <div class="product-favourite">
+                                <a href="#" class="favme fa fa-heart"></a>
+                            </div>
+                        </div>
+                        <!-- Product Description -->
+                        <div class="product-description">
+                            <a href="single-product-details.html">
+                                <h6>City homes</h6>
+                            </a>
+
+                            <!-- Hover Content -->
+                            <div class="hover-content">
+                                <!-- Add to Cart -->
+                                <div class="add-to-cart-btn">
+                                    <a href="#" class="btn essence-btn">More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Single Product -->
+                    <div class="single-product-wrapper">
+                        <!-- Product Image -->
+                        <div class="product-img">
+                            <img src="img/HomePage/country1.jpg" alt="">
+                            <!-- Hover Thumb -->
+                            <img class="hover-img" src="img/HomePage/country2.jpg" alt="">
+
+
+
+                            <!-- Favourite -->
+                            <div class="product-favourite">
+                                <a href="#" class="favme fa fa-heart"></a>
+                            </div>
+                        </div>
+                        <!-- Product Description -->
+                        <div class="product-description">
+                            <a href="single-product-details.html">
+                                <h6>Country retreats</h6>
+                            </a>
+
+                            <!-- Hover Content -->
+                            <div class="hover-content">
+                                <!-- Add to Cart -->
+                                <div class="add-to-cart-btn">
+                                    <a href="#" class="btn essence-btn">More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Single Product -->
+                    <div class="single-product-wrapper">
+                        <!-- Product Image -->
+                        <div class="product-img">
+                            <img src="img/HomePage/resort2.jpg" alt="">
+                            <!-- Hover Thumb -->
+                            <img class="hover-img" src="img/HomePage/resort1.jpg" alt="">
+
+                            <!-- Product Badge -->
+                            <div class="product-badge new-badge">
+                                <span>Most popular</span>
+                            </div>
+
+                            <!-- Favourite -->
+                            <div class="product-favourite">
+                                <a href="#" class="favme fa fa-heart"></a>
+                            </div>
+                        </div>
+                        <!-- Product Description -->
+                        <div class="product-description">
+                            <a href="single-product-details.html">
+                                <h6>Resorts</h6>
+                            </a>
+
+                            <!-- Hover Content -->
+                            <div class="hover-content">
+                                <!-- Add to Cart -->
+                                <div class="add-to-cart-btn">
+                                    <a href="#" class="btn essence-btn">More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ##### New Arrivals Area End ##### -->
+<!-- ##### carousel ##### -->
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="section-heading text-center">
+                <h2>Recommended destinations</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Carousel Wrapper-->
+<div id="carousel-example-2" class="carousel slide carousel-fade" data-ride="carousel">
+    <!--Indicators-->
+    <ol class="carousel-indicators">
+        <li data-target="#carousel-example-2" data-slide-to="0" class="active"></li>
+        <li data-target="#carousel-example-2" data-slide-to="1"></li>
+        <li data-target="#carousel-example-2" data-slide-to="2"></li>
+    </ol>
+    <!--/.Indicators-->
+    <!--Slides-->
+    <div class="carousel-inner" role="listbox">
+        <div class="carousel-item active">
+            <div class="view">
+                <img class="d-block w-100" src="img/HomePage/London.png" alt="First slide">
+                <div class="mask rgba-black-light"></div>
+            </div>
+            <div class="carousel-caption">
+                <h3 class="h3-responsive">London</h3>
+                <p>First text</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <!--Mask color-->
+            <div class="view">
+                <img class="d-block w-100" src="img/HomePage/Santorini.jpg" alt="Second slide">
+                <div class="mask rgba-black-strong"></div>
+            </div>
+            <div class="carousel-caption">
+                <h3 class="h3-responsive">Santorini</h3>
+                <p>Secondary text</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <!--Mask color-->
+            <div class="view">
+                <img class="d-block w-100" src="img/HomePage/Paris.jpg" alt="Third slide">
+                <div class="mask rgba-black-slight"></div>
+            </div>
+            <div class="carousel-caption">
+                <h3 class="h3-responsive">Paris</h3>
+                <p>Third text</p>
+            </div>
+        </div>
+    </div>
+    <!--/.Slides-->
+    <!--Controls-->
+    <a class="carousel-control-prev" href="#carousel-example-2" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carousel-example-2" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+    <!--/.Controls-->
+</div>
+<!--/.Carousel Wrapper-->

@@ -3,62 +3,78 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
-<h4>CreateHotelRoomCommand</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Capacity" class="control-label"></label>
-                <input asp-for="Capacity" class="form-control" />
-                <span asp-validation-for="Capacity" class="text-danger"></span>
+<div class="breadcumb_area bg-img" style="background-image: url(img/core-img/breadcumb.jpg);margin-top:90px; ">
+    <div class="container h-100">
+        <div class="row h-100 align-items-center">
+            <div class="col-12">
+                <div class="page-title text-center">
+                    <h2>Create</h2>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="RoomType" class="control-label"></label>
-                <select asp-for="RoomType" class="form-control">
-                    @{
-                        var enums = (RoomType[])Enum.GetValues(typeof(RoomType));
-                        for (int i = 0; i < enums.Length; i++)
-                        {
-                            <option value="@i">@string.Join(' ', Regex.Split(enums[i].ToString(), "(?<!^)(?=[A-Z0-9])"))</option>
-                        }
-                    }
-                </select>
-                <span asp-validation-for="RoomType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PriceForAdults" class="control-label"></label>
-                <input asp-for="PriceForAdults" class="form-control" />
-                <span asp-validation-for="PriceForAdults" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PriceForChildren" class="control-label"></label>
-                <input asp-for="PriceForChildren" class="form-control" />
-                <span asp-validation-for="PriceForChildren" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RoomNumber" class="control-label"></label>
-                <input asp-for="RoomNumber" class="form-control" />
-                <span asp-validation-for="RoomNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Images" class="control-label"></label>
-                <input asp-for="Images" class="form-control" />
-                <span asp-validation-for="Images" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-controller="Home" asp-action="Index">Back to List</a>
+
+<div class="container-contact100">
+    <div class="wrap-contact100">
+        <form class="contact100-form validate-form">
+            <span class="contact100-form-title">
+                Create a hotel room
+            </span>
+
+            <label class="label-input100" for="phone">Capacity</label>
+            <div class="wrap-input100">
+                <input id="phone" class="input100" type="text" name="phone" placeholder="">
+                <span class="focus-input100"></span>
+            </div>
+
+            <label class="label-input100" for="phone">Room type</label>
+            <div class="wrap-input100">
+                <input id="phone" class="input100" type="text" name="phone" placeholder="">
+                <span class="focus-input100"></span>
+            </div>
+
+            <label class="label-input100" for="phone">Price for adults</label>
+            <div class="wrap-input100">
+                <input id="phone" class="input100" type="text" name="phone" placeholder="">
+                <span class="focus-input100"></span>
+            </div>
+
+            <label class="label-input100" for="phone">Price for children</label>
+            <div class="wrap-input100">
+                <input id="phone" class="input100" type="text" name="phone" placeholder="">
+                <span class="focus-input100"></span>
+            </div>
+
+            <label class="label-input100" for="phone">Room number</label>
+            <div class="wrap-input100">
+                <input id="phone" class="input100" type="text" name="phone" placeholder="">
+                <span class="focus-input100"></span>
+            </div>
+
+
+            <div class="form-group mt-3 ml-1">
+                <label for="exampleFormControlFile1">Example file input</label>
+                <input type="file" class="form-control-file" id="exampleFormControlFile1">
+            </div>
+
+
+            <div class="container-contact100-form-btn">
+                <button class="contact100-form-btn">
+                    Create
+                </button>
+            </div>
+        </form>
+
+        <div class="contact100-more flex-col-c-m" style="background-image: url(img/HomePage/bg-01.jpg);">
+        </div>
+    </div>
 </div>
+
+
+<div id="dropDownSelect1"></div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
