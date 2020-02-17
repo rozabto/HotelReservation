@@ -43,5 +43,20 @@ namespace Persistence.Common
             Query.Where(f => f.Id == id)
                 .ProjectTo<HotelRoomVm>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(token);
+
+        public Task<List<HotelRoomShortVm>> SearchHotelRooms(string term, DateTime from, DateTime to, int capacity, int page, int pageCount, CancellationToken token)
+        {
+            Query.Include(f => f.Reservations)
+                .ThenInclude(f => f.UsersReservations)
+                .Where(f => !f.Reservations.Any(f => f.ReservedForDate < to && from < f.ReservedUntilDate)
+                    && f.Capacity >= capacity)
+                .OrderBy(f => f.CreatedOn);
+
+            if (page > 0)
+                Query.Skip(pageCount * page).Take(page);
+
+            return Query.ProjectTo<HotelRoomShortVm>(_mapper.ConfigurationProvider)
+                .ToListAsync(token);
+        }
     }
 }

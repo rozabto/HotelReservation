@@ -15,12 +15,13 @@ namespace Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, bool isDevelopment)
         {
             services.AddSingleton<IMemoryService, MemoryService>();
-            services.AddSingleton<IImageService, ImageService>();
 
             services.AddScoped<IUserManager, UserManagerService>();
             services.AddScoped<IRoleManager, RoleManagerService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IDateTime, UniversalDateTime>();
+            services.AddTransient<ICountryService, CountryService>();
+            services.AddTransient<IImageService, ImageService>();
 
             var identity = services.AddDefaultIdentity<AppUser>(options =>
             {

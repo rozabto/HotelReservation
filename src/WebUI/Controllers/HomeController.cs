@@ -4,21 +4,14 @@ using System.Threading.Tasks;
 using Application.Home.Queries.Checkout;
 using Application.Home.Queries.GetHomePage;
 using Application.Home.Queries.GetHotelRoom;
+using Application.Search.Queries.SearchHotelRooms;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using WebUI.Models;
 
 namespace WebUI.Controllers
 {
     public class HomeController : BaseController
     {
-        private readonly IConfiguration _configuration;
-
-        public HomeController(IConfiguration configuration)
-        {
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-        }
-
         public async Task<IActionResult> Index(int? page) =>
             View(await Mediator.Send(new GetHomePageQuery { Page = page ?? 0 }));
 
@@ -29,11 +22,24 @@ namespace WebUI.Controllers
             View(await Mediator.Send(new CheckoutQuery()));
 
         public IActionResult Privacy() => View();
+
         public IActionResult Contacts() => View();
-        public IActionResult Search() => View();
+
+        public async Task<IActionResult> Search(string term, DateTime from, DateTime to, int capacity, int page) =>
+            View(await Mediator.Send(new SearchHotelRoomsQuery
+            {
+                Term = term,
+                AvailableFrom = from,
+                AvailableTo = to,
+                Capacity = capacity,
+                Page = page
+            }));
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error() =>
-            View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            View(new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            });
     }
 }
