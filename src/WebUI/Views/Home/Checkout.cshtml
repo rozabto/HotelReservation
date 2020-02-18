@@ -1,8 +1,25 @@
 ﻿@model Application.Home.Queries.Checkout.CheckoutResponse
 @{
-    ViewData["Title"] = "Checkout";
+	ViewData["Title"] = "Checkout";
 }
 
 <div class="embed-responsive embed-responsive-16by9">
-    <iframe class="mt-100 w-100 embed-responsive-item" src="@Model.Url"></iframe>
+	<iframe name="sc_frame" class="mt-100 w-100 embed-responsive-item" src="@Model.Url"></iframe>
 </div>
+
+<script>
+	if (window.addEventListener) {
+		window.addEventListener("message", recievedMessage, false);
+	} else {
+		window.attachEvent("onmessage", recievedMessage);
+	}
+	function recievedMessage(message) {
+		var data = JSON.parse(message.data);
+		if (data === "success") {
+			document.location.href = document.location.origin;
+		}
+		else if (data === "backToMerchantSite") {
+			document.location.href = document.location.origin;
+		}
+	}
+</script>

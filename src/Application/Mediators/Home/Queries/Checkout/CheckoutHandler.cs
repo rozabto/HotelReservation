@@ -73,9 +73,7 @@ namespace Application.Home.Queries.Checkout
                 { "user_token_id", "niki4616@gmail.com" },
                 { "user_token", "auto" },
                 { "total_amount", "50.00" },
-                { "notify_url", "https://localhost:5001" },
-                { "success", "https://localhost:5001" },
-                { "back", "https://localhost:5001" }
+                { "notify_url", "https://localhost:5001" }
             };
 
         private Dictionary<string, string> ConstructParametersMapForChecksum() =>
@@ -95,9 +93,7 @@ namespace Application.Home.Queries.Checkout
                 { "user_token_id", "niki4616@gmail.com" },
                 { "user_token", "auto" },
                 { "total_amount", "50.00" },
-                { "notify_url", "https://localhost:5001" },
-                { "success", "https://localhost:5001" },
-                { "back", "https://localhost:5001" }
+                { "notify_url", "https://localhost:5001" }
             };
 
         private string CalculateChecksum(Dictionary<string, string> _params, string merchantKey)
