@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Persistence.Development
 {
-    public partial class Initial : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -191,11 +191,15 @@ namespace Persistence.Development
                     Id = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
                     CreatedByUserId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     Capacity = table.Column<int>(nullable: false),
                     RoomType = table.Column<int>(nullable: false),
                     IsEmpty = table.Column<bool>(nullable: false),
-                    PriceForAdults = table.Column<decimal>(nullable: false),
-                    PriceForChildren = table.Column<decimal>(nullable: false),
+                    PriceForAdults = table.Column<decimal>(nullable: true),
+                    PriceForChildren = table.Column<decimal>(nullable: true),
+                    RoomPrice = table.Column<decimal>(nullable: true),
+                    FoodPrice = table.Column<decimal>(nullable: false),
+                    Country = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     RoomNumber = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -239,7 +243,9 @@ namespace Persistence.Development
                     ReservedUntilDate = table.Column<DateTime>(nullable: false),
                     IncludeFood = table.Column<bool>(nullable: false),
                     AllInclusive = table.Column<bool>(nullable: false),
-                    Price = table.Column<decimal>(nullable: false)
+                    SessionToken = table.Column<string>(maxLength: 36, nullable: true),
+                    Price = table.Column<decimal>(nullable: false),
+                    ReservedByUserId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -251,43 +257,17 @@ namespace Persistence.Development
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Reservations_AspNetUsers_ReservedByUserId",
+                        column: x => x.ReservedByUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Reservations_HotelRooms_ReservedRoomId",
                         column: x => x.ReservedRoomId,
                         principalTable: "HotelRooms",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UsersReservations",
-                columns: table => new
-                {
-                    ReservationId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
-                    UserId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
-                    CreatedByUserId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UsersReservations", x => new { x.ReservationId, x.UserId });
-                    table.ForeignKey(
-                        name: "FK_UsersReservations_AspNetUsers_CreatedByUserId",
-                        column: x => x.CreatedByUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UsersReservations_Reservations_ReservationId",
-                        column: x => x.ReservationId,
-                        principalTable: "Reservations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_UsersReservations_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -355,19 +335,14 @@ namespace Persistence.Development
                 column: "CreatedByUserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Reservations_ReservedByUserId",
+                table: "Reservations",
+                column: "ReservedByUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reservations_ReservedRoomId",
                 table: "Reservations",
                 column: "ReservedRoomId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UsersReservations_CreatedByUserId",
-                table: "UsersReservations",
-                column: "CreatedByUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UsersReservations_UserId",
-                table: "UsersReservations",
-                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -394,13 +369,10 @@ namespace Persistence.Development
                 name: "HotelRoomImages");
 
             migrationBuilder.DropTable(
-                name: "UsersReservations");
+                name: "Reservations");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "Reservations");
 
             migrationBuilder.DropTable(
                 name: "HotelRooms");

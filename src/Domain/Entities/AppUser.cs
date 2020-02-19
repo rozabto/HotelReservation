@@ -8,7 +8,7 @@ namespace Domain.Entities
     {
         public AppUser()
         {
-            UsersReservations = new HashSet<UserReservation>();
+            Reservations = new HashSet<Reservation>();
             UsersRoles = new HashSet<AppUserRole>();
             Id = Guid.NewGuid().ToString("N");
         }
@@ -19,7 +19,7 @@ namespace Domain.Entities
         public DateTime CreatedOn { get; set; }
         public Employee Employee { get; set; }
 
-        public ICollection<UserReservation> UsersReservations { get; set; }
+        public ICollection<Reservation> Reservations { get; set; }
         public ICollection<AppUserRole> UsersRoles { get; set; }
     }
 }

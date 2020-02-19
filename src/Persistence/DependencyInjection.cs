@@ -31,7 +31,6 @@ namespace Persistence
             services.AddScoped<IHotelRoomRepository, HotelRoomRepository>();
             services.AddScoped<IHotelRoomImageRepository, HotelRoomImageRepository>();
             services.AddScoped<IReservationRepository, ReservationRepository>();
-            services.AddScoped<IUserReservationRepository, UserReservationRepository>();
 
             return services;
         }

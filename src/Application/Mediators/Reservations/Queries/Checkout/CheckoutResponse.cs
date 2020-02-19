@@ -1,4 +1,4 @@
-﻿namespace Application.Home.Queries.Checkout
+﻿namespace Application.Reservations.Queries.Checkout
 {
     public class CheckoutResponse
     {

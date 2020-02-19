@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Application.Home.Queries.Checkout;
 using Application.Home.Queries.GetHomePage;
 using Application.Home.Queries.GetHotelRoom;
 using Application.Search.Queries.SearchHotelRooms;
@@ -17,9 +16,6 @@ namespace WebUI.Controllers
 
         public async Task<IActionResult> Details(string id) =>
             View(await Mediator.Send(new GetHotelRoomQuery { Id = id }));
-
-        public async Task<IActionResult> Checkout() =>
-            View(await Mediator.Send(new CheckoutQuery()));
 
         public IActionResult Privacy() => View();
 

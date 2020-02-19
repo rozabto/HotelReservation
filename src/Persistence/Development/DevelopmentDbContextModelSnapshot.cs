@@ -349,6 +349,12 @@ namespace Persistence.Development
                     b.Property<int>("Capacity")
                         .HasColumnType("int");
 
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
+
                     b.Property<string>("CreatedByUserId")
                         .IsRequired()
                         .HasColumnType("char(32)")
@@ -359,17 +365,29 @@ namespace Persistence.Development
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal>("FoodPrice")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<bool>("IsEmpty")
                         .HasColumnType("bit");
 
-                    b.Property<decimal>("PriceForAdults")
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
+
+                    b.Property<decimal?>("PriceForAdults")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("PriceForChildren")
+                    b.Property<decimal?>("PriceForChildren")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("RoomNumber")
                         .HasColumnType("int");
+
+                    b.Property<decimal?>("RoomPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("RoomType")
                         .HasColumnType("int");
@@ -436,6 +454,13 @@ namespace Persistence.Development
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("ReservedByUserId")
+                        .IsRequired()
+                        .HasColumnType("char(32)")
+                        .IsFixedLength(true)
+                        .HasMaxLength(32)
+                        .IsUnicode(false);
+
                     b.Property<DateTime>("ReservedForDate")
                         .HasColumnType("datetime2");
 
@@ -449,46 +474,19 @@ namespace Persistence.Development
                     b.Property<DateTime>("ReservedUntilDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("SessionToken")
+                        .HasColumnType("nvarchar(36)")
+                        .HasMaxLength(36);
+
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedByUserId");
 
+                    b.HasIndex("ReservedByUserId");
+
                     b.HasIndex("ReservedRoomId");
 
                     b.ToTable("Reservations");
-                });
-
-            modelBuilder.Entity("Domain.Entities.UserReservation", b =>
-                {
-                    b.Property<string>("ReservationId")
-                        .HasColumnType("char(32)")
-                        .IsFixedLength(true)
-                        .HasMaxLength(32)
-                        .IsUnicode(false);
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("char(32)")
-                        .IsFixedLength(true)
-                        .HasMaxLength(32)
-                        .IsUnicode(false);
-
-                    b.Property<string>("CreatedByUserId")
-                        .IsRequired()
-                        .HasColumnType("char(32)")
-                        .IsFixedLength(true)
-                        .HasMaxLength(32)
-                        .IsUnicode(false);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ReservationId", "UserId");
-
-                    b.HasIndex("CreatedByUserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UsersReservations");
                 });
 
             modelBuilder.Entity("Domain.Entities.AppRoleClaim", b =>
@@ -583,31 +581,16 @@ namespace Persistence.Development
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.AppUser", "ReservedByUser")
+                        .WithMany("Reservations")
+                        .HasForeignKey("ReservedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.HotelRoom", "ReservedRoom")
                         .WithMany("Reservations")
                         .HasForeignKey("ReservedRoomId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Entities.UserReservation", b =>
-                {
-                    b.HasOne("Domain.Entities.AppUser", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedByUserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Reservation", "Reservation")
-                        .WithMany("UsersReservations")
-                        .HasForeignKey("ReservationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.AppUser", "User")
-                        .WithMany("UsersReservations")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

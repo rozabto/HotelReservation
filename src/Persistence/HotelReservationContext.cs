@@ -23,7 +23,6 @@ namespace Persistence
         public DbSet<HotelRoom> HotelRooms { get; set; }
         public DbSet<HotelRoomImage> HotelRoomImages { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
-        public DbSet<UserReservation> UsersReservations { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

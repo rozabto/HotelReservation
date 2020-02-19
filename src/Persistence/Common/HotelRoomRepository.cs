@@ -26,8 +26,7 @@ namespace Persistence.Common
             if (userId != null)
             {
                 Query.Include(f => f.Reservations)
-                    .ThenInclude(f => f.UsersReservations)
-                    .Where(f => f.Reservations.Any(s => s.UsersReservations.Any(w => w.UserId != userId)));
+                    .Where(f => f.Reservations.Any(w => w.ReservedByUserId != userId));
             }
 
             Query.OrderBy(f => f.CreatedOn);
@@ -47,7 +46,6 @@ namespace Persistence.Common
         public Task<List<HotelRoomShortVm>> SearchHotelRooms(string term, DateTime from, DateTime to, int capacity, int page, int pageCount, CancellationToken token)
         {
             Query.Include(f => f.Reservations)
-                .ThenInclude(f => f.UsersReservations)
                 .Where(f => !f.Reservations.Any(f => f.ReservedForDate < to && from < f.ReservedUntilDate)
                     && f.Capacity >= capacity)
                 .OrderBy(f => f.CreatedOn);

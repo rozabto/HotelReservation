@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Domain.Common;
 
 namespace Domain.Entities
@@ -8,7 +7,6 @@ namespace Domain.Entities
     {
         public Reservation()
         {
-            UsersReservations = new HashSet<UserReservation>();
             Id = Guid.NewGuid().ToString("N");
         }
 
@@ -19,8 +17,9 @@ namespace Domain.Entities
         public DateTime ReservedUntilDate { get; set; }
         public bool IncludeFood { get; set; }
         public bool AllInclusive { get; set; }
+        public string SessionToken { get; set; }
         public decimal Price { get; set; }
-
-        public ICollection<UserReservation> UsersReservations { get; set; }
+        public string ReservedByUserId { get; set; }
+        public AppUser ReservedByUser { get; set; }
     }
 }

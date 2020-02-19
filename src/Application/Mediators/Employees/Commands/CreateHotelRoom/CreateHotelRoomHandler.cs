@@ -31,7 +31,11 @@ namespace Application.Employees.Commands.CreateHotelRoom
                 RoomNumber = request.RoomNumber,
                 RoomType = request.RoomType,
                 PriceForAdults = request.PriceForAdults,
-                PriceForChildren = request.PriceForChildren
+                PriceForChildren = request.PriceForChildren,
+                Country = request.Country,
+                FoodPrice = request.FoodPrice,
+                Name = request.Name,
+                RoomPrice = request.RoomPrice
             };
 
             await _hotelRoom.Create(room, cancellationToken);

@@ -20,6 +20,16 @@ namespace Persistence.Configuration
                 .HasMaxLength(32)
                 .IsUnicode(false);
 
+            builder.Property(f => f.Name)
+                .HasMaxLength(50)
+                .IsRequired()
+                .IsUnicode(false);
+
+            builder.Property(f => f.Country)
+                .HasMaxLength(50)
+                .IsRequired()
+                .IsUnicode(false);
+
             builder.HasOne(f => f.CreatedByUser)
                 .WithMany()
                 .OnDelete(DeleteBehavior.NoAction);

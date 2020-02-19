@@ -15,11 +15,15 @@ namespace Domain.Entities
         }
 
         public string Id { get; set; }
+        public string Name { get; set; }
         public int Capacity { get; set; }
         public RoomType RoomType { get; set; }
         public bool IsEmpty { get; set; }
-        public decimal PriceForAdults { get; set; }
-        public decimal PriceForChildren { get; set; }
+        public decimal? PriceForAdults { get; set; }
+        public decimal? PriceForChildren { get; set; }
+        public decimal? RoomPrice { get; set; }
+        public decimal FoodPrice { get; set; }
+        public string Country { get; set; }
         public int RoomNumber { get; set; }
 
         public ICollection<HotelRoomImage> RoomImages { get; set; }
