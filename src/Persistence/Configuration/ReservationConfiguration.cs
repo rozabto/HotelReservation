@@ -25,19 +25,6 @@ namespace Persistence.Configuration
                 .IsFixedLength()
                 .HasMaxLength(32)
                 .IsUnicode(false);
-
-            builder.Property(f => f.ReservedByUserId)
-                .IsRequired()
-                .IsFixedLength()
-                .HasMaxLength(32)
-                .IsUnicode(false);
-
-            builder.Property(f => f.SessionToken)
-                .HasMaxLength(36);
-
-            builder.HasOne(f => f.ReservedByUser)
-                .WithMany(f => f.Reservations)
-                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

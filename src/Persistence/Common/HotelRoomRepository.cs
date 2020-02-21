@@ -26,7 +26,7 @@ namespace Persistence.Common
             if (userId != null)
             {
                 Query.Include(f => f.Reservations)
-                    .Where(f => f.Reservations.Any(w => w.ReservedByUserId != userId));
+                    .Where(f => f.Reservations.Any(w => w.CreatedByUserId != userId));
             }
 
             Query.OrderBy(f => f.CreatedOn);

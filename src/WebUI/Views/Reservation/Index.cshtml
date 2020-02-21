@@ -1,0 +1,11 @@
+﻿@model Application.Reservations.Queries.Reservations.ReservationsResponse
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+@foreach (var reservation in Model.Reservations)
+{
+    <h1>@reservation.Id</h1>
+}

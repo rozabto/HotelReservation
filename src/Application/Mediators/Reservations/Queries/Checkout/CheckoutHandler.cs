@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.Common.Models;
 using Application.Common.Repositories;
 using Common;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 
 namespace Application.Reservations.Queries.Checkout
 {
@@ -39,66 +36,59 @@ namespace Application.Reservations.Queries.Checkout
             var room = await _hotelRoom.GetById(request.RoomId, cancellationToken)
                 ?? throw new NotFoundException("Room", request.RoomId);
 
-            var marchantKey = _configuration.GetValue<string>("Key:SafeCharge");
+            if (await _reservation.CanReserve(request.RoomId, _currentUser.User.Id, request.To, request.From, cancellationToken))
+                throw new BadRequestException("You can't reserve already reserved rooms");
 
-            SessionTokenJson sessionToken;
-
-            using (var http = new HttpClient())
-            {
-                var identifier = _date.Now.Ticks.ToString();
-
-                var parameters = ConstructGetSessionToken(identifier);
-                var checksum = _checkout.CalculateChecksum(parameters, marchantKey);
-                parameters.Add("checksum", checksum);
-
-                var response = await http.PostAsync(
-                    "https://ppp-test.safecharge.com/ppp/api/v1/getSessionToken.do",
-                    new FormUrlEncodedContent(parameters)
-                );
-
-                sessionToken = JsonConvert.DeserializeObject<SessionTokenJson>(await response.Content.ReadAsStringAsync());
-            }
+            var merchantKey = _configuration.GetValue<string>("Key:SafeCharge");
+            var merchantId = _configuration.GetValue<string>("Key:SafeChargeMId");
 
             var price = (decimal)(request.To - request.From).TotalDays
                 * (room.PriceForAdults ?? room.RoomPrice).Value
-                + (request.AllInclusive ? 100m : 0m)
+                + (request.AllInclusive ? 50m : 0m)
                 + (request.IncludeFood ? room.FoodPrice : 0m);
 
-            var _params = ConstructParametersMap(room, price.ToString());
+            if (!await _reservation.CheckIfExists(request.RoomId, _currentUser.User.Id, cancellationToken))
+            {
+                await _reservation.Create(new Reservation
+                {
+                    AllInclusive = request.AllInclusive,
+                    IncludeFood = request.IncludeFood,
+                    Price = price,
+                    ReservedForDate = request.From,
+                    ReservedRoomId = room.Id,
+                    ReservedUntilDate = request.To
+                }, cancellationToken);
+            }
+
+            var priceStr = price.ToString().Replace(',', '.');
+
+            var _params = ConstructParametersMap(room, merchantId,
+                priceStr.Contains('.') ? priceStr : priceStr + ".00");
 
             return new CheckoutResponse
             {
-                Url = _checkout.GenerateCheckout(_params, marchantKey)
+                Url = _checkout.GenerateCheckout(_params, merchantKey)
             };
         }
 
-        private Dictionary<string, string> ConstructParametersMap(HotelRoom room, string price) =>
+        private Dictionary<string, string> ConstructParametersMap(HotelRoom room, string merchantId, string price) =>
             new Dictionary<string, string>
             {
                 { "currency", "EUR" },
-                { "item_name_1", room.Name },
+                { "item_name_1", room.Id },
                 { "item_number_1", "1" },
                 { "item_quantity_1", "1" },
                 { "item_amount_1", price },
                 { "numberofitems", "1" },
                 { "encoding", "utf-8" },
-                { "merchant_id", "4778151621448449994" },
+                { "merchant_id", merchantId },
                 { "merchant_site_id", "183073" },
-                { "time_stamp", "2019-07-08.09:55:50" },
+                { "time_stamp", _date.Now.ToString("yyyy-MM-dd.HH:mm:ss") },
                 { "version", "4.0.0" },
                 { "user_token_id", _currentUser.User.Email },
                 { "user_token", "auto" },
                 { "total_amount", price },
-                { "notify_url", "https://localhost:5001" }
-            };
-
-        private Dictionary<string, string> ConstructGetSessionToken(string identifier) =>
-            new Dictionary<string, string>
-            {
-                { "merchantId", "4778151621448449994" },
-                { "merchantSiteId", "183073" },
-                { "clientRequestId", identifier },
-                { "timeStamp", "20170118191622" }
+                { "notify_url", "https://sandbox.safecharge.com/lib/demo_process_request/response.php" }
             };
     }
 }
