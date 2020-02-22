@@ -8,10 +8,11 @@
     <title>@ViewData["Title"] - HotelReservation</title>
     <base href="~/">
     <link rel="stylesheet" href="css/core-style.css">
-    <link rel="stylesheet" href="style.css">
+    
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500" rel="stylesheet" />
     <link href="css/main.css" rel="stylesheet" />
-  
+    
+
 
     @RenderSection("Styles", required: false)
 
@@ -41,7 +42,7 @@
                             <li><a asp-controller="Home" asp-action="Contacts">Contacts</a></li>
                             @if (currentUser.IsAuthenticated)
                             {
-                                if (currentUser.User.UsersRoles.Any(f => f.Role.Name == "Employee"|| f.Role.Name == "Admin"))
+                                if (currentUser.User.UsersRoles.Any(f => f.Role.Name == "Employee" || f.Role.Name == "Admin"))
                                 {
                                     <li><a asp-controller="Employee" asp-action="Create">Employee</a></li>
                                 }
@@ -116,7 +117,7 @@
                         <ul class="footer_widget_menu">
                             <li><a href="#">About us</a></li>
                             <li><a href="#">User terms & Privacy</a></li>
-                            <li><a asp-controller="Home" asp-action="Contacts"+>Contacts</a></li>
+                            <li><a asp-controller="Home" asp-action="Contacts" +>Contacts</a></li>
                             <li><a href="#">Top destinations</a></li>
                             <li><a href="#">Support & FAQs</a></li>
                             <li><a href="#">Website feedback</a></li>
@@ -177,6 +178,7 @@
 
     <!-- jQuery -->
     <script src="js/jquery/jquery-2.2.4.min.js"></script>
+    <script src="~/js/jquery/jquery-easing.js"></script>
     <!-- Popper js -->
     <script src="js/popper.min.js"></script>
     <!-- Bootstrap js -->
@@ -187,6 +189,7 @@
     <script src="js/classy-nav.min.js"></script>
     <!-- Active js -->
     <script src="js/active.js"></script>
+
 
 
     <script src="js/extention/choices.js"></script>
@@ -225,7 +228,7 @@
         $(function () {
             'use strict'
 
-       
+
             $(window).resize(function () {
                 minimizeMenu();
             });
