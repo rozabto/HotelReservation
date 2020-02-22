@@ -1,67 +1,136 @@
-﻿@model Application.Home.Queries.GetHotelRoom.GetHotelRoomResponse
-@{
-    ViewData["Title"] = "Details";
-}
+﻿@*@model Application.Home.Queries.GetHotelRoom.GetHotelRoomResponse
+    @{
+        ViewData["Title"] = "Details";
+    }
 
-<h1>Details</h1>
+    <h1>Details</h1>
 
-<div>
-    <h4>HotelRoomVm</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Room.Id)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Room.Id)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Room.Capacity)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Room.Capacity)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Room.RoomType)
-        </dt>
-        <dd class="col-sm-10">
-            @string.Join(' ', Regex.Split(Model.Room.RoomType.ToString(), "(?<!^)(?=[A-Z0-9])"))
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Room.IsEmpty)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Room.IsEmpty)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Room.PriceForAdults)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Room.PriceForAdults)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Room.PriceForChildren)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Room.PriceForChildren)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Room.RoomNumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Room.RoomNumber)
-        </dd>
-        @foreach (var image in Model.Room.Images)
-        {
+    <div>
+        <h4>HotelRoomVm</h4>
+        <hr />
+        <dl class="row">
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => Model.Room.Images)
+                @Html.DisplayNameFor(model => model.Room.Id)
             </dt>
             <dd class="col-sm-10">
-                <img src="~/@image" alt="room image" />
+                @Html.DisplayFor(model => model.Room.Id)
             </dd>
-        }
-    </dl>
-</div>
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Room.Capacity)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Room.Capacity)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Room.RoomType)
+            </dt>
+            <dd class="col-sm-10">
+                @string.Join(' ', Regex.Split(Model.Room.RoomType.ToString(), "(?<!^)(?=[A-Z0-9])"))
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Room.IsEmpty)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Room.IsEmpty)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Room.PriceForAdults)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Room.PriceForAdults)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Room.PriceForChildren)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Room.PriceForChildren)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Room.RoomNumber)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Room.RoomNumber)
+            </dd>
+            @foreach (var image in Model.Room.Images)
+            {
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => Model.Room.Images)
+                </dt>
+                <dd class="col-sm-10">
+                    <img src="~/@image" alt="room image" />
+                </dd>
+            }
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>*@
+
+
+
+@{
+    ViewData["Title"] = "Product";
+}
+
+<h1>Product</h1>
+<!-- ##### Single Product Details Area Start ##### -->
+<section class="single_product_details_area d-flex align-items-center">
+
+    <!-- Single Product Thumb -->
+    <div class="single_product_thumb clearfix">
+        <div class="product_thumbnail_slides owl-carousel">
+            <img src="img/product-img/product1.jpg" alt="">
+            <img src="img/product-img/product1-1.jpg" alt="">
+        </div>
+    </div>
+
+    <!-- Single Product Description -->
+    <div class="single_product_desc clearfix">
+
+        <a href="cart.html">
+            <h2> BEST WESTERN City Hotel, BW Premier Collection </h2>
+        </a>
+        <span> 4-star hotel with restaurant </span>
+        <p class="product-price"><span class="old-price"> 97$ </span> 77$ </p>
+        <p class="product-desc">
+            Main amenities
+            61 guestrooms
+            Restaurant and bar/lounge
+            Free train station pick-up
+            Sauna
+            Self parking
+            Massage/treatment rooms
+            24-hour business center
+            Airport shuttle
+            Childcare
+            Terrace
+            24-hour front desk
+            Air conditioning
+            Free English breakfast and free Internet
+        </p>
+
+        <!-- Form -->
+        <form class="cart-form clearfix" method="post">
+            <!-- Select Box -->
+            <div class="select-box d-flex mt-50 mb-30">
+
+                <select name="select" id="productColor">
+                    <option value="value">Цвят : Розов</option>
+                    <option value="value">Цвят : Бял</option>
+                    <option value="value">Цвят : Червен</option>
+                    <option value="value">Цвят : Лилав</option>
+                </select>
+            </div>
+            <!-- Cart & Favourite Box -->
+            <div class="cart-fav-box d-flex align-items-center">
+                <!-- Cart -->
+                <button type="submit" name="addtocart" value="5" class="btn essence-btn">Reserve now</button>
+                <!-- Favourite -->
+                <div class="product-favourite ml-4">
+                    <a href="#" class="favme fa fa-heart"></a>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+<!-- ##### Single Product Details Area End ##### -->
