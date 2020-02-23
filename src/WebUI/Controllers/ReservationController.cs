@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Application.Reservations.Commands.CompleteCheckout;
+using Application.Reservations.Commands.CreateReservation;
 using Application.Reservations.Queries.Checkout;
 using Application.Reservations.Queries.Reservations;
 using Microsoft.AspNetCore.Authorization;
@@ -25,6 +26,13 @@ namespace WebUI.Controllers
             }));
 
         public IActionResult Create() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromForm]CreateReservationCommand command)
+        {
+            await Mediator.Send(command);
+            return Redirect(nameof(Index));
+        }
 
         public async Task<IActionResult> Complete(string id) =>
             await Mediator.Send(new CompleteCheckoutCommand { Id = id })
