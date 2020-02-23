@@ -28,76 +28,23 @@
 
     <table class="table table-valign-middle mg-b-0">
         <tbody>
-            <tr>
-                <td class="pd-l-0-force">
-                    <img src="http://via.placeholder.com/280x280" class="wd-40 rounded-circle" alt="">
-                </td>
-                <td>
-                    <h6 class="tx-inverse tx-14 mg-b-0">Name of Hotel</h6>
-                    <span class="tx-12">Location</span>
-                </td>
-                <td>Nov 01, 2020</td>
-                <td>Nov 02, 2020</td>
-                <td class="pd-r-0-force tx-center">
-                    <a href="" class="tx-gray-600"><i class="icon ion-more tx-18 lh-0"></i></a>
-                </td>
-            </tr>
-            <tr>
-                <td class="pd-l-0-force">
-                    <img src="http://via.placeholder.com/280x280" class="wd-40 rounded-circle" alt="">
-                </td>
-                <td>
-                    <h6 class="tx-inverse tx-14 mg-b-0">Name of Hotel</h6>
-                    <span class="tx-12">Location</span>
-                </td>
-                <td>Nov 01, 2020</td>
-                <td>Nov 02, 2020</td>
-                <td class="pd-r-0-force tx-center">
-                    <a href="" class="tx-gray-600"><i class="icon ion-more tx-18 lh-0"></i></a>
-                </td>
-            </tr>
-            <tr>
-                <td class="pd-l-0-force">
-                    <img src="http://via.placeholder.com/280x280" class="wd-40 rounded-circle" alt="">
-                </td>
-                <td>
-                    <h6 class="tx-inverse tx-14 mg-b-0">Name of Hotel</h6>
-                    <span class="tx-12">Location</span>
-                </td>
-                <td>Nov 01, 2020</td>
-                <td>Nov 02, 2020</td>
-                <td class="pd-r-0-force tx-center">
-                    <a href="" class="tx-gray-600"><i class="icon ion-more tx-18 lh-0"></i></a>
-                </td>
-            </tr>
-            <tr>
-                <td class="pd-l-0-force">
-                    <img src="http://via.placeholder.com/280x280" class="wd-40 rounded-circle" alt="">
-                </td>
-                <td>
-                    <h6 class="tx-inverse tx-14 mg-b-0">Name of Hotel</h6>
-                    <span class="tx-12">Location</span>
-                </td>
-                <td>Nov 01, 2020</td>
-                <td>Nov 02, 2020</td>
-                <td class="pd-r-0-force tx-center">
-                    <a href="" class="tx-gray-600"><i class="icon ion-more tx-18 lh-0"></i></a>
-                </td>
-            </tr>
-            <tr>
-                <td class="pd-l-0-force">
-                    <img src="http://via.placeholder.com/280x280" class="wd-40 rounded-circle" alt="">
-                </td>
-                <td>
-                    <h6 class="tx-inverse tx-14 mg-b-0">Name of Hotel</h6>
-                    <span class="tx-12">Location</span>
-                </td>
-                <td>Nov 01, 2020</td>
-                <td>Nov 02, 2020</td>
-                <td class="pd-r-0-force tx-center">
-                    <a href="" class="tx-gray-600"><i class="icon ion-more tx-18 lh-0"></i></a>
-                </td>
-            </tr>
+            @foreach (var reservation in Model.Reservations)
+            {
+                <tr>
+                    <td class="pd-l-0-force">
+                        <img src="@reservation.ReservedRoom.Image" class="wd-40 rounded-circle" alt="">
+                    </td>
+                    <td>
+                        <h6 class="tx-inverse tx-14 mg-b-0">@reservation.ReservedRoom.Name</h6>
+                        <span class="tx-12"></span>
+                    </td>
+                    <td>@reservation.ReservedForDate</td>
+                    <td>@reservation.ReservedUntilDate</td>
+                    <td class="pd-r-0-force tx-center">
+                        <a href="" class="tx-gray-600"><i class="icon ion-more tx-18 lh-0"></i></a>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>
