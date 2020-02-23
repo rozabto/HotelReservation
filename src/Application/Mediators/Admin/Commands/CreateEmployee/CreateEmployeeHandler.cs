@@ -5,6 +5,7 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.Common.Repositories;
+using Common;
 using Domain.Entities;
 using MediatR;
 
@@ -14,11 +15,13 @@ namespace Application.Admin.Commands.CreateEmployee
     {
         private readonly IEmployeeRepository _employee;
         private readonly IUserManager _userManager;
+        private readonly IMemoryService _memory;
 
-        public CreateEmployeeHandler(IEmployeeRepository employee, IUserManager userManager)
+        public CreateEmployeeHandler(IEmployeeRepository employee, IUserManager userManager, IMemoryService memory)
         {
             _employee = employee ?? throw new ArgumentNullException(nameof(employee));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _memory = memory ?? throw new ArgumentNullException(nameof(memory));
         }
 
         public async Task<Unit> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
@@ -35,6 +38,8 @@ namespace Application.Admin.Commands.CreateEmployee
             }, cancellationToken);
 
             await _userManager.AddUserToRole(user, RoleType.Employee);
+
+            _memory.SetValue(user.UserName, user);
 
             return Unit.Value;
         }
