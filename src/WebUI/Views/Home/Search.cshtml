@@ -45,9 +45,16 @@
                                 <li data-toggle="collapse" data-target="#plants1" class="collapsed">
                                     <a href="#">Room type</a>
                                     <ul class="sub-menu collapse" id="plants1">
-                                        <li><a href="#">1</a></li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
+                                        @{
+                                            var enums = (RoomType[])Enum.GetValues(typeof(RoomType));
+                                            for (int i = 0; i < enums.Length; i++)
+                                            {
+                                                <li><a href="#">@string.Join(' ', Regex.Split(enums[i].ToString(), "(?<!^)(?=[A-Z0-9])"))</a></li>
+
+                                            }
+
+                                        }
+
                                     </ul>
                                 </li>
                                 <!-- Single Item -->
@@ -108,47 +115,28 @@
                     </div>
 
                     <div class="row">
-
-                 
-                        <!-- Single Product -->
-                        <div class="col-12 col-sm-6 col-lg-4">
-                            <div class="single-product-wrapper">
-                                <!-- Product Image -->
-                                <div class="product-img">
-                                    <img src="img/product-img/product1.jpg" alt="">
-                                    <!-- Hover Thumb -->
-                                    <img class="hover-img" src="img/product-img/product1-1.jpg" alt="">
-
-                                    <!-- Product Badge -->
-                                    <div class="product-badge offer-badge">
-                                        <span>-30%</span>
+                        @foreach (var room in Model.HotelRooms)
+                        {
+                            <div class="col-12 col-sm-6 col-lg-4">
+                                <div class="single-product-wrapper">
+                                    <!-- Product Image -->
+                                    <div class="product-img">
+                                        <img src="@room.Image" alt="">                      
                                     </div>
-                                    <!-- Favourite -->
-                                    <div class="product-favourite">
-                                        <a href="#" class="favme fa fa-heart"></a>
-                                    </div>
-                                </div>
 
-                                <!-- Product Description -->
-                                <div class="product-description">
-                                    <a href="single-product-details.html">
-                                        <h6>Lato Boutique Hotel</h6>
-                                        <span></span>
-                                    </a>
-                                    <p class="product-price"><span class="old-price">1500.99BGN</span>890.99BGN</p>
-
-                                    <!-- Hover Content -->
-                                    <div class="hover-content">
-                                        <!-- Add to Cart -->
-                                        <div class="add-to-cart-btn">
-                                            <a href="#" class="btn essence-btn">More</a>
+                                    <!-- Product Description -->
+                                    <div class="product-description">
+                                        <a asp-action="Details" asp-route-id="@room.Id">
+                                            <h6>@room.Name</h6>
+                                            
+                                        </a>
+                                        <p class="product-price"> @room.PriceForAdults</p>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                           
 
-
+                        }
 
                     </div>
                 </div>

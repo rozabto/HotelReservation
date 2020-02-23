@@ -24,6 +24,8 @@ namespace WebUI.Controllers
                 To = to
             }));
 
+        public IActionResult Create() => View();
+
         public async Task<IActionResult> Complete(string id) =>
             await Mediator.Send(new CompleteCheckoutCommand { Id = id })
                 ? Redirect(nameof(Index)) : (IActionResult)View("Failed");

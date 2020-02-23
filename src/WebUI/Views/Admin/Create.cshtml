@@ -23,23 +23,23 @@
                 Create a new employee
             </span>
 
-            <label class="label-input100" for="phone">Middle name</label>
+            <label asp-for="MiddleName" class="label-input100" >Middle name</label>
             <div class="wrap-input100">
-                <input id="phone" class="input100" type="text" name="phone" placeholder="">
-                <span class="focus-input100"></span>
+                <input asp-for="MiddleName"  class="input100">
+                <span asp-validation-for="MiddleName" class="focus-input100"></span>
             </div>
 
-            <label class="label-input100" for="phone">EGN</label>
+            <label asp-for="EGN"class="label-input100">EGN</label>
             <div class="wrap-input100">
-                <input id="phone" class="input100" type="text" name="phone" placeholder="">
-                <span class="focus-input100"></span>
+                <input asp-for="EGN" class="input100">
+                <span asp-validation-for="EGN" class="focus-input100"></span>
             </div>
 
 
-            <label class="label-input100" for="phone">User</label>
+            <label asp-for="UserId" class="label-input100">User</label>
             <div class="wrap-input100">
-                <input id="phone" class="input100" type="text" name="phone" placeholder="">
-                <span class="focus-input100"></span>
+                <input asp-for="UserId" class="input100">
+                <span asp-validation-for="UserId" class="focus-input100"></span>
             </div>
 
 

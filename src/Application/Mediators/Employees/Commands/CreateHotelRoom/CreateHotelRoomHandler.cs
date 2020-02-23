@@ -32,7 +32,6 @@ namespace Application.Employees.Commands.CreateHotelRoom
                 RoomType = request.RoomType,
                 PriceForAdults = request.PriceForAdults,
                 PriceForChildren = request.PriceForChildren,
-                Country = request.Country,
                 FoodPrice = request.FoodPrice,
                 Name = request.Name,
                 RoomPrice = request.RoomPrice

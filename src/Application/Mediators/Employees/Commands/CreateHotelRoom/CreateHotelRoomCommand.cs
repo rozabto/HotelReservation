@@ -15,7 +15,6 @@ namespace Application.Employees.Commands.CreateHotelRoom
         public decimal? RoomPrice { get; set; }
         public decimal FoodPrice { get; set; }
         public int RoomNumber { get; set; }
-        public string Country { get; set; }
         public IReadOnlyList<IFormFile> Images { get; set; }
     }
 }
