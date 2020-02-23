@@ -10,6 +10,7 @@ namespace Domain.Models
     public class HotelRoomShortVm : IMapFrom<HotelRoom>
     {
         public string Id { get; set; }
+        public string Name { get; set; }
         public decimal PriceForAdults { get; set; }
         public string Image { get; set; }
 

@@ -83,127 +83,33 @@
             <div class="col-12">
                 <div class="popular-products-slides owl-carousel">
 
-                    <!-- Single Product -->
-                    <div class="single-product-wrapper">
-                        <!-- Product Image -->
-                        <div class="product-img">
-                            <img src="img/HomePage/apar2.jpg" alt="">
-                            <!-- Hover Thumb -->
-                            <img class="hover-img" src="img/HomePage/apart1.jpg" alt="">
-                            <!-- Favourite -->
-                            <div class="product-favourite">
-                                <a href="#" class="favme fa fa-heart"></a>
+                    @foreach (var item in (RoomType[])Enum.GetValues(typeof(RoomType)))
+                    {
+                        var name = string.Join(' ', Regex.Split(item.ToString(), "(?<!^)(?=[A-Z0-9])"));
+                        <!-- Single Product -->
+                        <div class="single-product-wrapper">
+                            <!-- Product Image -->
+                            <div class="product-img">
+                                <img src="img/HomePage/@(name).jpg" alt="">
                             </div>
-                        </div>
-                        <!-- Product Description -->
-                        <div class="product-description">
-                            <a href="single-product-details.html">
-                                <h6>Apartments</h6>
-                            </a>
+                            <!-- Product Description -->
+                            <div class="product-description">
+                                <a href="single-product-details.html"> <!-- href da se smeni-->
+                                    <h6>@name</h6>
+                                </a>
 
 
-                            <!-- Hover Content -->
-                            <div class="hover-content">
-                                <!-- Add to Cart -->
-                                <div class="add-to-cart-btn">
-                                    <a href="#" class="btn essence-btn">More</a>
+                                <!-- Hover Content -->
+                                <div class="hover-content">
+                                    <!-- Add to Cart -->
+                                    <div class="add-to-cart-btn">
+                                        <a href="#" class="btn essence-btn">More</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    }
 
-                    <!-- Single Product -->
-                    <div class="single-product-wrapper">
-                        <!-- Product Image -->
-                        <div class="product-img">
-                            <img src="img/HomePage/cityhome1.jpg" alt="">
-                            <!-- Hover Thumb -->
-                            <img class="hover-img" src="img/HomePage/cityhome2.jpg" alt="">
-                            <!-- Favourite -->
-                            <div class="product-favourite">
-                                <a href="#" class="favme fa fa-heart"></a>
-                            </div>
-                        </div>
-                        <!-- Product Description -->
-                        <div class="product-description">
-                            <a href="single-product-details.html">
-                                <h6>City homes</h6>
-                            </a>
-
-                            <!-- Hover Content -->
-                            <div class="hover-content">
-                                <!-- Add to Cart -->
-                                <div class="add-to-cart-btn">
-                                    <a href="#" class="btn essence-btn">More</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Single Product -->
-                    <div class="single-product-wrapper">
-                        <!-- Product Image -->
-                        <div class="product-img">
-                            <img src="img/HomePage/country1.jpg" alt="">
-                            <!-- Hover Thumb -->
-                            <img class="hover-img" src="img/HomePage/country2.jpg" alt="">
-
-
-
-                            <!-- Favourite -->
-                            <div class="product-favourite">
-                                <a href="#" class="favme fa fa-heart"></a>
-                            </div>
-                        </div>
-                        <!-- Product Description -->
-                        <div class="product-description">
-                            <a href="single-product-details.html">
-                                <h6>Country retreats</h6>
-                            </a>
-
-                            <!-- Hover Content -->
-                            <div class="hover-content">
-                                <!-- Add to Cart -->
-                                <div class="add-to-cart-btn">
-                                    <a href="#" class="btn essence-btn">More</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Single Product -->
-                    <div class="single-product-wrapper">
-                        <!-- Product Image -->
-                        <div class="product-img">
-                            <img src="img/HomePage/resort2.jpg" alt="">
-                            <!-- Hover Thumb -->
-                            <img class="hover-img" src="img/HomePage/resort1.jpg" alt="">
-
-                            <!-- Product Badge -->
-                            <div class="product-badge new-badge">
-                                <span>Most popular</span>
-                            </div>
-
-                            <!-- Favourite -->
-                            <div class="product-favourite">
-                                <a href="#" class="favme fa fa-heart"></a>
-                            </div>
-                        </div>
-                        <!-- Product Description -->
-                        <div class="product-description">
-                            <a href="single-product-details.html">
-                                <h6>Resorts</h6>
-                            </a>
-
-                            <!-- Hover Content -->
-                            <div class="hover-content">
-                                <!-- Add to Cart -->
-                                <div class="add-to-cart-btn">
-                                    <a href="#" class="btn essence-btn">More</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -240,7 +146,7 @@
             </div>
             <div class="carousel-caption">
                 <h3 class="h3-responsive">London</h3>
-                
+
             </div>
         </div>
         <div class="carousel-item">
@@ -251,7 +157,7 @@
             </div>
             <div class="carousel-caption">
                 <h3 class="h3-responsive">Santorini</h3>
-                
+
             </div>
         </div>
         <div class="carousel-item">
@@ -262,7 +168,7 @@
             </div>
             <div class="carousel-caption">
                 <h3 class="h3-responsive">Paris</h3>
-               
+
             </div>
         </div>
     </div>
