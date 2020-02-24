@@ -35,6 +35,18 @@ namespace Application.Search.Queries.SearchHotelRooms
                     request.Capacity,
                     request.Page,
                     20,
+                    request.RoomType,
+                    request.SortBy,
+                    cancellationToken
+                ),
+                Count = await _hotelRoom.SearchedHotelRoomsCount(
+                    request.Term,
+                    request.AvailableFrom,
+                    request.AvailableTo,
+                    request.Capacity,
+                    request.Page,
+                    20,
+                    request.RoomType,
                     cancellationToken
                 )
             };

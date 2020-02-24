@@ -25,7 +25,7 @@ namespace Persistence.Common
             Query.AnyAsync(f => f.ReservedRoomId == roomId && f.CreatedByUserId != userId && f.ReservedForDate < to && from < f.ReservedUntilDate, token);
 
         public Task<bool> CheckIfExists(string roomId, string userId, CancellationToken token) =>
-            Query.AnyAsync(f => f.ReservedRoomId == roomId && f.CreatedByUserId == userId && !f.HasCompleted, token);
+            Query.AnyAsync(f => f.ReservedRoomId == roomId && f.CreatedByUserId == userId, token);
 
         public Task<Reservation> FindByRoomId(string roomId, string userId, CancellationToken token) =>
             Query.FirstOrDefaultAsync(f => f.ReservedRoomId == roomId && f.CreatedByUserId == userId, token);

@@ -442,9 +442,6 @@ namespace Persistence.Development
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("HasCompleted")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IncludeFood")
                         .HasColumnType("bit");
 

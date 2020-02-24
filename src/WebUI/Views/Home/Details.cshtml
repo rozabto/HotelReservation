@@ -1,5 +1,4 @@
-﻿
-@model Application.Home.Queries.GetHotelRoom.GetHotelRoomResponse
+﻿@model Application.Home.Queries.GetHotelRoom.GetHotelRoomResponse
 @{
     ViewData["Title"] = "Product";
 }
@@ -7,7 +6,6 @@
 <h1>Product</h1>
 <!-- ##### Single Product Details Area Start ##### -->
 <section class="single_product_details_area d-flex align-items-center">
-
     <!-- Single Product Thumb -->
     <div class="single_product_thumb clearfix">
         <div class="product_thumbnail_slides owl-carousel">
@@ -15,38 +13,36 @@
             {
                 <img src="@image" alt="">
             }
-
-
         </div>
     </div>
-
     <!-- Single Product Description -->
     <div class="single_product_desc clearfix">
-
-        <a href="cart.html">
-            <h2> BEST WESTERN City Hotel, BW Premier Collection </h2>
-        </a>
+        <h2> BEST WESTERN City Hotel, BW Premier Collection </h2>
         <span> 4-star hotel with restaurant </span>
-        <p class="product-price"><span> @Model.Room.PriceForAdults</span> @Model.Room.PriceForChildren </p>
-
+        @if (Model.Room.RoomPrice.HasValue)
+        {
+            <p class="m-0">Room price</p>
+            <p class="product-price">@Model.Room.RoomPrice</p>
+        }
+        else
+        {
+            <p class="m-0">Price per adult</p>
+            <p class="product-price">@Model.Room.PriceForAdults</p>
+            <p class="m-0">Price per child</p>
+            <p class="product-price">@Model.Room.PriceForChildren </p>
+        }
         <p class="product-desc">
             Main amenities
             61 guestrooms
             Childcare
             Terrace
         </p>
-
         <!-- Form -->
-        <form class="cart-form clearfix" method="get" asp-controller="Reservation" asp-action="Create">
-           
-            
-
-
+        <form class="cart-form clearfix" method="get" asp-controller="Reservation" asp-action="Create" asp-route-roomId="@Model.Room.Id" asp-route-normalRoom="@Model.Room.RoomPrice.HasValue">
             <!-- Cart & Favourite Box -->
             <div class="cart-fav-box d-flex align-items-center">
                 <!-- Cart -->
                 <button type="submit" name="addtocart" value="5" class="btn essence-btn">Reserve now</button>
-                
             </div>
         </form>
     </div>

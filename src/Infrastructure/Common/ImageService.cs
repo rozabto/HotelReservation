@@ -11,10 +11,13 @@ namespace Infrastructure.Common
     {
         public async Task<IEnumerable<string>> SaveImages(IReadOnlyList<IFormFile> images)
         {
+            if (!Directory.Exists("wwwroot/img/products"))
+                Directory.CreateDirectory("wwwroot/img/products");
+
             var names = new List<string>(images.Count);
             foreach (var image in images)
             {
-                var name = Guid.NewGuid().ToString("N") + '.'
+                var name = "img/products/" + Guid.NewGuid().ToString("N") + '.'
                     + image.ContentType.Replace("image/", "");
 
                 using var file = File.Create("wwwroot/" + name);

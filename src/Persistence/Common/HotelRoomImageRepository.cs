@@ -1,5 +1,4 @@
-﻿using Application.Common.Interfaces;
-using Application.Common.Repositories;
+﻿using Application.Common.Repositories;
 using Domain.Entities;
 
 namespace Persistence.Common

@@ -1,11 +1,11 @@
-﻿using Application.Common.Exceptions;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Application.Common.Exceptions;
 using Application.Common.Repositories;
 using Common;
 using Domain.Entities;
 using MediatR;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Application.Reservations.Commands.CreateReservation
 {
@@ -24,8 +24,17 @@ namespace Application.Reservations.Commands.CreateReservation
 
         public async Task<Unit> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
         {
+            request.To = request.To.Date;
+            request.From = request.From.Date;
+
+            if (request.From < request.To)
+                (request.To, request.From) = (request.From.Date, request.To.Date);
+
             var room = await _hotelRoom.GetById(request.RoomId, cancellationToken)
                 ?? throw new NotFoundException("Room Id", request.RoomId);
+
+            if (!room.RoomPrice.HasValue && (!request.Adults.HasValue || !request.Children.HasValue))
+                throw new BadRequestException("Adults and children count must have a value");
 
             if (await _reservation.CanReserve(request.RoomId, _currentUser.User.Id, request.To, request.From, cancellationToken))
                 throw new BadRequestException("You can't reserve already reserved rooms");
@@ -33,10 +42,10 @@ namespace Application.Reservations.Commands.CreateReservation
             await _reservation.Create(new Reservation
             {
                 AllInclusive = request.AllInclusive,
-                HasCompleted = true,
                 IncludeFood = request.IncludeFood,
                 Price = (decimal)(request.To - request.From).TotalDays
-                * (room.PriceForAdults ?? room.RoomPrice).Value
+                * (room.RoomPrice ?? room.PriceForAdults.Value * request.Adults.Value
+                    + room.PriceForChildren.Value + request.Children.Value)
                 + (request.AllInclusive ? 50m : 0m)
                 + (request.IncludeFood ? room.FoodPrice : 0m),
                 ReservedForDate = request.From,

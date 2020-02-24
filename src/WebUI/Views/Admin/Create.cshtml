@@ -15,34 +15,30 @@
     </div>
 </div>
 
-
 <div class="container-contact100">
     <div class="wrap-contact100">
-        <form  asp-action="Create" class="contact100-form validate-form">
+        <form asp-action="Create" class="contact100-form validate-form">
             <span class="contact100-form-title">
                 Create a new employee
             </span>
 
-            <label asp-for="MiddleName" class="label-input100" >Middle name</label>
+            <label asp-for="MiddleName" class="label-input100">Middle name</label>
             <div class="wrap-input100">
-                <input asp-for="MiddleName"  class="input100">
+                <input asp-for="MiddleName" class="input100">
                 <span asp-validation-for="MiddleName" class="focus-input100"></span>
             </div>
 
-            <label asp-for="EGN"class="label-input100">EGN</label>
+            <label asp-for="EGN" class="label-input100">EGN</label>
             <div class="wrap-input100">
                 <input asp-for="EGN" class="input100">
                 <span asp-validation-for="EGN" class="focus-input100"></span>
             </div>
-
 
             <label asp-for="UserId" class="label-input100">User</label>
             <div class="wrap-input100">
                 <input asp-for="UserId" class="input100">
                 <span asp-validation-for="UserId" class="focus-input100"></span>
             </div>
-
-
 
             <div class="container-contact100-form-btn">
                 <button class="contact100-form-btn">
@@ -56,34 +52,11 @@
     </div>
 </div>
 
-
-<div id="dropDownSelect1"></div>
-
-
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
 @section Styles {
-    <link rel="icon" type="image/png" href="images/icons/favicon.ico" />
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
-    <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="css/util.css">
     <link rel="stylesheet" type="text/css" href="css/main-contacts.css">
-    <!--===============================================================================================-->
 }

@@ -14,66 +14,61 @@
         </div>
     </div>
 </div>
-
-
 <!-- ##### Shop Area ##### -->
 <section class="shop_grid_area section-padding-80">
     <div class="container">
         <div class="row">
             <div class="col-12 col-md-4 col-lg-3">
                 <div class="shop_sidebar_area">
-
                     <!-- ##### Single Widget ##### -->
                     <div class="widget catagory mb-50">
                         <!-- Widget Title -->
                         <h6 class="widget-title mb-30">Filter by:</h6>
-
                         <!--  Catagories  -->
                         <div class="catagories-menu">
                             <ul id="menu-content2" class="menu-content collapse show">
                                 <!-- Single Item -->
                                 <li data-toggle="collapse" data-target="#plants">
-                                    <a href="#">Room capacity</a>
+                                    <a class="link">Room capacity</a>
                                     <ul class="sub-menu collapse show" id="plants">
-                                        <li><a href="#">1 adults</a></li>
-                                        <li><a href="#">2 adults</a></li>
-                                        <li><a href="#">3 adults</a></li>
-                                        <li><a href="#">4 adults</a></li>
+                                        <li><a class="link">1 adults</a></li>
+                                        <li><a class="link">2 adults</a></li>
+                                        <li><a class="link">3 adults</a></li>
+                                        <li><a class="link">4 adults</a></li>
                                     </ul>
                                 </li>
                                 <!-- Single Item -->
                                 <li data-toggle="collapse" data-target="#plants1" class="collapsed">
-                                    <a href="#">Room type</a>
+                                    <a class="link">Room type</a>
                                     <ul class="sub-menu collapse" id="plants1">
                                         @{
                                             var enums = (RoomType[])Enum.GetValues(typeof(RoomType));
                                             for (int i = 0; i < enums.Length; i++)
                                             {
-                                                <li><a href="#">@string.Join(' ', Regex.Split(enums[i].ToString(), "(?<!^)(?=[A-Z0-9])"))</a></li>
-
+                                                <li>
+                                                    <a class="link">
+                                                        @string.Join(' ', Regex.Split(enums[i].ToString(), "(?<!^)(?=[A-Z0-9])"))
+                                                    </a>
+                                                </li>
                                             }
-
                                         }
-
                                     </ul>
                                 </li>
                                 <!-- Single Item -->
                                 <li data-toggle="collapse" data-target="#plants2" class="collapsed">
-                                    <a href="#">Availability</a>
+                                    <a class="link">Availability</a>
                                     <ul class="sub-menu collapse" id="plants2">
-                                        <li><a href="#">Only show available properties</a></li>
+                                        <li><a class="link">Only show available properties</a></li>
                                     </ul>
                                 </li>
                             </ul>
                         </div>
                     </div>
-
                     <!-- ##### Single Widget ##### -->
                     <div class="widget price mb-50">
                         <!-- Widget Title -->
                         <!-- Widget Title 2 -->
                         <p class="widget-title2 mb-30">Price</p>
-
                         <div class="widget-desc">
                             <div class="slider-range">
                                 <div data-min="0" data-max="100" data-unit="" class="slider-range-price ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" data-value-min="00" data-value-max="100" data-label-result="BGN">
@@ -95,17 +90,20 @@
                             <div class="product-topbar d-flex align-items-center justify-content-between">
                                 <!-- Total Products -->
                                 <div class="total-products">
-                                    <p><span>186</span> found properties </p>
+                                    <p><span>@Model.Count</span> found properties </p>
                                 </div>
                                 <!-- Sorting -->
                                 <div class="product-sorting d-flex">
                                     <p>Sorted by</p>
                                     <form action="#" method="get">
                                         <select name="select" id="sortByselect">
-                                            <option value="value">Popular</option>
-                                            <option value="value">New</option>
-                                            <option value="value">Lower price</option>
-                                            <option value="value">Higher price</option>
+                                            @{
+                                                var sorts = (SortBy[])Enum.GetValues(typeof(SortBy));
+                                                for (int i = 0; i < sorts.Length; i++)
+                                                {
+                                                    <option value="@i">@string.Join(' ', Regex.Split(sorts[i].ToString(), "(?<!^)(?=[A-Z0-9])"))</option>
+                                                }
+                                            }
                                         </select>
                                         <input type="submit" class="d-none" value="">
                                     </form>
@@ -121,23 +119,18 @@
                                 <div class="single-product-wrapper">
                                     <!-- Product Image -->
                                     <div class="product-img">
-                                        <img src="@room.Image" alt="">                      
+                                        <img src="@room.Image" alt="">
                                     </div>
-
                                     <!-- Product Description -->
                                     <div class="product-description">
                                         <a asp-action="Details" asp-route-id="@room.Id">
                                             <h6>@room.Name</h6>
-                                            
                                         </a>
                                         <p class="product-price"> @room.PriceForAdults</p>
-                                        </div>
                                     </div>
                                 </div>
-                           
-
+                            </div>
                         }
-
                     </div>
                 </div>
                 <!-- Pagination -->
@@ -156,3 +149,7 @@
         </div>
     </div>
 </section>
+
+@section Scripts {
+    <script src="lib/jquery-ui/jquery-ui.js"></script>
+}

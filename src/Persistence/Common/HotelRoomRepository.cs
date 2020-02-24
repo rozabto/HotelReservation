@@ -7,6 +7,7 @@ using Application.Common.Repositories;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,12 +44,62 @@ namespace Persistence.Common
                 .ProjectTo<HotelRoomVm>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(token);
 
-        public Task<List<HotelRoomShortVm>> SearchHotelRooms(string term, DateTime from, DateTime to, int capacity, int page, int pageCount, CancellationToken token)
+        public Task<int> SearchedHotelRoomsCount(string term, DateTime? from, DateTime? to, int? capacity, int page, int pageCount, RoomType? type, CancellationToken token)
         {
             Query.Include(f => f.Reservations)
                 .Where(f => !f.Reservations.Any(f => f.ReservedForDate < to && from < f.ReservedUntilDate)
                     && f.Capacity >= capacity)
                 .OrderBy(f => f.CreatedOn);
+
+            if (!string.IsNullOrWhiteSpace(term))
+                Query.Where(f => f.Name == term);
+
+            if (capacity.HasValue)
+                Query.Where(f => f.Capacity >= capacity);
+
+            if (type.HasValue)
+                Query.Where(f => f.RoomType == type);
+
+            if (page > 0)
+                Query.Skip(pageCount * page).Take(page);
+
+            return Query.CountAsync(token);
+        }
+
+        public Task<List<HotelRoomShortVm>> SearchHotelRooms(string term, DateTime? from, DateTime? to, int? capacity, int page, int pageCount, RoomType? type, SortBy sort, CancellationToken token)
+        {
+            Query.Include(f => f.Reservations);
+
+            if (from.HasValue && to.HasValue)
+                Query.Where(f => !f.Reservations.Any(f => f.ReservedForDate < to && from < f.ReservedUntilDate));
+
+            if (!string.IsNullOrWhiteSpace(term))
+                Query.Where(f => f.Name == term);
+
+            if (capacity.HasValue)
+                Query.Where(f => f.Capacity >= capacity);
+
+            if (type.HasValue)
+                Query.Where(f => f.RoomType == type);
+
+            switch (sort)
+            {
+                case SortBy.New:
+                    Query.OrderBy(f => f.CreatedOn);
+                    break;
+
+                case SortBy.Popular:
+                    Query.OrderBy(f => f.Reservations.Count);
+                    break;
+
+                case SortBy.LowerPrice:
+                    Query.OrderBy(f => f.PriceForAdults ?? f.RoomPrice);
+                    break;
+
+                case SortBy.HigherPrice:
+                    Query.OrderByDescending(f => f.PriceForAdults ?? f.RoomPrice);
+                    break;
+            }
 
             if (page > 0)
                 Query.Skip(pageCount * page).Take(page);

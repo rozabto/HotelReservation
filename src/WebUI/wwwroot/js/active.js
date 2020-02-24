@@ -1,3 +1,24 @@
+(function () {
+    var method;
+    var noop = function noop() { };
+    var methods = [
+        'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
+        'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
+        'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd',
+        'timeStamp', 'trace', 'warn'
+    ];
+    var length = methods.length;
+    var console = (window.console = window.console || {});
+
+    while (length--) {
+        method = methods[length];
+
+        // Only stub undefined methods.
+        if (!console[method]) {
+            console[method] = noop;
+        }
+    }
+}());
 (function ($) {
     'use strict';
 
@@ -87,9 +108,9 @@
     });
 
     // :: Nice Select Active Code
-  //  if ($.fn.niceSelect) {
- //       $('select').niceSelect();
- //   }
+    //  if ($.fn.niceSelect) {
+    //       $('select').niceSelect();
+    //   }
 
     // :: Slider Range Price Active Code
     $('.slider-range-price').each(function () {
@@ -105,9 +126,8 @@
             min: min,
             max: max,
             values: [value_min, value_max],
-            slide: function (event, ui) {
-                var result = label_result + " " + unit + ui.values[0] + ' - ' + unit + ui.values[1];
-                console.log(t);
+            slide: function (_event, ui) {
+                var result = label_result + ' ' + unit + ui.values[0] + ' - ' + unit + ui.values[1];
                 t.closest('.slider-range').find('.range-price').html(result);
             }
         });
@@ -133,11 +153,6 @@
         $(".cart-list, .cart-content").niceScroll();
     }
 
-    // :: wow Active Code
-    if ($window.width() > 767) {
-        new WOW().init();
-    }
-
     // :: Tooltip Active Code
     if ($.fn.tooltip) {
         $('[data-toggle="tooltip"]').tooltip();
@@ -147,5 +162,4 @@
     $("a[href='#']").on('click', function ($) {
         $.preventDefault();
     });
-
 })(jQuery);

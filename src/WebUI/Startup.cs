@@ -1,7 +1,6 @@
 using Application;
 using Common;
 using Domain;
-using FluentValidation.AspNetCore;
 using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -39,8 +38,7 @@ namespace WebUI
 
             services
                 .AddControllersWithViews()
-                .AddNewtonsoftJson()
-                .AddFluentValidation(f => f.RegisterValidatorsFromAssemblyContaining<IHotelReservationContext>());
+                .AddNewtonsoftJson();
 
             services.AddRazorPages();
         }

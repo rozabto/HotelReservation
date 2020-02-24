@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Repositories;
+using Domain.Models;
 using MediatR;
 
 namespace Application.Home.Queries.GetHotelRoom
@@ -18,7 +19,8 @@ namespace Application.Home.Queries.GetHotelRoom
         public async Task<GetHotelRoomResponse> Handle(GetHotelRoomQuery request, CancellationToken cancellationToken) =>
             new GetHotelRoomResponse
             {
-                Room = await _hotelRoom.GetVmById(request.Id, cancellationToken)
+                Room = string.IsNullOrWhiteSpace(request.Id) || request.Id.Length != 32
+                    ? new HotelRoomVm() : await _hotelRoom.GetVmById(request.Id, cancellationToken)
             };
     }
 }

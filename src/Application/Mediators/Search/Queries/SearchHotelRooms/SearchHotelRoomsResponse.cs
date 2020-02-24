@@ -6,5 +6,6 @@ namespace Application.Search.Queries.SearchHotelRooms
     public class SearchHotelRoomsResponse
     {
         public IReadOnlyList<HotelRoomShortVm> HotelRooms { get; set; }
+        public int Count { get; set; }
     }
 }

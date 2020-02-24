@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +9,9 @@ namespace WebUI.Areas.Identity.Pages.Account.Manage
 {
     public class ResetAuthenticatorModel : PageModel
     {
-        UserManager<AppUser> _userManager;
+        private UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        ILogger<ResetAuthenticatorModel> _logger;
+        private ILogger<ResetAuthenticatorModel> _logger;
 
         public ResetAuthenticatorModel(
             UserManager<AppUser> userManager,

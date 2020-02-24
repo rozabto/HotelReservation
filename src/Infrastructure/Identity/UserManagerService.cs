@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Application.Common.Models;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Common;
 using Domain.Entities;
+using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,11 +17,13 @@ namespace Infrastructure.Identity
     public class UserManagerService : IUserManager
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly IMapper _mapper;
         private readonly IDateTime _date;
 
-        public UserManagerService(UserManager<AppUser> userManager, IDateTime date)
+        public UserManagerService(UserManager<AppUser> userManager, IMapper mapper, IDateTime date)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _date = date ?? throw new ArgumentNullException(nameof(date));
         }
 
@@ -62,5 +69,19 @@ namespace Infrastructure.Identity
                     _ => throw new NotImplementedException("Role Type of User is not implemented")
                 }
             )).ToApplicationResult();
+
+        public Task<List<UserVm>> SearchUsers(string term)
+        {
+            var name = '%' + _userManager.NormalizeName(term) + '%';
+            var email = '%' + _userManager.NormalizeEmail(term) + '%';
+            term = '%' + term + '%';
+            return _userManager.Users
+                .Where(f => EF.Functions.Like(f.FirstName, term)
+                    || EF.Functions.Like(f.LastName, term)
+                    || EF.Functions.Like(f.NormalizedEmail, email)
+                    || EF.Functions.Like(f.NormalizedUserName, name))
+                .ProjectTo<UserVm>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
     }
 }

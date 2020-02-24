@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebUI.Controllers
 {
-    public class BaseController : Controller
+    public abstract class BaseController : Controller
     {
         private IMediator _mediator;
 

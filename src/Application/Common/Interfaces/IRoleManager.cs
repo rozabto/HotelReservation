@@ -7,6 +7,7 @@ namespace Application.Common.Interfaces
     public interface IRoleManager
     {
         Task<Result> CreateRole(AppRole role);
+
         Task<bool> AnyRoles();
     }
 }

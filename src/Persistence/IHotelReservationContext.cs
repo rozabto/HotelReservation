@@ -8,7 +8,9 @@ namespace Persistence
     public interface IHotelReservationContext
     {
         DatabaseFacade Database { get; }
+
         DbSet<T> Set<T>() where T : class;
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

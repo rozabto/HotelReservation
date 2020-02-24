@@ -9,25 +9,20 @@
             <div class="col-12">
                 <div class="page-title text-center">
                     <h2>Employee list</h2>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-
-<!-- ##### List Area ##### -->
 <div class="card bd-0 shadow-base pd-30 mg-t-20">
     <div class="d-flex align-items-center justify-content-between mg-b-30">
         <div>
-            <h6 class="tx-13 tx-uppercase tx-inverse tx-semibold tx-spacing-1">List of emloyee</h6>
-          
+            <h6 class="tx-13 tx-uppercase tx-inverse tx-semibold tx-spacing-1">List of employees</h6>
         </div>
         <a asp-controller="Admin" asp-action="Create"
            class="btn-outline-info btn-oblong tx-11 tx-uppercase tx-mont tx-medium tx-spacing-1 pd-x-30 bd-2">Create new</a>
     </div><!-- d-flex -->
-
     <table class="table table-valign-middle mg-b-0">
         <tbody>
             @foreach (var employee in Model.Employees)
@@ -35,37 +30,33 @@
                 <tr>
                     <td class="pd-l-0-force">
                         <img src="" class="wd-40 rounded-circle" alt="">
-
                     </td>
                     <td>
                         <h6 class="tx-inverse tx-14 mg-b-0">@employee.FullName</h6>
                         <span class="tx-12">@employee.Email</span>
                     </td>
                     <td>@employee.HiredOnDate</td>
-                    <td><span id="sparkline1">1,4,4,7,5,9,4,7,5,9,1</span></td>
-
+                    <td><span class="sparkline1">1,4,4,7,5,9,4,7,5,9,1</span></td>
                 </tr>
             }
-
         </tbody>
     </table>
 </div>
+
 @section Styles {
-    <link href="lib/Ionicons/css/ionicons.css" rel="stylesheet">
-    <link href="lib/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet">
-    <link href="lib/jquery-switchbutton/jquery.switchButton.css" rel="stylesheet">
-    <link href="lib/rickshaw/rickshaw.min.css" rel="stylesheet">
-    <link href="lib/chartist/chartist.css" rel="stylesheet">
     <link rel="stylesheet" href="css/bracket.css">
-    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
-    <link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
-    <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
-    <link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
-    <link rel="stylesheet" type="text/css" href="css/util.css">
+    <link rel="stylesheet" type="text/css" href="node_modules\bootstrap\dist\css\bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/main-contacts.css">
+}
 
-
-
+@section Scripts {
+    <script src="node_modules\jquery-sparkline\jquery.sparkline.min.js"></script>
+    <script>
+        $('.sparkline1').sparkline('html', {
+            width: 100,
+            height: 30,
+            lineColor: '#0083CD',
+            fillColor: 'rgba(0,131,205,0.2)',
+        });
+    </script>
 }

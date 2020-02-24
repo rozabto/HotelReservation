@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using System.Text;
+﻿using System.Text;
 using System.Threading.Tasks;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.AspNetCore.Identity;
 
 namespace WebUI.Areas.Identity.Pages.Account
 {

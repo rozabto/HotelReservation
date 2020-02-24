@@ -17,7 +17,6 @@ namespace Domain.Entities
         public DateTime ReservedUntilDate { get; set; }
         public bool IncludeFood { get; set; }
         public bool AllInclusive { get; set; }
-        public bool HasCompleted { get; set; }
         public decimal Price { get; set; }
     }
 }
