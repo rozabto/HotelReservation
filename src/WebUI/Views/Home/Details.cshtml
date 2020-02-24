@@ -37,14 +37,10 @@
             Childcare
             Terrace
         </p>
-        <!-- Form -->
-        <form class="cart-form clearfix" method="get" asp-controller="Reservation" asp-action="Create" asp-route-roomId="@Model.Room.Id" asp-route-normalRoom="@Model.Room.RoomPrice.HasValue">
-            <!-- Cart & Favourite Box -->
-            <div class="cart-fav-box d-flex align-items-center">
-                <!-- Cart -->
-                <button type="submit" name="addtocart" value="5" class="btn essence-btn">Reserve now</button>
-            </div>
-        </form>
+
+        <a class="btn essence-btn" asp-controller="Reservation" asp-action="Create" asp-route-roomId="@Model.Room.Id" asp-route-normalRoom="@Model.Room.RoomPrice.HasValue">
+            Reserve now
+        </a>
     </div>
 </section>
 <!-- ##### Single Product Details Area End ##### -->

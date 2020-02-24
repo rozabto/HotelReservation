@@ -4,6 +4,7 @@
   "description": "",
   "author": "Rozabto",
   "dependencies": {
+    "@goldenplanet/bracket-theme": "^2.0.0",
     "@popperjs/core": "^2.0.6",
     "bootstrap": "^4.4.1",
     "choices.js": "^9.0.1",
