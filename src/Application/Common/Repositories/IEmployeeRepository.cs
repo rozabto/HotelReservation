@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain.Entities;
@@ -8,6 +9,6 @@ namespace Application.Common.Repositories
 {
     public interface IEmployeeRepository : IRepository<Employee>
     {
-        Task<List<EmployeeVm>> GetEmployees(int page, int pageCount, CancellationToken token);
+        Task<List<EmployeeShortVm>> GetEmployees(int page, int pageCount, DateTime afterDate, CancellationToken token);
     }
 }

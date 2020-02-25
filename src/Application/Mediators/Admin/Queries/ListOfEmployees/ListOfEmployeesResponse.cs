@@ -5,6 +5,6 @@ namespace Application.Admin.Queries.ListOfEmployees
 {
     public class ListOfEmployeesResponse
     {
-        public IReadOnlyList<EmployeeVm> Employees { get; set; }
+        public IReadOnlyList<EmployeeShortVm> Employees { get; set; }
     }
 }

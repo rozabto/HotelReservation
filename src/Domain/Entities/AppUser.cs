@@ -10,6 +10,7 @@ namespace Domain.Entities
         {
             Reservations = new HashSet<Reservation>();
             UsersRoles = new HashSet<AppUserRole>();
+            CreatedRooms = new HashSet<HotelRoom>();
             Id = Guid.NewGuid().ToString("N");
         }
 
@@ -21,5 +22,6 @@ namespace Domain.Entities
 
         public ICollection<Reservation> Reservations { get; set; }
         public ICollection<AppUserRole> UsersRoles { get; set; }
+        public ICollection<HotelRoom> CreatedRooms { get; set; }
     }
 }

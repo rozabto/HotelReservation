@@ -26,7 +26,7 @@ namespace Persistence.Configuration
                 .IsUnicode(false);
 
             builder.HasOne(f => f.CreatedByUser)
-                .WithMany()
+                .WithMany(f => f.CreatedRooms)
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }

@@ -21,10 +21,10 @@ namespace Persistence.Common
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public Task<List<EmployeeVm>> GetEmployees(int page, int pageCount, CancellationToken token) =>
+        public Task<List<EmployeeShortVm>> GetEmployees(int page, int pageCount, DateTime afterDate, CancellationToken token) =>
             Query.Skip(pageCount * page)
                 .Take(pageCount)
-                .ProjectTo<EmployeeVm>(_mapper.ConfigurationProvider)
+                .ProjectTo<EmployeeShortVm>(_mapper.ConfigurationProvider, new { afterDate })
                 .ToListAsync(token);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Domain.Enums
+﻿namespace Application.Common.Models
 {
     public enum SortBy
     {

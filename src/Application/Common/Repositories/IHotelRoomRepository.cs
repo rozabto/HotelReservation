@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Common.Models;
 using Domain.Entities;
 using Domain.Enums;
 using Domain.Models;

@@ -20,7 +20,6 @@ namespace Infrastructure
             services.AddScoped<IRoleManager, RoleManagerService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IDateTime, UniversalDateTime>();
-            services.AddTransient<ICountryService, CountryService>();
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<ICheckoutService, CheckoutService>();
 

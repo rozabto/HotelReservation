@@ -22,6 +22,9 @@ namespace WebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromForm]CreateReservationCommand command)
         {
+            if (!ModelState.IsValid)
+                return View();
+
             await Mediator.Send(command);
             return Redirect(nameof(Index));
         }

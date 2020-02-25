@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Application.Common.Models;
 using Application.Home.Queries.GetHotelRoom;
 using Application.Search.Queries.SearchHotelRooms;
 using Domain.Enums;

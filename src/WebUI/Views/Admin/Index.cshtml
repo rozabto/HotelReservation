@@ -37,6 +37,13 @@
                     </td>
                     <td>@employee.HiredOnDate</td>
                     <td><span class="sparkline1">1,4,4,7,5,9,4,7,5,9,1</span></td>
+                    <td>
+                        @foreach (var date in employee.CreatedRoomsPerWeek.GroupBy(f => f))
+                        {
+                            @date.Key
+                            @date.Count()
+                        }
+                    </td>
                 </tr>
             }
         </tbody>
@@ -45,7 +52,6 @@
 
 @section Styles {
     <link rel="stylesheet" href="node_modules\@@goldenplanet\bracket-theme\template\css\bracket.min.css">
-    <link rel="stylesheet" type="text/css" href="node_modules\bootstrap\dist\css\bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/main-contacts.css">
 }
 

@@ -8,12 +8,9 @@
     "@popperjs/core": "^2.0.6",
     "bootstrap": "^4.4.1",
     "choices.js": "^9.0.1",
-    "codemirror": "^5.52.0",
     "flatpickr": "^4.6.3",
-    "font-awesome": "^4.7.0",
     "jquery": "^3.4.1",
     "jquery-sparkline": "^2.4.0",
-    "jquery-ui": "^1.12.1",
     "jquery-validation": "^1.19.1",
     "jquery-validation-unobtrusive": "^3.2.11",
     "owl.carousel": "^2.3.4"

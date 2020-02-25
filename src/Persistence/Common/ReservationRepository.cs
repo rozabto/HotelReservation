@@ -32,13 +32,14 @@ namespace Persistence.Common
 
         public Task<List<ReservationVm>> GetUserReservations(string userId, int page, int pageCount, CancellationToken token)
         {
-            Query.Where(f => f.CreatedByUserId != userId)
+            var query = Query;
+            query = query.Where(f => f.CreatedByUserId != userId)
                 .OrderBy(f => f.CreatedOn);
 
             if (page > 0)
-                Query.Skip(pageCount * page).Take(page);
+                query = query.Skip(pageCount * page).Take(page);
 
-            return Query.ProjectTo<ReservationVm>(_mapper.ConfigurationProvider)
+            return query.ProjectTo<ReservationVm>(_mapper.ConfigurationProvider)
                 .ToListAsync(token);
         }
     }
