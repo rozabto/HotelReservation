@@ -1,0 +1,38 @@
+﻿@using Microsoft.AspNetCore.Hosting
+@using Microsoft.Extensions.Hosting
+@model Application.Reservations.Queries.Checkout.CheckoutResponse
+@inject IWebHostEnvironment environment
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+@if (environment.IsDevelopment())
+{
+    <p class="text-center mt-100">
+        You are in development mod, you can skip this process by <a asp-action="Index">Clicking here</a>
+    </p>
+}
+
+<div class="embed-responsive embed-responsive-16by9">
+    <iframe class="mt-100 w-100 embed-responsive-item" src="@Model.Url"></iframe>
+</div>
+
+@section Scripts {
+    <script>
+        if (window.addEventListener) {
+            window.addEventListener("message", recievedMessage, false);
+        } else {
+            window.attachEvent("onmessage", recievedMessage);
+        }
+
+        function recievedMessage(message) {
+            const data = JSON.parse(message.data);
+            if (data === "success") {
+                document.location.href = document.location.origin + '/Reservation';
+            }
+            else if (data === "backToMerchantSite") {
+                document.location.href = document.location.origin;
+            }
+        }
+    </script>
+}

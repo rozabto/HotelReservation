@@ -14,6 +14,8 @@ namespace Application.Common.Interfaces
 
         Task<AppUser> GetUserById(string userId);
 
+        Task<AppUser> GetUserByEmail(string email);
+
         Task<Result> AddUserToRole(AppUser user, RoleType roleType);
 
         Task<List<UserVm>> SearchUsers(string term);

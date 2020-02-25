@@ -60,6 +60,12 @@ namespace Infrastructure.Identity
                 .ThenInclude(f => f.Role)
                 .FirstOrDefaultAsync(f => f.Id == userId);
 
+        public Task<AppUser> GetUserByEmail(string email) =>
+            _userManager.Users
+                .Include(f => f.UsersRoles)
+                .ThenInclude(f => f.Role)
+                .FirstOrDefaultAsync(f => f.NormalizedEmail == _userManager.NormalizeEmail(email));
+
         public async Task<Result> AddUserToRole(AppUser user, RoleType roleType) =>
             (await _userManager.AddToRoleAsync(user,
                 roleType switch

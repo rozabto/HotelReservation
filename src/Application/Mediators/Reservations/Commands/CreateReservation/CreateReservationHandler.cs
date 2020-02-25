@@ -9,7 +9,7 @@ using MediatR;
 
 namespace Application.Reservations.Commands.CreateReservation
 {
-    public class CreateReservationHandler : IRequestHandler<CreateReservationCommand>
+    public class CreateReservationHandler : IRequestHandler<CreateReservationCommand, string>
     {
         private readonly IReservationRepository _reservation;
         private readonly IHotelRoomRepository _hotelRoom;
@@ -22,13 +22,13 @@ namespace Application.Reservations.Commands.CreateReservation
             _currentUser = currentUser ?? throw new ArgumentNullException(nameof(currentUser));
         }
 
-        public async Task<Unit> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
+        public async Task<string> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
         {
             request.To = request.To.Date;
             request.From = request.From.Date;
 
-            if (request.From < request.To)
-                (request.To, request.From) = (request.From.Date, request.To.Date);
+            if (request.From > request.To)
+                (request.To, request.From) = (request.From, request.To);
 
             var room = await _hotelRoom.GetById(request.RoomId, cancellationToken)
                 ?? throw new NotFoundException("Room Id", request.RoomId);
@@ -39,7 +39,7 @@ namespace Application.Reservations.Commands.CreateReservation
             if (await _reservation.CanReserve(request.RoomId, _currentUser.User.Id, request.To, request.From, cancellationToken))
                 throw new BadRequestException("You can't reserve already reserved rooms");
 
-            await _reservation.Create(new Reservation
+            var reservation = new Reservation
             {
                 AllInclusive = request.AllInclusive,
                 IncludeFood = request.IncludeFood,
@@ -50,9 +50,13 @@ namespace Application.Reservations.Commands.CreateReservation
                 + (request.IncludeFood ? room.FoodPrice : 0m),
                 ReservedForDate = request.From,
                 ReservedUntilDate = request.To,
-                ReservedRoomId = request.RoomId
-            }, cancellationToken);
-            return Unit.Value;
+                ReservedRoomId = request.RoomId,
+                HasCompleted = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development"
+            };
+
+            await _reservation.Create(reservation, cancellationToken);
+
+            return reservation.Id;
         }
     }
 }

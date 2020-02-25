@@ -25,7 +25,7 @@ namespace Persistence.Common
             Query.AnyAsync(f => f.ReservedRoomId == roomId && f.CreatedByUserId != userId && f.ReservedForDate < to && from < f.ReservedUntilDate, token);
 
         public Task<bool> CheckIfExists(string roomId, string userId, CancellationToken token) =>
-            Query.AnyAsync(f => f.ReservedRoomId == roomId && f.CreatedByUserId == userId, token);
+            Query.AnyAsync(f => f.ReservedRoomId == roomId && f.CreatedByUserId == userId && !f.HasCompleted, token);
 
         public Task<Reservation> FindByRoomId(string roomId, string userId, CancellationToken token) =>
             Query.FirstOrDefaultAsync(f => f.ReservedRoomId == roomId && f.CreatedByUserId == userId, token);
@@ -33,11 +33,13 @@ namespace Persistence.Common
         public Task<List<ReservationVm>> GetUserReservations(string userId, int page, int pageCount, CancellationToken token)
         {
             var query = Query;
-            query = query.Where(f => f.CreatedByUserId != userId)
+            query = query.Where(f => f.CreatedByUserId == userId)
                 .OrderBy(f => f.CreatedOn);
 
             if (page > 0)
-                query = query.Skip(pageCount * page).Take(page);
+                query = query.Skip(pageCount * page);
+
+            query = query.Take(pageCount);
 
             return query.ProjectTo<ReservationVm>(_mapper.ConfigurationProvider)
                 .ToListAsync(token);

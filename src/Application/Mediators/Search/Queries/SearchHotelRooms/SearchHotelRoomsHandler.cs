@@ -34,8 +34,6 @@ namespace Application.Search.Queries.SearchHotelRooms
                         request.AvailableFrom,
                         request.AvailableTo,
                         request.Capacity,
-                        request.Page,
-                        20,
                         request.RoomType,
                         cancellationToken
                     )

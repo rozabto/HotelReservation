@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Application.Reservations.Commands.CreateReservation
 {
-    public class CreateReservationCommand : IRequest
+    public class CreateReservationCommand : IRequest<string>
     {
         [Required]
         [StringLength(32, MinimumLength = 32)]

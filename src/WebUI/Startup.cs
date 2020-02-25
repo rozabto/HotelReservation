@@ -21,7 +21,7 @@ namespace WebUI
             Environment = environment;
         }
 
-        public IWebHostEnvironment Environment { get; set; }
+        public IWebHostEnvironment Environment { get; }
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)

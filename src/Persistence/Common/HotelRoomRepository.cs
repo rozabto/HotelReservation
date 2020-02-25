@@ -35,7 +35,9 @@ namespace Persistence.Common
             query = query.OrderBy(f => f.CreatedOn);
 
             if (page > 0)
-                query = query.Skip(pageCount * page).Take(page);
+                query = query.Skip(pageCount * page);
+
+            query = query.Take(pageCount);
 
             return query.ProjectTo<HotelRoomShortVm>(_mapper.ConfigurationProvider)
                 .ToListAsync(token);
@@ -46,7 +48,7 @@ namespace Persistence.Common
                 .ProjectTo<HotelRoomVm>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(token);
 
-        public Task<int> SearchedHotelRoomsCount(string term, DateTime? from, DateTime? to, int? capacity, int page, int pageCount, RoomType? type, CancellationToken token)
+        public Task<int> SearchedHotelRoomsCount(string term, DateTime? from, DateTime? to, int? capacity, RoomType? type, CancellationToken token)
         {
             var query = Query;
             query = Query.Include(f => f.Reservations)
@@ -62,9 +64,6 @@ namespace Persistence.Common
 
             if (type.HasValue)
                 query = query.Where(f => f.RoomType == type);
-
-            if (page > 0)
-                query = query.Skip(pageCount * page).Take(page);
 
             return query.CountAsync(token);
         }
@@ -106,7 +105,9 @@ namespace Persistence.Common
             }
 
             if (page > 0)
-                query = query.Skip(pageCount * page).Take(page);
+                query = query.Skip(pageCount * page);
+
+            query = query.Take(pageCount);
 
             return query.ProjectTo<HotelRoomShortVm>(_mapper.ConfigurationProvider)
                 .ToListAsync(token);

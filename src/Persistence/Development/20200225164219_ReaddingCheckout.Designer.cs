@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Development;
 
 namespace Persistence.Development
 {
     [DbContext(typeof(DevelopmentDbContext))]
-    partial class DevelopmentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200225164219_ReaddingCheckout")]
+    partial class ReaddingCheckout
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
