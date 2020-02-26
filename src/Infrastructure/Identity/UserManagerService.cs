@@ -68,12 +68,9 @@ namespace Infrastructure.Identity
 
         public async Task<Result> AddUserToRole(AppUser user, RoleType roleType) =>
             (await _userManager.AddToRoleAsync(user,
-                roleType switch
-                {
-                    RoleType.Admin => "Admin",
-                    RoleType.Employee => "Employee",
-                    _ => throw new NotImplementedException("Role Type of User is not implemented")
-                }
+                roleType == RoleType.Admin || roleType == RoleType.Employee
+                    ? roleType.ToString()
+                    : throw new NotImplementedException("Role Type of User is not implemented")
             )).ToApplicationResult();
 
         public Task<List<UserVm>> SearchUsers(string term)
@@ -88,6 +85,15 @@ namespace Infrastructure.Identity
                     || EF.Functions.Like(f.NormalizedUserName, name))
                 .ProjectTo<UserVm>(_mapper.ConfigurationProvider)
                 .ToListAsync();
+        }
+
+        public async Task<Result> RemoveUserFromRole(AppUser user, RoleType roleType)
+        {
+            return (await _userManager.RemoveFromRoleAsync(user,
+                roleType == RoleType.Admin || roleType == RoleType.Employee
+                    ? roleType.ToString()
+                    : throw new NotImplementedException("Role Type of User is not implemented")
+            )).ToApplicationResult();
         }
     }
 }

@@ -16,9 +16,20 @@ namespace WebUI.Controllers.Api
             string Status = default,
             string productId = default,
             string advanceResponseChecksum = default,
-            string email = default)
+            string unknownParameters = default,
+            ulong? TransactionID = default,
+            string authCode = default)
         {
-            if (ppp_status == "OK")
+            if (ppp_status == "OK"
+                && !string.IsNullOrWhiteSpace(totalAmount)
+                && !string.IsNullOrWhiteSpace(Currency)
+                && !string.IsNullOrWhiteSpace(responseTimeStamp)
+                && !string.IsNullOrWhiteSpace(PPP_TransactionID)
+                && !string.IsNullOrWhiteSpace(Status)
+                && !string.IsNullOrWhiteSpace(productId)
+                && !string.IsNullOrWhiteSpace(advanceResponseChecksum)
+                && !string.IsNullOrWhiteSpace(unknownParameters)
+                && TransactionID != default)
             {
                 await Mediator.Send(new CompleteReservationCommand
                 {
@@ -29,7 +40,9 @@ namespace WebUI.Controllers.Api
                     Status = Status,
                     TotalAmount = totalAmount,
                     AdvanceResponseChecksum = advanceResponseChecksum,
-                    Email = email
+                    UserId = unknownParameters.Split('=')[1],
+                    TransactionId = TransactionID.Value,
+                    AuthCode = authCode
                 });
             }
             return Ok();

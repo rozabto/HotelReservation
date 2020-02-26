@@ -10,8 +10,8 @@ using Persistence.Development;
 namespace Persistence.Development
 {
     [DbContext(typeof(DevelopmentDbContext))]
-    [Migration("20200220175246_Reservations")]
-    partial class Reservations
+    [Migration("20200226092213_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -301,7 +301,7 @@ namespace Persistence.Development
                         .HasMaxLength(32)
                         .IsUnicode(false);
 
-                    b.Property<string>("CreatedByUserId")
+                    b.Property<string>("CreatedById")
                         .IsRequired()
                         .HasColumnType("char(32)")
                         .IsFixedLength(true)
@@ -313,6 +313,15 @@ namespace Persistence.Development
 
                     b.Property<decimal>("EGN")
                         .HasColumnType("decimal(20,0)");
+
+                    b.Property<string>("EditedById")
+                        .HasColumnType("char(32)")
+                        .IsFixedLength(true)
+                        .HasMaxLength(32)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime?>("EditedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -331,8 +340,12 @@ namespace Persistence.Development
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedByUserId")
+                    b.HasIndex("CreatedById")
                         .IsUnique();
+
+                    b.HasIndex("EditedById")
+                        .IsUnique()
+                        .HasFilter("[EditedById] IS NOT NULL");
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -351,13 +364,7 @@ namespace Persistence.Development
                     b.Property<int>("Capacity")
                         .HasColumnType("int");
 
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.Property<string>("CreatedByUserId")
+                    b.Property<string>("CreatedById")
                         .IsRequired()
                         .HasColumnType("char(32)")
                         .IsFixedLength(true)
@@ -365,6 +372,18 @@ namespace Persistence.Development
                         .IsUnicode(false);
 
                     b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EditedById")
+                        .HasColumnType("char(32)")
+                        .IsFixedLength(true)
+                        .HasMaxLength(32)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime?>("EditedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("FoodPrice")
@@ -396,7 +415,11 @@ namespace Persistence.Development
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedByUserId");
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("EditedById")
+                        .IsUnique()
+                        .HasFilter("[EditedById] IS NOT NULL");
 
                     b.ToTable("HotelRooms");
                 });
@@ -440,7 +463,12 @@ namespace Persistence.Development
                     b.Property<bool>("AllInclusive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("CreatedByUserId")
+                    b.Property<string>("AuthCode")
+                        .HasColumnType("varchar(35)")
+                        .HasMaxLength(35)
+                        .IsUnicode(false);
+
+                    b.Property<string>("CreatedById")
                         .IsRequired()
                         .HasColumnType("char(32)")
                         .IsFixedLength(true)
@@ -450,8 +478,17 @@ namespace Persistence.Development
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("HasCompleted")
-                        .HasColumnType("bit");
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EditedById")
+                        .HasColumnType("char(32)")
+                        .IsFixedLength(true)
+                        .HasMaxLength(32)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime?>("EditedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IncludeFood")
                         .HasColumnType("bit");
@@ -472,9 +509,16 @@ namespace Persistence.Development
                     b.Property<DateTime>("ReservedUntilDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal?>("TransactionId")
+                        .HasColumnType("decimal(20,0)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedByUserId");
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("EditedById")
+                        .IsUnique()
+                        .HasFilter("[EditedById] IS NOT NULL");
 
                     b.HasIndex("ReservedRoomId");
 
@@ -534,26 +578,36 @@ namespace Persistence.Development
 
             modelBuilder.Entity("Domain.Entities.Employee", b =>
                 {
-                    b.HasOne("Domain.Entities.AppUser", "CreatedByUser")
+                    b.HasOne("Domain.Entities.AppUser", "CreatedBy")
                         .WithOne()
-                        .HasForeignKey("Domain.Entities.Employee", "CreatedByUserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .HasForeignKey("Domain.Entities.Employee", "CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Domain.Entities.AppUser", "EditedBy")
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.Employee", "EditedById")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Domain.Entities.AppUser", "User")
                         .WithOne("Employee")
                         .HasForeignKey("Domain.Entities.Employee", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.HotelRoom", b =>
                 {
-                    b.HasOne("Domain.Entities.AppUser", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                    b.HasOne("Domain.Entities.AppUser", "CreatedBy")
+                        .WithMany("CreatedRooms")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Domain.Entities.AppUser", "EditedBy")
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.HotelRoom", "EditedById")
+                        .OnDelete(DeleteBehavior.NoAction);
                 });
 
             modelBuilder.Entity("Domain.Entities.HotelRoomImage", b =>
@@ -567,11 +621,16 @@ namespace Persistence.Development
 
             modelBuilder.Entity("Domain.Entities.Reservation", b =>
                 {
-                    b.HasOne("Domain.Entities.AppUser", "CreatedByUser")
+                    b.HasOne("Domain.Entities.AppUser", "CreatedBy")
                         .WithMany("Reservations")
-                        .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Domain.Entities.AppUser", "EditedBy")
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.Reservation", "EditedById")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Domain.Entities.HotelRoom", "ReservedRoom")
                         .WithMany("Reservations")

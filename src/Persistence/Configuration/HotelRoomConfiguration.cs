@@ -14,8 +14,13 @@ namespace Persistence.Configuration
                 .HasMaxLength(32)
                 .IsUnicode(false);
 
-            builder.Property(f => f.CreatedByUserId)
+            builder.Property(f => f.CreatedById)
                 .IsRequired()
+                .IsFixedLength()
+                .HasMaxLength(32)
+                .IsUnicode(false);
+
+            builder.Property(f => f.EditedById)
                 .IsFixedLength()
                 .HasMaxLength(32)
                 .IsUnicode(false);
@@ -25,8 +30,12 @@ namespace Persistence.Configuration
                 .IsRequired()
                 .IsUnicode(false);
 
-            builder.HasOne(f => f.CreatedByUser)
+            builder.HasOne(f => f.CreatedBy)
                 .WithMany(f => f.CreatedRooms)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(f => f.EditedBy)
+                .WithOne()
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }

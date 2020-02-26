@@ -28,7 +28,7 @@ namespace WebUI
         {
             services.AddDomain();
             services.AddPersistence(Configuration, Environment.IsDevelopment());
-            services.AddInfrastructure(Environment.IsDevelopment());
+            services.AddInfrastructure(Configuration, Environment.IsDevelopment());
             services.AddApplication();
 
             services.AddHealthChecks()

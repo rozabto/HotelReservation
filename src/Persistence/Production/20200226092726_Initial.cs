@@ -12,7 +12,7 @@ namespace Persistence.Production
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(unicode: false, fixedLength: true, maxLength: 36, nullable: false),
+                    Id = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
                     Name = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     NormalizedName = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     ConcurrencyStamp = table.Column<string>(unicode: false, maxLength: 256, nullable: false)
@@ -26,23 +26,23 @@ namespace Persistence.Production
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(unicode: false, fixedLength: true, maxLength: 36, nullable: false),
+                    Id = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
                     UserName = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     NormalizedUserName = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     Email = table.Column<string>(maxLength: 256, nullable: false),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: false),
                     EmailConfirmed = table.Column<bool>(nullable: false),
                     PasswordHash = table.Column<string>(maxLength: 256, nullable: false),
-                    SecurityStamp = table.Column<string>(unicode: false, maxLength: 256, nullable: false),
-                    ConcurrencyStamp = table.Column<string>(maxLength: 256, nullable: false),
-                    PhoneNumber = table.Column<string>(unicode: false, maxLength: 256, nullable: true),
+                    SecurityStamp = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
+                    ConcurrencyStamp = table.Column<string>(fixedLength: true, maxLength: 36, nullable: false),
+                    PhoneNumber = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    FirstName = table.Column<string>(maxLength: 100, nullable: false),
-                    LastName = table.Column<string>(maxLength: 100, nullable: false),
+                    FirstName = table.Column<string>(maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(maxLength: 50, nullable: false),
                     IsAdult = table.Column<bool>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false)
                 },
@@ -57,9 +57,9 @@ namespace Persistence.Production
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    RoleId = table.Column<string>(nullable: false),
-                    ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true)
+                    RoleId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
+                    ClaimType = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    ClaimValue = table.Column<string>(unicode: false, maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -69,7 +69,7 @@ namespace Persistence.Production
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -78,9 +78,9 @@ namespace Persistence.Production
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<string>(nullable: false),
-                    ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
+                    ClaimType = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    ClaimValue = table.Column<string>(unicode: false, maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -90,7 +90,7 @@ namespace Persistence.Production
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -99,8 +99,8 @@ namespace Persistence.Production
                 {
                     LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
                     ProviderKey = table.Column<string>(maxLength: 128, nullable: false),
-                    ProviderDisplayName = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: false)
+                    ProviderDisplayName = table.Column<string>(maxLength: 100, nullable: true),
+                    UserId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -110,15 +110,15 @@ namespace Persistence.Production
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
-                    RoleId = table.Column<string>(nullable: false)
+                    UserId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
+                    RoleId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -128,23 +128,23 @@ namespace Persistence.Production
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
+                    UserId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
                     LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
                     Name = table.Column<string>(maxLength: 128, nullable: false),
-                    Value = table.Column<string>(nullable: true)
+                    Value = table.Column<string>(maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -154,70 +154,88 @@ namespace Persistence.Production
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Employees",
                 columns: table => new
                 {
-                    Id = table.Column<string>(unicode: false, fixedLength: true, maxLength: 36, nullable: false),
-                    CreatedByUserId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 36, nullable: false),
+                    Id = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
+                    CreatedById = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
+                    EditedById = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: true),
+                    EditedOn = table.Column<DateTime>(nullable: true),
                     MiddleName = table.Column<string>(maxLength: 100, nullable: false),
                     EGN = table.Column<decimal>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
-                    UserId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 36, nullable: false)
+                    UserId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employees", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Employees_AspNetUsers_CreatedByUserId",
-                        column: x => x.CreatedByUserId,
+                        name: "FK_Employees_AspNetUsers_CreatedById",
+                        column: x => x.CreatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Employees_AspNetUsers_EditedById",
+                        column: x => x.EditedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Employees_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "HotelRooms",
                 columns: table => new
                 {
-                    Id = table.Column<string>(unicode: false, fixedLength: true, maxLength: 36, nullable: false),
-                    CreatedByUserId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 36, nullable: false),
+                    Id = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
+                    CreatedById = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
+                    EditedById = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: true),
+                    EditedOn = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     Capacity = table.Column<int>(nullable: false),
                     RoomType = table.Column<int>(nullable: false),
                     IsEmpty = table.Column<bool>(nullable: false),
-                    PriceForAdults = table.Column<decimal>(nullable: false),
-                    PriceForChildren = table.Column<decimal>(nullable: false),
-                    RoomNumber = table.Column<int>(nullable: false)
+                    PriceForAdults = table.Column<decimal>(nullable: true),
+                    PriceForChildren = table.Column<decimal>(nullable: true),
+                    RoomPrice = table.Column<decimal>(nullable: true),
+                    FoodPrice = table.Column<decimal>(nullable: false),
+                    RoomNumber = table.Column<int>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_HotelRooms", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_HotelRooms_AspNetUsers_CreatedByUserId",
-                        column: x => x.CreatedByUserId,
+                        name: "FK_HotelRooms_AspNetUsers_CreatedById",
+                        column: x => x.CreatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_HotelRooms_AspNetUsers_EditedById",
+                        column: x => x.EditedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "HotelRoomImages",
                 columns: table => new
                 {
-                    Id = table.Column<string>(unicode: false, fixedLength: true, maxLength: 36, nullable: false),
+                    Id = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
                     Image = table.Column<string>(unicode: false, maxLength: 100, nullable: false),
-                    HotelRoomId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 36, nullable: false)
+                    HotelRoomId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -226,68 +244,49 @@ namespace Persistence.Production
                         name: "FK_HotelRoomImages_HotelRooms_HotelRoomId",
                         column: x => x.HotelRoomId,
                         principalTable: "HotelRooms",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Reservations",
                 columns: table => new
                 {
-                    Id = table.Column<string>(unicode: false, fixedLength: true, maxLength: 36, nullable: false),
-                    CreatedByUserId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 36, nullable: false),
+                    Id = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
+                    CreatedById = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
-                    ReservedRoomId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 36, nullable: false),
+                    EditedById = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: true),
+                    EditedOn = table.Column<DateTime>(nullable: true),
+                    ReservedRoomId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
                     ReservedForDate = table.Column<DateTime>(nullable: false),
                     ReservedUntilDate = table.Column<DateTime>(nullable: false),
                     IncludeFood = table.Column<bool>(nullable: false),
                     AllInclusive = table.Column<bool>(nullable: false),
-                    Price = table.Column<decimal>(nullable: false)
+                    TransactionId = table.Column<decimal>(nullable: true),
+                    AuthCode = table.Column<string>(unicode: false, maxLength: 35, nullable: true),
+                    Price = table.Column<decimal>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Reservations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Reservations_AspNetUsers_CreatedByUserId",
-                        column: x => x.CreatedByUserId,
+                        name: "FK_Reservations_AspNetUsers_CreatedById",
+                        column: x => x.CreatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Reservations_AspNetUsers_EditedById",
+                        column: x => x.EditedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Reservations_HotelRooms_ReservedRoomId",
                         column: x => x.ReservedRoomId,
                         principalTable: "HotelRooms",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UsersReservations",
-                columns: table => new
-                {
-                    Id = table.Column<string>(unicode: false, fixedLength: true, maxLength: 36, nullable: false),
-                    CreatedByUserId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 36, nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    ReservationId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 36, nullable: false),
-                    UserId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 36, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UsersReservations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UsersReservations_AspNetUsers_CreatedByUserId",
-                        column: x => x.CreatedByUserId,
-                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_UsersReservations_Reservations_ReservationId",
-                        column: x => x.ReservationId,
-                        principalTable: "Reservations",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_UsersReservations_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -328,9 +327,16 @@ namespace Persistence.Production
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employees_CreatedByUserId",
+                name: "IX_Employees_CreatedById",
                 table: "Employees",
-                column: "CreatedByUserId");
+                column: "CreatedById",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Employees_EditedById",
+                table: "Employees",
+                column: "EditedById",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_UserId",
@@ -344,34 +350,31 @@ namespace Persistence.Production
                 column: "HotelRoomId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HotelRooms_CreatedByUserId",
+                name: "IX_HotelRooms_CreatedById",
                 table: "HotelRooms",
-                column: "CreatedByUserId");
+                column: "CreatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reservations_CreatedByUserId",
+                name: "IX_HotelRooms_EditedById",
+                table: "HotelRooms",
+                column: "EditedById",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservations_CreatedById",
                 table: "Reservations",
-                column: "CreatedByUserId");
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservations_EditedById",
+                table: "Reservations",
+                column: "EditedById",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reservations_ReservedRoomId",
                 table: "Reservations",
                 column: "ReservedRoomId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UsersReservations_CreatedByUserId",
-                table: "UsersReservations",
-                column: "CreatedByUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UsersReservations_ReservationId",
-                table: "UsersReservations",
-                column: "ReservationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UsersReservations_UserId",
-                table: "UsersReservations",
-                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -398,13 +401,10 @@ namespace Persistence.Production
                 name: "HotelRoomImages");
 
             migrationBuilder.DropTable(
-                name: "UsersReservations");
+                name: "Reservations");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "Reservations");
 
             migrationBuilder.DropTable(
                 name: "HotelRooms");

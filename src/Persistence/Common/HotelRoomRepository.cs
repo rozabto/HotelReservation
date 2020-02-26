@@ -23,13 +23,17 @@ namespace Persistence.Common
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        public Task<HotelRoom> GetRoomWithReservationsOverDate(string id, DateTime date, CancellationToken token) =>
+            Query.Include(f => f.Reservations.Where(f => f.ReservedForDate < date))
+                .FirstOrDefaultAsync(f => f.Id == id, token);
+
         public Task<List<HotelRoomShortVm>> GetUnreservedRooms(string userId, int page, int pageCount, CancellationToken token)
         {
-            var query = Query;
+            var query = Query.Where(f => f.DeletedOn == null);
             if (userId != null)
             {
                 query = query.Include(f => f.Reservations)
-                    .Where(f => f.Reservations.Any(w => w.CreatedByUserId != userId));
+                    .Where(f => f.Reservations.Any(w => w.CreatedById != userId));
             }
 
             query = query.OrderBy(f => f.CreatedOn);
@@ -50,8 +54,8 @@ namespace Persistence.Common
 
         public Task<int> SearchedHotelRoomsCount(string term, DateTime? from, DateTime? to, int? capacity, RoomType? type, CancellationToken token)
         {
-            var query = Query;
-            query = Query.Include(f => f.Reservations)
+            var query = Query.Where(f => f.DeletedOn == null);
+            query = query.Include(f => f.Reservations)
                 .Where(f => !f.Reservations.Any(f => f.ReservedForDate < to && from < f.ReservedUntilDate)
                     && f.Capacity >= capacity)
                 .OrderBy(f => f.CreatedOn);
@@ -70,8 +74,8 @@ namespace Persistence.Common
 
         public Task<List<HotelRoomShortVm>> SearchHotelRooms(string term, DateTime? from, DateTime? to, int? capacity, int page, int pageCount, RoomType? type, SortBy sort, CancellationToken token)
         {
-            var query = Query;
-            query = Query.Include(f => f.Reservations);
+            var query = Query.Where(f => f.DeletedOn == null);
+            query = query.Include(f => f.Reservations);
 
             if (from.HasValue && to.HasValue)
                 query = query.Where(f => !f.Reservations.Any(f => f.ReservedForDate < to && from < f.ReservedUntilDate));

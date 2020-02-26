@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Application.Reservations.Commands.CreateReservation;
+using Application.Reservations.Commands.DeleteReservation;
 using Application.Reservations.Queries.Checkout;
 using Application.Reservations.Queries.Reservations;
 using Microsoft.AspNetCore.Authorization;
@@ -22,6 +23,12 @@ namespace WebUI.Controllers
 
         public async Task<IActionResult> Checkout(string id) =>
             View(await Mediator.Send(new CheckoutQuery { Id = id }));
+
+        public async Task<IActionResult> Delete(string id)
+        {
+            await Mediator.Send(new DeleteReservationCommand { RoomId = id });
+            return Redirect(nameof(Index));
+        }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromForm]CreateReservationCommand command)

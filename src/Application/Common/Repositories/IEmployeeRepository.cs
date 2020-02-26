@@ -10,5 +10,7 @@ namespace Application.Common.Repositories
     public interface IEmployeeRepository : IRepository<Employee>
     {
         Task<List<EmployeeShortVm>> GetEmployees(int page, int pageCount, DateTime afterDate, CancellationToken token);
+
+        Task<Employee> GetEmployeeWithUser(string id, CancellationToken token);
     }
 }

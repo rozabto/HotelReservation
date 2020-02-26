@@ -8,8 +8,13 @@ namespace Persistence.Configuration
     {
         public void Configure(EntityTypeBuilder<Reservation> builder)
         {
-            builder.Property(f => f.CreatedByUserId)
+            builder.Property(f => f.CreatedById)
                 .IsRequired()
+                .IsFixedLength()
+                .HasMaxLength(32)
+                .IsUnicode(false);
+
+            builder.Property(f => f.EditedById)
                 .IsFixedLength()
                 .HasMaxLength(32)
                 .IsUnicode(false);
@@ -25,6 +30,18 @@ namespace Persistence.Configuration
                 .IsFixedLength()
                 .HasMaxLength(32)
                 .IsUnicode(false);
+
+            builder.Property(f => f.AuthCode)
+                .HasMaxLength(35)
+                .IsUnicode(false);
+
+            builder.HasOne(f => f.CreatedBy)
+                .WithMany(f => f.Reservations)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(f => f.EditedBy)
+                .WithOne()
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

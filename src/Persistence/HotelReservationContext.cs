@@ -26,12 +26,18 @@ namespace Persistence
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
+            foreach(var entry in ChangeTracker.Entries<AuditableEntity>())
             {
-                if (entry.State == EntityState.Added)
+                switch (entry.State)
                 {
-                    entry.Entity.CreatedByUserId = _currentUser.User.Id;
-                    entry.Entity.CreatedOn = _date.Now;
+                    case EntityState.Added:
+                        entry.Entity.CreatedById = _currentUser.User.Id;
+                        entry.Entity.CreatedOn = _date.Now;
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.EditedById = _currentUser.User.Id;
+                        entry.Entity.EditedOn = _date.Now;
+                        break;
                 }
             }
 

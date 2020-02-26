@@ -34,7 +34,7 @@ namespace Application.Reservations.Queries.Checkout
             var reservation = await _reservation.GetById(request.Id, cancellationToken)
                 ?? throw new NotFoundException("Reservation Id", request.Id);
 
-            if (reservation.CreatedByUserId != _currentUser.User.Id)
+            if (reservation.CreatedById != _currentUser.User.Id)
                 throw new BadRequestException("This reservation is not yours");
 
             var _params = ConstructParametersMap(reservation);
@@ -66,6 +66,7 @@ namespace Application.Reservations.Queries.Checkout
                 { "user_token_id", _currentUser.User.Email },
                 { "user_token", "auto" },
                 { "total_amount", price },
+                { "userId", _currentUser.User.Id },
                 { "notify_url", Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development"
                     ? "https://sandbox.safecharge.com/lib/demo_process_request/response.php"
                     : "https://hotel-reservation-manager.herokuapp.com/api/safecharge" }

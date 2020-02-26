@@ -27,24 +27,30 @@
         <tbody>
             @foreach (var employee in Model.Employees)
             {
-                <tr>
-                    <td class="pd-l-0-force">
-                        <img src="" class="wd-40 rounded-circle" alt="">
-                    </td>
-                    <td>
-                        <h6 class="tx-inverse tx-14 mg-b-0">@employee.FullName</h6>
-                        <span class="tx-12">@employee.Email</span>
-                    </td>
-                    <td>@employee.HiredOnDate</td>
-                    <td><span class="sparkline1">1,4,4,7,5,9,4,7,5,9,1</span></td>
-                    <td>
-                        @foreach (var date in employee.CreatedRoomsPerWeek.GroupBy(f => f))
-                        {
-                            @date.Key
-                            @date.Count()
-                        }
-                    </td>
-                </tr>
+            <tr>
+                <td class="pd-l-0-force">
+                    <img src="" class="wd-40 rounded-circle" alt="">
+                </td>
+                <td>
+                    <h6 class="tx-inverse tx-14 mg-b-0">@employee.FullName</h6>
+                    <span class="tx-12">@employee.Email</span>
+                </td>
+                <td>@employee.HiredOnDate</td>
+                <td><span class="sparkline1">1,4,4,7,5,9,4,7,5,9,1</span></td>
+                <td>
+                    @foreach (var date in employee.CreatedRoomsPerWeek.GroupBy(f => f))
+                    {
+                        @date.Key
+                        @date.Count()
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@employee.Id">Edit</a>
+                </td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@employee.Id">Delete</a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>

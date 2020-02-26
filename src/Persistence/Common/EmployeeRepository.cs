@@ -26,5 +26,9 @@ namespace Persistence.Common
                 .Take(pageCount)
                 .ProjectTo<EmployeeShortVm>(_mapper.ConfigurationProvider, new { afterDate })
                 .ToListAsync(token);
+
+        public Task<Employee> GetEmployeeWithUser(string id, CancellationToken token) =>
+            Query.Include(f => f.User)
+                .FirstOrDefaultAsync(f => f.Id == id, token);
     }
 }

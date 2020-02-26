@@ -18,6 +18,8 @@ namespace Application.Common.Interfaces
 
         Task<Result> AddUserToRole(AppUser user, RoleType roleType);
 
+        Task<Result> RemoveUserFromRole(AppUser user, RoleType roleType);
+
         Task<List<UserVm>> SearchUsers(string term);
     }
 }

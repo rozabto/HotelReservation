@@ -1,9 +1,11 @@
 ﻿using Application.Common.Interfaces;
+using CloudinaryDotNet;
 using Common;
 using Domain.Entities;
 using Infrastructure.Common;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Development;
 using Persistence.Production;
@@ -12,8 +14,16 @@ namespace Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, bool isDevelopment)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration, bool isDevelopment)
         {
+            var account = new Account(
+                configuration.GetValue<string>("Key:Cloudinary:Name"),
+                configuration.GetValue<string>("Key:Cloudinary:Api_Key"),
+                configuration.GetValue<string>("Key:Cloudinary:Api_Secret")
+            );
+            var cloudinary = new Cloudinary(account);
+
+            services.AddSingleton(_ => cloudinary);
             services.AddSingleton<IMemoryService, MemoryService>();
 
             services.AddScoped<IUserManager, UserManagerService>();

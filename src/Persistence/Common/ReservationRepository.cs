@@ -22,18 +22,18 @@ namespace Persistence.Common
         }
 
         public Task<bool> CanReserve(string roomId, string userId, DateTime to, DateTime from, CancellationToken token) =>
-            Query.AnyAsync(f => f.ReservedRoomId == roomId && f.CreatedByUserId != userId && f.ReservedForDate < to && from < f.ReservedUntilDate, token);
+            Query.AnyAsync(f => f.ReservedRoomId == roomId && f.CreatedById != userId && f.ReservedForDate < to && from < f.ReservedUntilDate && f.DeletedOn == null, token);
 
         public Task<bool> CheckIfExists(string roomId, string userId, CancellationToken token) =>
-            Query.AnyAsync(f => f.ReservedRoomId == roomId && f.CreatedByUserId == userId && !f.HasCompleted, token);
+            Query.AnyAsync(f => f.ReservedRoomId == roomId && f.CreatedById == userId && !f.TransactionId.HasValue && f.DeletedOn == null, token);
 
         public Task<Reservation> FindByRoomId(string roomId, string userId, CancellationToken token) =>
-            Query.FirstOrDefaultAsync(f => f.ReservedRoomId == roomId && f.CreatedByUserId == userId, token);
+            Query.FirstOrDefaultAsync(f => f.ReservedRoomId == roomId && f.CreatedById == userId, token);
 
         public Task<List<ReservationVm>> GetUserReservations(string userId, int page, int pageCount, CancellationToken token)
         {
             var query = Query;
-            query = query.Where(f => f.CreatedByUserId == userId)
+            query = query.Where(f => f.CreatedById == userId && f.DeletedOn == null)
                 .OrderBy(f => f.CreatedOn);
 
             if (page > 0)

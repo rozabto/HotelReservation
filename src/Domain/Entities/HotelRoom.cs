@@ -24,6 +24,7 @@ namespace Domain.Entities
         public decimal? RoomPrice { get; set; }
         public decimal FoodPrice { get; set; }
         public int RoomNumber { get; set; }
+        public DateTime? DeletedOn { get; set; }
 
         public ICollection<HotelRoomImage> RoomImages { get; set; }
         public ICollection<Reservation> Reservations { get; set; }

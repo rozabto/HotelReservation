@@ -11,6 +11,8 @@ namespace Application.Reservations.Commands.CompleteReservation
         public string Status { get; set; }
         public string ProductId { get; set; }
         public string AdvanceResponseChecksum { get; set; }
-        public string Email { get; set; }
+        public string UserId { get; set; }
+        public ulong TransactionId { get; set; }
+        public string AuthCode { get; set; }
     }
 }

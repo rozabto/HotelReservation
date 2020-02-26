@@ -13,14 +13,12 @@ namespace Application.Reservations.Commands.CompleteReservation
         private readonly ICheckoutService _checkout;
         private readonly IConfiguration _configuration;
         private readonly IReservationRepository _reservation;
-        private readonly IUserManager _userManager;
 
-        public CompleteReservationHandler(ICheckoutService checkout, IConfiguration configuration, IReservationRepository reservation, IUserManager userManager)
+        public CompleteReservationHandler(ICheckoutService checkout, IConfiguration configuration, IReservationRepository reservation)
         {
             _checkout = checkout ?? throw new ArgumentNullException(nameof(checkout));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _reservation = reservation ?? throw new ArgumentNullException(nameof(reservation));
-            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
         public async Task<Unit> Handle(CompleteReservationCommand request, CancellationToken cancellationToken)
@@ -31,9 +29,9 @@ namespace Application.Reservations.Commands.CompleteReservation
 
             if (_checkout.GetHash(str) == request.AdvanceResponseChecksum)
             {
-                var user = await _userManager.GetUserByEmail(request.Email);
-                var reservation = await _reservation.FindByRoomId(request.ProductId, user.Id, cancellationToken);
-                reservation.HasCompleted = true;
+                var reservation = await _reservation.FindByRoomId(request.ProductId, request.UserId, cancellationToken);
+                reservation.TransactionId = request.TransactionId;
+                reservation.AuthCode = request.AuthCode;
                 await _reservation.Update(reservation, cancellationToken);
             }
 

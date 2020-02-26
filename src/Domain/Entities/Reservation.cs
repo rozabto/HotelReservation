@@ -17,7 +17,9 @@ namespace Domain.Entities
         public DateTime ReservedUntilDate { get; set; }
         public bool IncludeFood { get; set; }
         public bool AllInclusive { get; set; }
-        public bool HasCompleted { get; set; }
+        public ulong? TransactionId { get; set; }
+        public string AuthCode { get; set; }
         public decimal Price { get; set; }
+        public DateTime? DeletedOn { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿@model Application.Home.Queries.GetHotelRoom.GetHotelRoomResponse
+﻿@using Common
+@model Application.Home.Queries.GetHotelRoom.GetHotelRoomResponse
+@inject ICurrentUserService currentUser
 @{
     ViewData["Title"] = "Product";
 }
@@ -41,6 +43,13 @@
         <a class="btn essence-btn" asp-controller="Reservation" asp-action="Create" asp-route-roomId="@Model.Room.Id" asp-route-normalRoom="@Model.Room.RoomPrice.HasValue">
             Reserve now
         </a>
+
+        @if (currentUser.IsAuthenticated && currentUser.User.UsersRoles.Any(f => f.Role.Name == "Employee" || f.Role.Name == "Admin"))
+        {
+            <a class="btn essence-btn" asp-controller="Reservation" asp-action="Delete" asp-route-roomId="@Model.Room.Id">
+                Delete
+            </a>
+        }
     </div>
 </section>
 <!-- ##### Single Product Details Area End ##### -->

@@ -15,6 +15,8 @@ namespace Application.Common.Repositories
 
         Task<HotelRoomVm> GetVmById(string id, CancellationToken token);
 
+        Task<HotelRoom> GetRoomWithReservationsOverDate(string id, DateTime date, CancellationToken token);
+
         Task<List<HotelRoomShortVm>> SearchHotelRooms(string term, DateTime? from, DateTime? to, int? capacity, int page, int pageCount, RoomType? type, SortBy sort, CancellationToken token);
 
         Task<int> SearchedHotelRoomsCount(string term, DateTime? from, DateTime? to, int? capacity, RoomType? type, CancellationToken token);

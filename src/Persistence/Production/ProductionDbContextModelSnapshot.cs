@@ -22,9 +22,9 @@ namespace Persistence.Production
             modelBuilder.Entity("Domain.Entities.AppRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(32)")
                         .IsFixedLength(true)
-                        .HasMaxLength(36)
+                        .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<string>("ConcurrencyStamp")
@@ -55,12 +55,43 @@ namespace Persistence.Production
                     b.ToTable("AspNetRoles");
                 });
 
+            modelBuilder.Entity("Domain.Entities.AppRoleClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("character varying(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("character varying(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("character(32)")
+                        .IsFixedLength(true)
+                        .HasMaxLength(32)
+                        .IsUnicode(false);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims");
+                });
+
             modelBuilder.Entity("Domain.Entities.AppUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(32)")
                         .IsFixedLength(true)
-                        .HasMaxLength(36)
+                        .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<int>("AccessFailedCount")
@@ -69,8 +100,9 @@ namespace Persistence.Production
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .IsRequired()
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasColumnType("character(36)")
+                        .IsFixedLength(true)
+                        .HasMaxLength(36);
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp without time zone");
@@ -85,16 +117,16 @@ namespace Persistence.Production
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("character varying(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("character varying(50)")
+                        .HasMaxLength(50);
 
                     b.Property<bool>("IsAdult")
                         .HasColumnType("boolean");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("character varying(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("character varying(50)")
+                        .HasMaxLength(50);
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -119,8 +151,8 @@ namespace Persistence.Production
                         .HasMaxLength(256);
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256)
+                        .HasColumnType("character varying(50)")
+                        .HasMaxLength(50)
                         .IsUnicode(false);
 
                     b.Property<bool>("PhoneNumberConfirmed")
@@ -128,8 +160,9 @@ namespace Persistence.Production
 
                     b.Property<string>("SecurityStamp")
                         .IsRequired()
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256)
+                        .HasColumnType("character(32)")
+                        .IsFixedLength(true)
+                        .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -153,19 +186,124 @@ namespace Persistence.Production
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("Domain.Entities.AppUserClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("character varying(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("character varying(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("character(32)")
+                        .IsFixedLength(true)
+                        .HasMaxLength(32)
+                        .IsUnicode(false);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims");
+                });
+
+            modelBuilder.Entity("Domain.Entities.AppUserLogin", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("character varying(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("character varying(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("character varying(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("character(32)")
+                        .IsFixedLength(true)
+                        .HasMaxLength(32)
+                        .IsUnicode(false);
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins");
+                });
+
+            modelBuilder.Entity("Domain.Entities.AppUserRole", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("character(32)")
+                        .IsFixedLength(true)
+                        .HasMaxLength(32)
+                        .IsUnicode(false);
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("character(32)")
+                        .IsFixedLength(true)
+                        .HasMaxLength(32)
+                        .IsUnicode(false);
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
+                });
+
+            modelBuilder.Entity("Domain.Entities.AppUserToken", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("character(32)")
+                        .IsFixedLength(true)
+                        .HasMaxLength(32)
+                        .IsUnicode(false);
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("character varying(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("character varying(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("Value")
+                        .HasColumnType("character varying(100)")
+                        .HasMaxLength(100);
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens");
+                });
+
             modelBuilder.Entity("Domain.Entities.Employee", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(32)")
                         .IsFixedLength(true)
-                        .HasMaxLength(36)
+                        .HasMaxLength(32)
                         .IsUnicode(false);
 
-                    b.Property<string>("CreatedByUserId")
+                    b.Property<string>("CreatedById")
                         .IsRequired()
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(32)")
                         .IsFixedLength(true)
-                        .HasMaxLength(36)
+                        .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<DateTime>("CreatedOn")
@@ -173,6 +311,15 @@ namespace Persistence.Production
 
                     b.Property<decimal>("EGN")
                         .HasColumnType("numeric(20,0)");
+
+                    b.Property<string>("EditedById")
+                        .HasColumnType("character(32)")
+                        .IsFixedLength(true)
+                        .HasMaxLength(32)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime?>("EditedOn")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -184,14 +331,18 @@ namespace Persistence.Production
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(32)")
                         .IsFixedLength(true)
-                        .HasMaxLength(36)
+                        .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedByUserId");
+                    b.HasIndex("CreatedById")
+                        .IsUnique();
+
+                    b.HasIndex("EditedById")
+                        .IsUnique();
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -202,42 +353,69 @@ namespace Persistence.Production
             modelBuilder.Entity("Domain.Entities.HotelRoom", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(32)")
                         .IsFixedLength(true)
-                        .HasMaxLength(36)
+                        .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<int>("Capacity")
                         .HasColumnType("integer");
 
-                    b.Property<string>("CreatedByUserId")
+                    b.Property<string>("CreatedById")
                         .IsRequired()
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(32)")
                         .IsFixedLength(true)
-                        .HasMaxLength(36)
+                        .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("EditedById")
+                        .HasColumnType("character(32)")
+                        .IsFixedLength(true)
+                        .HasMaxLength(32)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime?>("EditedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<decimal>("FoodPrice")
+                        .HasColumnType("numeric");
+
                     b.Property<bool>("IsEmpty")
                         .HasColumnType("boolean");
 
-                    b.Property<decimal>("PriceForAdults")
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("character varying(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
+
+                    b.Property<decimal?>("PriceForAdults")
                         .HasColumnType("numeric");
 
-                    b.Property<decimal>("PriceForChildren")
+                    b.Property<decimal?>("PriceForChildren")
                         .HasColumnType("numeric");
 
                     b.Property<int>("RoomNumber")
                         .HasColumnType("integer");
+
+                    b.Property<decimal?>("RoomPrice")
+                        .HasColumnType("numeric");
 
                     b.Property<int>("RoomType")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedByUserId");
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("EditedById")
+                        .IsUnique();
 
                     b.ToTable("HotelRooms");
                 });
@@ -245,16 +423,16 @@ namespace Persistence.Production
             modelBuilder.Entity("Domain.Entities.HotelRoomImage", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(32)")
                         .IsFixedLength(true)
-                        .HasMaxLength(36)
+                        .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<string>("HotelRoomId")
                         .IsRequired()
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(32)")
                         .IsFixedLength(true)
-                        .HasMaxLength(36)
+                        .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<string>("Image")
@@ -273,22 +451,39 @@ namespace Persistence.Production
             modelBuilder.Entity("Domain.Entities.Reservation", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(32)")
                         .IsFixedLength(true)
-                        .HasMaxLength(36)
+                        .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<bool>("AllInclusive")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("CreatedByUserId")
+                    b.Property<string>("AuthCode")
+                        .HasColumnType("character varying(35)")
+                        .HasMaxLength(35)
+                        .IsUnicode(false);
+
+                    b.Property<string>("CreatedById")
                         .IsRequired()
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(32)")
                         .IsFixedLength(true)
-                        .HasMaxLength(36)
+                        .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("EditedById")
+                        .HasColumnType("character(32)")
+                        .IsFixedLength(true)
+                        .HasMaxLength(32)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime?>("EditedOn")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IncludeFood")
@@ -302,196 +497,112 @@ namespace Persistence.Production
 
                     b.Property<string>("ReservedRoomId")
                         .IsRequired()
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(32)")
                         .IsFixedLength(true)
-                        .HasMaxLength(36)
+                        .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<DateTime>("ReservedUntilDate")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<decimal?>("TransactionId")
+                        .HasColumnType("numeric(20,0)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedByUserId");
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("EditedById")
+                        .IsUnique();
 
                     b.HasIndex("ReservedRoomId");
 
                     b.ToTable("Reservations");
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserReservation", b =>
+            modelBuilder.Entity("Domain.Entities.AppRoleClaim", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("character(36)")
-                        .IsFixedLength(true)
-                        .HasMaxLength(36)
-                        .IsUnicode(false);
-
-                    b.Property<string>("CreatedByUserId")
-                        .IsRequired()
-                        .HasColumnType("character(36)")
-                        .IsFixedLength(true)
-                        .HasMaxLength(36)
-                        .IsUnicode(false);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("ReservationId")
-                        .IsRequired()
-                        .HasColumnType("character(36)")
-                        .IsFixedLength(true)
-                        .HasMaxLength(36)
-                        .IsUnicode(false);
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("character(36)")
-                        .IsFixedLength(true)
-                        .HasMaxLength(36)
-                        .IsUnicode(false);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedByUserId");
-
-                    b.HasIndex("ReservationId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UsersReservations");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
-
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("character varying(36)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetRoleClaims");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("character varying(36)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserClaims");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
-
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
-
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("character varying(36)");
-
-                    b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserLogins");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("character varying(36)");
-
-                    b.Property<string>("RoleId")
-                        .HasColumnType("character varying(36)");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("character varying(36)");
-
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
-
-                    b.Property<string>("Value")
-                        .HasColumnType("text");
-
-                    b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Employee", b =>
-                {
-                    b.HasOne("Domain.Entities.AppUser", "CreatedByUser")
+                    b.HasOne("Domain.Entities.AppRole", null)
                         .WithMany()
-                        .HasForeignKey("CreatedByUserId")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.AppUserClaim", b =>
+                {
+                    b.HasOne("Domain.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.AppUserLogin", b =>
+                {
+                    b.HasOne("Domain.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.AppUserRole", b =>
+                {
+                    b.HasOne("Domain.Entities.AppRole", "Role")
+                        .WithMany("UsersRoles")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.AppUser", "User")
+                        .WithMany("UsersRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.AppUserToken", b =>
+                {
+                    b.HasOne("Domain.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.Employee", b =>
+                {
+                    b.HasOne("Domain.Entities.AppUser", "CreatedBy")
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.Employee", "CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.AppUser", "EditedBy")
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.Employee", "EditedById")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Domain.Entities.AppUser", "User")
                         .WithOne("Employee")
                         .HasForeignKey("Domain.Entities.Employee", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.HotelRoom", b =>
                 {
-                    b.HasOne("Domain.Entities.AppUser", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("Domain.Entities.AppUser", "CreatedBy")
+                        .WithMany("CreatedRooms")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Domain.Entities.AppUser", "EditedBy")
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.HotelRoom", "EditedById")
+                        .OnDelete(DeleteBehavior.NoAction);
                 });
 
             modelBuilder.Entity("Domain.Entities.HotelRoomImage", b =>
@@ -499,93 +610,26 @@ namespace Persistence.Production
                     b.HasOne("Domain.Entities.HotelRoom", "HotelRoom")
                         .WithMany("RoomImages")
                         .HasForeignKey("HotelRoomId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.Reservation", b =>
                 {
-                    b.HasOne("Domain.Entities.AppUser", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("Domain.Entities.AppUser", "CreatedBy")
+                        .WithMany("Reservations")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Domain.Entities.AppUser", "EditedBy")
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.Reservation", "EditedById")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Domain.Entities.HotelRoom", "ReservedRoom")
                         .WithMany("Reservations")
                         .HasForeignKey("ReservedRoomId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Entities.UserReservation", b =>
-                {
-                    b.HasOne("Domain.Entities.AppUser", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Reservation", "Reservation")
-                        .WithMany("UsersReservations")
-                        .HasForeignKey("ReservationId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.AppUser", "User")
-                        .WithMany("UsersReservations")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.HasOne("Domain.Entities.AppRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.HasOne("Domain.Entities.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.HasOne("Domain.Entities.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("Domain.Entities.AppRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.HasOne("Domain.Entities.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

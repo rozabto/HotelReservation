@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Persistence.Development
 {
-    public partial class Init : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -161,8 +161,10 @@ namespace Persistence.Development
                 columns: table => new
                 {
                     Id = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
-                    CreatedByUserId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
+                    CreatedById = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
+                    EditedById = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: true),
+                    EditedOn = table.Column<DateTime>(nullable: true),
                     MiddleName = table.Column<string>(maxLength: 100, nullable: false),
                     EGN = table.Column<decimal>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
@@ -172,8 +174,14 @@ namespace Persistence.Development
                 {
                     table.PrimaryKey("PK_Employees", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Employees_AspNetUsers_CreatedByUserId",
-                        column: x => x.CreatedByUserId,
+                        name: "FK_Employees_AspNetUsers_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Employees_AspNetUsers_EditedById",
+                        column: x => x.EditedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -181,7 +189,7 @@ namespace Persistence.Development
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -189,8 +197,10 @@ namespace Persistence.Development
                 columns: table => new
                 {
                     Id = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
-                    CreatedByUserId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
+                    CreatedById = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
+                    EditedById = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: true),
+                    EditedOn = table.Column<DateTime>(nullable: true),
                     Name = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     Capacity = table.Column<int>(nullable: false),
                     RoomType = table.Column<int>(nullable: false),
@@ -199,15 +209,21 @@ namespace Persistence.Development
                     PriceForChildren = table.Column<decimal>(nullable: true),
                     RoomPrice = table.Column<decimal>(nullable: true),
                     FoodPrice = table.Column<decimal>(nullable: false),
-                    Country = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
-                    RoomNumber = table.Column<int>(nullable: false)
+                    RoomNumber = table.Column<int>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_HotelRooms", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_HotelRooms_AspNetUsers_CreatedByUserId",
-                        column: x => x.CreatedByUserId,
+                        name: "FK_HotelRooms_AspNetUsers_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_HotelRooms_AspNetUsers_EditedById",
+                        column: x => x.EditedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
@@ -236,32 +252,34 @@ namespace Persistence.Development
                 columns: table => new
                 {
                     Id = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
-                    CreatedByUserId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
+                    CreatedById = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
+                    EditedById = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: true),
+                    EditedOn = table.Column<DateTime>(nullable: true),
                     ReservedRoomId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false),
                     ReservedForDate = table.Column<DateTime>(nullable: false),
                     ReservedUntilDate = table.Column<DateTime>(nullable: false),
                     IncludeFood = table.Column<bool>(nullable: false),
                     AllInclusive = table.Column<bool>(nullable: false),
-                    SessionToken = table.Column<string>(maxLength: 36, nullable: true),
+                    TransactionId = table.Column<decimal>(nullable: true),
+                    AuthCode = table.Column<string>(unicode: false, maxLength: 35, nullable: true),
                     Price = table.Column<decimal>(nullable: false),
-                    ReservedByUserId = table.Column<string>(unicode: false, fixedLength: true, maxLength: 32, nullable: false)
+                    DeletedOn = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Reservations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Reservations_AspNetUsers_CreatedByUserId",
-                        column: x => x.CreatedByUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Reservations_AspNetUsers_ReservedByUserId",
-                        column: x => x.ReservedByUserId,
+                        name: "FK_Reservations_AspNetUsers_CreatedById",
+                        column: x => x.CreatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Reservations_AspNetUsers_EditedById",
+                        column: x => x.EditedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Reservations_HotelRooms_ReservedRoomId",
                         column: x => x.ReservedRoomId,
@@ -308,10 +326,17 @@ namespace Persistence.Development
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employees_CreatedByUserId",
+                name: "IX_Employees_CreatedById",
                 table: "Employees",
-                column: "CreatedByUserId",
+                column: "CreatedById",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Employees_EditedById",
+                table: "Employees",
+                column: "EditedById",
+                unique: true,
+                filter: "[EditedById] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_UserId",
@@ -325,19 +350,28 @@ namespace Persistence.Development
                 column: "HotelRoomId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HotelRooms_CreatedByUserId",
+                name: "IX_HotelRooms_CreatedById",
                 table: "HotelRooms",
-                column: "CreatedByUserId");
+                column: "CreatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reservations_CreatedByUserId",
-                table: "Reservations",
-                column: "CreatedByUserId");
+                name: "IX_HotelRooms_EditedById",
+                table: "HotelRooms",
+                column: "EditedById",
+                unique: true,
+                filter: "[EditedById] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reservations_ReservedByUserId",
+                name: "IX_Reservations_CreatedById",
                 table: "Reservations",
-                column: "ReservedByUserId");
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservations_EditedById",
+                table: "Reservations",
+                column: "EditedById",
+                unique: true,
+                filter: "[EditedById] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reservations_ReservedRoomId",
