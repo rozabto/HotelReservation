@@ -16,5 +16,7 @@ namespace Application.Common.Repositories
         Task<Reservation> FindByRoomId(string roomId, string userId, CancellationToken token);
 
         Task<List<ReservationVm>> GetUserReservations(string userId, int page, int pageCount, CancellationToken token);
+
+        Task DeleteExpired(DateTime date, CancellationToken token);
     }
 }

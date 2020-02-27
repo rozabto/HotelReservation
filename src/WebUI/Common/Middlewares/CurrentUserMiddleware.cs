@@ -7,7 +7,7 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 
-namespace WebUI.Common
+namespace WebUI.Common.Middlewares
 {
     public class CurrentUserMiddleware
     {

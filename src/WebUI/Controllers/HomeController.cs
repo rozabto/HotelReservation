@@ -6,7 +6,7 @@ using Application.Home.Queries.GetHotelRoom;
 using Application.Search.Queries.SearchHotelRooms;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
-using WebUI.Models;
+using WebUI.Common.Models;
 
 namespace WebUI.Controllers
 {

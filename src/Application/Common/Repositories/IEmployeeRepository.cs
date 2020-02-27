@@ -11,6 +11,12 @@ namespace Application.Common.Repositories
     {
         Task<List<EmployeeShortVm>> GetEmployees(int page, int pageCount, DateTime afterDate, CancellationToken token);
 
+        Task<EmployeeVm> GetVmById(string id, CancellationToken token);
+
         Task<Employee> GetEmployeeWithUser(string id, CancellationToken token);
+
+        Task<Employee> GetEmployeeByUser(string id, CancellationToken token);
+
+        Task UpdateInactiveEmployees(DateTime date, CancellationToken token);
     }
 }

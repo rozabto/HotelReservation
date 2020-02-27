@@ -13,10 +13,12 @@ namespace Application.Reservations.Commands.CreateReservation
 
         [Required]
         [OverCurrrentDate]
+        [FromBeforeTo]
         public DateTime From { get; set; }
 
         [Required]
         [OverCurrrentDate]
+        [ToAfterFrom]
         public DateTime To { get; set; }
 
         [Required]
@@ -25,10 +27,10 @@ namespace Application.Reservations.Commands.CreateReservation
         [Required]
         public bool AllInclusive { get; set; }
 
-        [Range(0, 20)]
+        [Range(0, 1000)]
         public int? Children { get; set; }
 
-        [Range(0, 20)]
+        [Range(0, 1000)]
         public int? Adults { get; set; }
     }
 }

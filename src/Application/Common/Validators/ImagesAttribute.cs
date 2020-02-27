@@ -10,7 +10,13 @@ namespace Application.Common.Validators
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            foreach (var image in (IReadOnlyList<IFormFile>)value)
+            if (!(value is IReadOnlyList<IFormFile> images))
+                return new ValidationResult("Images Is Required");
+
+            if (images.Count < 2)
+                return new ValidationResult("Upload at least 2 images");
+
+            foreach (var image in images)
             {
                 if (!image.ContentType.StartsWith("image"))
                     return new ValidationResult("All files must be images");

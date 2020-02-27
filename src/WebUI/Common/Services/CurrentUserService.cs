@@ -1,7 +1,7 @@
 ﻿using Common;
 using Domain.Entities;
 
-namespace WebUI.Services
+namespace WebUI.Common.Services
 {
     public class CurrentUserService : ICurrentUserService
     {

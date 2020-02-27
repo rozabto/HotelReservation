@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Application.Home.Queries.GetHotelRoom;
 using Application.Reservations.Commands.CreateReservation;
 using Application.Reservations.Commands.DeleteReservation;
 using Application.Reservations.Queries.Checkout;
@@ -14,10 +15,9 @@ namespace WebUI.Controllers
         public async Task<IActionResult> Index(int? page) =>
             View(await Mediator.Send(new ReservationQuery { Page = page ?? 0 }));
 
-        public IActionResult Create(string roomId, bool normalRoom)
+        public async Task<IActionResult> Create(string id)
         {
-            ViewData["RoomId"] = roomId;
-            ViewData["NormalRoom"] = normalRoom;
+            ViewData["Room"] = (await Mediator.Send(new GetHotelRoomQuery { Id = id })).Room;
             return View();
         }
 
@@ -34,7 +34,10 @@ namespace WebUI.Controllers
         public async Task<IActionResult> Create([FromForm]CreateReservationCommand command)
         {
             if (!ModelState.IsValid)
+            {
+                ViewData["Room"] = (await Mediator.Send(new GetHotelRoomQuery { Id = command.RoomId })).Room;
                 return View();
+            }
 
             var id = await Mediator.Send(command);
             return Redirect(nameof(Checkout) + '/' + id);

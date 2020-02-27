@@ -27,6 +27,10 @@ namespace Persistence.Common
         public Task<bool> CheckIfExists(string roomId, string userId, CancellationToken token) =>
             Query.AnyAsync(f => f.ReservedRoomId == roomId && f.CreatedById == userId && !f.TransactionId.HasValue && f.DeletedOn == null, token);
 
+        public Task DeleteExpired(DateTime date, CancellationToken token) =>
+            Query.Where(f => f.TransactionId == null && EF.Functions.DateDiffHour(date, f.CreatedOn) > 1)
+                .DeleteFromQueryAsync(token);
+
         public Task<Reservation> FindByRoomId(string roomId, string userId, CancellationToken token) =>
             Query.FirstOrDefaultAsync(f => f.ReservedRoomId == roomId && f.CreatedById == userId, token);
 

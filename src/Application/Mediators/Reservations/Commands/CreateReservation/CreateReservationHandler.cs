@@ -27,14 +27,17 @@ namespace Application.Reservations.Commands.CreateReservation
             request.To = request.To.Date;
             request.From = request.From.Date;
 
-            if (request.From > request.To)
-                (request.To, request.From) = (request.From, request.To);
-
             var room = await _hotelRoom.GetById(request.RoomId, cancellationToken)
                 ?? throw new NotFoundException("Room Id", request.RoomId);
 
-            if (!room.RoomPrice.HasValue && (!request.Adults.HasValue || !request.Children.HasValue))
-                throw new BadRequestException("Adults and children count must have a value");
+            if (!room.RoomPrice.HasValue)
+            {
+                if (!request.Adults.HasValue || !request.Children.HasValue)
+                    throw new BadRequestException("Adults and children count must have a value");
+
+                if (room.Capacity < request.Adults + request.Children)
+                    throw new BadRequestException("Room can only store up to " + room.Capacity + " people");
+            }
 
             if (await _reservation.CanReserve(request.RoomId, _currentUser.User.Id, request.To, request.From, cancellationToken))
                 throw new BadRequestException("You can't reserve already reserved rooms");

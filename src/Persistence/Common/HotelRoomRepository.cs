@@ -27,26 +27,6 @@ namespace Persistence.Common
             Query.Include(f => f.Reservations.Where(f => f.ReservedForDate < date))
                 .FirstOrDefaultAsync(f => f.Id == id, token);
 
-        public Task<List<HotelRoomShortVm>> GetUnreservedRooms(string userId, int page, int pageCount, CancellationToken token)
-        {
-            var query = Query.Where(f => f.DeletedOn == null);
-            if (userId != null)
-            {
-                query = query.Include(f => f.Reservations)
-                    .Where(f => f.Reservations.Any(w => w.CreatedById != userId));
-            }
-
-            query = query.OrderBy(f => f.CreatedOn);
-
-            if (page > 0)
-                query = query.Skip(pageCount * page);
-
-            query = query.Take(pageCount);
-
-            return query.ProjectTo<HotelRoomShortVm>(_mapper.ConfigurationProvider)
-                .ToListAsync(token);
-        }
-
         public Task<HotelRoomVm> GetVmById(string id, CancellationToken token) =>
             Query.Where(f => f.Id == id)
                 .ProjectTo<HotelRoomVm>(_mapper.ConfigurationProvider)
@@ -55,10 +35,10 @@ namespace Persistence.Common
         public Task<int> SearchedHotelRoomsCount(string term, DateTime? from, DateTime? to, int? capacity, RoomType? type, CancellationToken token)
         {
             var query = Query.Where(f => f.DeletedOn == null);
-            query = query.Include(f => f.Reservations)
-                .Where(f => !f.Reservations.Any(f => f.ReservedForDate < to && from < f.ReservedUntilDate)
-                    && f.Capacity >= capacity)
-                .OrderBy(f => f.CreatedOn);
+            query = query.Include(f => f.Reservations);
+
+            if (from.HasValue && to.HasValue)
+                query = query.Where(f => !f.Reservations.Any(f => f.ReservedForDate < to && from < f.ReservedUntilDate));
 
             if (!string.IsNullOrWhiteSpace(term))
                 query = query.Where(f => f.Name == term);

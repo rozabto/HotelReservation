@@ -11,10 +11,10 @@ namespace Application.Common.Validators
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             if (value == null)
-                return ValidationResult.Success;
+                new ValidationResult("You must provide date");
 
             var dateTime = validationContext.GetRequiredService<IDateTime>();
-            return dateTime.Now > (DateTime)value ?
+            return dateTime.Now.Date > ((DateTime)value).Date ?
                 new ValidationResult("Date provided must be over current date")
                 : ValidationResult.Success;
         }

@@ -27,8 +27,22 @@ namespace Persistence.Common
                 .ProjectTo<EmployeeShortVm>(_mapper.ConfigurationProvider, new { afterDate })
                 .ToListAsync(token);
 
+        public Task<EmployeeVm> GetVmById(string id, CancellationToken token) =>
+            Query.Where(f => f.Id == id)
+                .ProjectTo<EmployeeVm>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(token);
+
         public Task<Employee> GetEmployeeWithUser(string id, CancellationToken token) =>
             Query.Include(f => f.User)
                 .FirstOrDefaultAsync(f => f.Id == id, token);
+
+        public Task<Employee> GetEmployeeByUser(string id, CancellationToken token) =>
+            Query.FirstOrDefaultAsync(f => f.UserId == id, token);
+
+        public Task UpdateInactiveEmployees(DateTime date, CancellationToken token) =>
+            Query.Include(f => f.User)
+                .ThenInclude(f => f.Reservations)
+                .Where(f => f.IsActive && f.User.Reservations.OrderByDescending(w => w.CreatedOn).Select(w => w.CreatedOn).FirstOrDefault() < date)
+                .UpdateFromQueryAsync(_ => new Employee { IsActive = false }, token);
     }
 }

@@ -24,10 +24,10 @@ namespace Application.Admin.Commands.EditEmployee
             var employee = await _employee.GetEmployeeWithUser(request.Id, cancellationToken)
                 ?? throw new NotFoundException("Employee", request.Id);
 
-            if (request.EGN.HasValue)
+            if (request.EGN.HasValue && request.EGN.Value != employee.EGN)
                 employee.EGN = request.EGN.Value;
 
-            if (!string.IsNullOrWhiteSpace(request.MiddleName))
+            if (!string.IsNullOrWhiteSpace(request.MiddleName) && request.MiddleName != employee.MiddleName)
                 employee.MiddleName = request.MiddleName;
 
             await _employee.Update(employee, cancellationToken);

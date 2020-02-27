@@ -2,6 +2,7 @@
 using Application.Admin.Commands.CreateEmployee;
 using Application.Admin.Commands.DeleteEmployee;
 using Application.Admin.Commands.EditEmployee;
+using Application.Admin.Queries.GetEmployee;
 using Application.Admin.Queries.ListOfEmployees;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +17,9 @@ namespace WebUI.Controllers
 
         public IActionResult Create() => View();
 
-        public IActionResult Edit(string id)
+        public async Task<IActionResult> Edit(string id)
         {
-            ViewData["EmployeeId"] = id;
+            ViewData["Employee"] = (await Mediator.Send(new GetEmployeeQuery { Id = id })).Employee;
             return View();
         }
 
@@ -42,7 +43,10 @@ namespace WebUI.Controllers
         public async Task<IActionResult> Edit(EditEmployeeCommand command)
         {
             if (!ModelState.IsValid)
+            {
+                ViewData["Employee"] = (await Mediator.Send(new GetEmployeeQuery { Id = command.Id })).Employee;
                 return View();
+            }
 
             await Mediator.Send(command);
             return Redirect(nameof(Index));

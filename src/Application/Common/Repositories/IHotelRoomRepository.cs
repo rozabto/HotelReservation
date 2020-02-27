@@ -11,8 +11,6 @@ namespace Application.Common.Repositories
 {
     public interface IHotelRoomRepository : IRepository<HotelRoom>
     {
-        Task<List<HotelRoomShortVm>> GetUnreservedRooms(string userId, int page, int pageCount, CancellationToken token);
-
         Task<HotelRoomVm> GetVmById(string id, CancellationToken token);
 
         Task<HotelRoom> GetRoomWithReservationsOverDate(string id, DateTime date, CancellationToken token);

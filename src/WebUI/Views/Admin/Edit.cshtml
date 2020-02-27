@@ -1,7 +1,7 @@
 ﻿@model Application.Admin.Commands.EditEmployee.EditEmployeeCommand
-
 @{
     ViewData["Title"] = "Edit";
+    var employee = ViewData["Employee"] as EmployeeVm;
 }
 
 <h1>Edit</h1>
@@ -12,15 +12,15 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input asp-for="Id" type="hidden" value="@ViewData["EmployeeId"]" class="form-control" />
+            <input asp-for="Id" type="hidden" value="@employee.Id" class="form-control" />
             <div class="form-group">
                 <label asp-for="MiddleName" class="control-label"></label>
-                <input asp-for="MiddleName" class="form-control" />
+                <input asp-for="MiddleName" value="@employee.FullName.Split()[1]" class="form-control" />
                 <span asp-validation-for="MiddleName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EGN" class="control-label"></label>
-                <input asp-for="EGN" class="form-control" />
+                <input asp-for="EGN" value="@employee.EGN" class="form-control" />
                 <span asp-validation-for="EGN" class="text-danger"></span>
             </div>
             <div class="form-group">

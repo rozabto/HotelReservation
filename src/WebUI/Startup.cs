@@ -8,8 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Persistence;
-using WebUI.Common;
-using WebUI.Services;
+using WebUI.Common.Middlewares;
+using WebUI.Common.Services;
 
 namespace WebUI
 {
@@ -35,6 +35,7 @@ namespace WebUI
                 .AddDbContextCheck<HotelReservationContext>();
 
             services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddHostedService<TimedHostedService>();
 
             services
                 .AddControllersWithViews()
