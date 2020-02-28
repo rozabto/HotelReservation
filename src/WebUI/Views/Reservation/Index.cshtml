@@ -35,8 +35,8 @@
                         <h6 class="tx-inverse tx-14 mg-b-0">@reservation.ReservedRoom.Name</h6>
                         <span class="tx-12"></span>
                     </td>
-                    <td>@reservation.ReservedForDate</td>
-                    <td>@reservation.ReservedUntilDate</td>
+                    <td>@reservation.ReservedForDate.ToShortDateString()</td>
+                    <td>@reservation.ReservedUntilDate.ToShortDateString()</td>
                     <td class="pd-r-0-force tx-center">
                         <a href="" class="tx-gray-600"><i class="icon ion-more tx-18 lh-0"></i></a>
                     </td>

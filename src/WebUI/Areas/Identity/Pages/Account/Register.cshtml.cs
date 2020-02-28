@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Common;
 using Domain.Entities;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -47,8 +44,6 @@ namespace WebUI.Areas.Identity.Pages.Account
 
         public string ReturnUrl { get; set; }
 
-        public IList<AuthenticationScheme> ExternalLogins { get; set; }
-
         public class InputModel
         {
             [Required]
@@ -85,17 +80,18 @@ namespace WebUI.Areas.Identity.Pages.Account
             public string Recaptcha { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             ViewData["recaptcha"] = _configuration.GetValue<string>("Key:Recaptcha:Key");
+
+            return Task.CompletedTask;
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            ViewData["recaptcha"] = _configuration.GetValue<string>("Key:Recaptcha:Key");
 
             if (!await IsReCaptchValid())
             {

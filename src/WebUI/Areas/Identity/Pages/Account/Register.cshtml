@@ -4,8 +4,6 @@
     ViewData["Title"] = "Register";
 }
 
-
-
 <div class="breadcumb_area bg-img" style="background-image: url(img/core-img/breadcumb.jpg);margin-top: 100px; ">
     <div class="container h-100">
         <div class="row h-100 align-items-center">
@@ -18,7 +16,6 @@
     </div>
 </div>
 
-
 <div class="container-contact100">
     <div class="wrap-contact100">
         <form method="post" class="contact100-form validate-form">
@@ -26,10 +23,10 @@
                 Sign Up for Free
             </span>
 
-            <label asp-for="Input.Username" class="label-input100">Username</label>
-            <div class="wrap-input100">
-                <input asp-for="Input.Username" class="input100">
-                <span asp-validation-for="Input.Username" class="focus-input100"></span>
+            <label asp-for="Input.Email" class="label-input100">Enter your email *</label>
+            <div class="wrap-input100 validate-input">
+                <input asp-for="Input.Email" class="input100">
+                <span asp-validation-for="Input.Email" class="focus-input100"></span>
             </div>
 
             <label asp-for="Input.FirstName" class="label-input100"></label>
@@ -42,18 +39,16 @@
                 <span asp-validation-for="Input.LastName" class="focus-input100"></span>
             </div>
 
+            <label asp-for="Input.Username" class="label-input100">Username</label>
+            <div class="wrap-input100">
+                <input asp-for="Input.Username" class="input100">
+                <span asp-validation-for="Input.Username" class="focus-input100"></span>
+            </div>
 
             <label asp-for="Input.Password" class="label-input100">Password</label>
             <div class="wrap-input100">
                 <input asp-for="Input.Password" class="input100">
                 <span asp-validation-for="Input.Password" class="focus-input100"></span>
-            </div>
-
-
-            <label asp-for="Input.Email" class="label-input100">Enter your email *</label>
-            <div class="wrap-input100 validate-input">
-                <input asp-for="Input.Email" class="input100">
-                <span asp-validation-for="Input.Email" class="focus-input100"></span>
             </div>
 
             <div class="label-input100">
@@ -69,8 +64,6 @@
                     </div>
                 </div>
             </div>
-
-
 
             <div class="container-contact100-form-btn">
                 <button class="contact100-form-btn">

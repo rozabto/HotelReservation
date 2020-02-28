@@ -13,7 +13,6 @@ namespace Application.Admin.Commands.CreateEmployee
         public ulong EGN { get; set; }
 
         [Required]
-        [StringLength(32, MinimumLength = 32)]
         public string UserId { get; set; }
     }
 }

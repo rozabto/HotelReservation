@@ -54,7 +54,7 @@ namespace Application.Search.Queries.SearchHotelRooms
                         cancellationToken
                     ),
                 Count = count,
-                HighestPrice = count > 0 ? await _hotelRoom.HighestPricesRoomSearch(
+                HighestPrice = count > 0 ? (int)await _hotelRoom.HighestPricesRoomSearch(
                         request.Term,
                         request.AvailableFrom,
                         request.AvailableTo,

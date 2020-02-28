@@ -24,14 +24,14 @@
         @if (Model.Room.RoomPrice.HasValue)
         {
             <p class="m-0">Room price</p>
-            <p class="product-price">@Model.Room.RoomPrice</p>
+            <p class="product-price">@Math.Round(Model.Room.RoomPrice.Value, 2) @Model.CurrencyCode</p>
         }
         else
         {
             <p class="m-0">Price per adult</p>
-            <p class="product-price">@Model.Room.PriceForAdults</p>
+            <p class="product-price">@Math.Round(Model.Room.PriceForAdults.Value, 2) @Model.CurrencyCode</p>
             <p class="m-0">Price per child</p>
-            <p class="product-price">@Model.Room.PriceForChildren </p>
+            <p class="product-price">@Math.Round(Model.Room.PriceForChildren.Value, 2) @Model.CurrencyCode</p>
         }
         <p class="product-desc">
             Main amenities

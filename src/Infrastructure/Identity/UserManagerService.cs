@@ -79,10 +79,13 @@ namespace Infrastructure.Identity
             var email = '%' + _userManager.NormalizeEmail(term) + '%';
             term = '%' + term + '%';
             return _userManager.Users
-                .Where(f => EF.Functions.Like(f.FirstName, term)
+                .Include(f => f.UsersRoles)
+                .ThenInclude(f => f.Role)
+                .Where(f => f.UsersRoles.Any(s => s.Role.Name == "Admin" || s.Role.Name == "Employee")
+                    && (EF.Functions.Like(f.FirstName, term)
                     || EF.Functions.Like(f.LastName, term)
                     || EF.Functions.Like(f.NormalizedEmail, email)
-                    || EF.Functions.Like(f.NormalizedUserName, name))
+                    || EF.Functions.Like(f.NormalizedUserName, name)))
                 .ProjectTo<UserVm>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }

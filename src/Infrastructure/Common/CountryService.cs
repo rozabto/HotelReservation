@@ -25,6 +25,7 @@ namespace Infrastructure.Common
             return JsonConvert.DeserializeObject<CountryJson>(response).Country;
         }
 
+#if DEBUG
         private bool IsLocalIpAddress(string ip)
         {
             try
@@ -48,5 +49,6 @@ namespace Infrastructure.Common
 
             return false;
         }
+#endif
     }
 }
