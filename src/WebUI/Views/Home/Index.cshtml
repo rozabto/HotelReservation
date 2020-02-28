@@ -43,15 +43,15 @@
                         </path>
                     </svg>
                 </div>
-                <select data-trigger="" name="choices-single-defaul">
-                    <option placeholder="">2 Adults</option>
+                <select id="adults" data-trigger="" name="choices-single-defaul">
+                    <option>2 Adults</option>
                     <option>3 Adults</option>
                     <option>4 Adults</option>
                     <option>5 Adults</option>
                 </select>
             </div>
             <div class="input-field fifth-wrap">
-                <button class="btn-search" type="button">SEARCH</button>
+                <button id="searchingBtn" class="btn-search" type="button">SEARCH</button>
             </div>
         </div>
     </form>
@@ -173,6 +173,13 @@
 </div>
 <!--/.Carousel Wrapper-->
 
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="css/util.css">
+    <link rel="stylesheet" type="text/css" href="css/main-contacts.css">
+}
+
+
+
 @section Scripts {
     <script src="node_modules\choices.js\public\assets\scripts\choices.min.js"></script>
     <script src="node_modules\flatpickr\dist\flatpickr.min.js"></script>
@@ -183,5 +190,17 @@
                 searchEnabled: false,
                 itemSelectText: '',
             });
+    </script>
+    <script>
+        (() => {
+            var search = $('#search');
+            var depart = $('#depart');
+            var returnval = $('#return');
+            var adults = $('#adults');
+
+            $('#searchingBtn').on('click', () => {
+                document.location.href = document.location.origin + `/Home/Search?term=${encodeURI(search.val())}&from=${depart.val()}&to=${returnval.val()}&capacity=${adults.val()}`;
+            });
+        })();
     </script>
 }
