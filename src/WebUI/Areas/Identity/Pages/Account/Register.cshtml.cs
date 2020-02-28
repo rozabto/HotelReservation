@@ -78,16 +78,10 @@ namespace WebUI.Areas.Identity.Pages.Account
             [Display(Name = "Password")]
             public string Password { get; set; }
 
-            [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-            public string ConfirmPassword { get; set; }
-
             [Required]
             [Display(Name = "Are you an Adult")]
             public bool IsAdult { get; set; }
 
-            [Required]
             public string Recaptcha { get; set; }
         }
 
@@ -109,7 +103,7 @@ namespace WebUI.Areas.Identity.Pages.Account
                 return Page();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return Page();
 
             var user = new AppUser

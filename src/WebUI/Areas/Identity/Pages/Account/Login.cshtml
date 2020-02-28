@@ -96,43 +96,46 @@
 
 <div class="container-contact100">
     <div class="wrap-contact100">
-        <form class="contact100-form validate-form">
+        <form method="post" class="contact100-form validate-form">
             <span class="contact100-form-title">
                 Member Login
             </span>
 
-            <label class="label-input100" for="phone">Username</label>
+            <label asp-for="Input.Username" class="label-input100">Username</label>
             <div class="wrap-input100">
-                <input id="phone" class="input100" type="text" name="phone" placeholder="Set a username">
-                <span class="focus-input100"></span>
+                <input asp-for="Input.Username" class="input100">
+                <span asp-validation-for="Input.Username" class="focus-input100"></span>
             </div>
 
-            <label class="label-input100" for="phone">Password</label>
+            <label asp-for="Input.Password" class="label-input100">Password</label>
             <div class="wrap-input100">
-                <input id="phone" class="input100" type="text" name="phone" placeholder="Set a password">
-                <span class="focus-input100"></span>
+                <input asp-for="Input.Password" class="input100">
+                <span asp-validation-for="Input.Password" class="focus-input100"></span>
             </div>
 
             <div class="form-group row mt-30 ml-1">
                 <div class="col">Remember me</div>
                 <div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="gridCheck1">
+                        <input asp-for="Input.RememberMe" class="form-check-input">
                     </div>
                 </div>
             </div>
 
-
+            <div class="label-input100">
+                <div class="g-recaptcha" data-sitekey="@ViewData["recaptcha"]"></div>
+                <span asp-validation-for="Input.Recaptcha" class="focus-input100"></span>
+            </div>
 
             <div class="container-contact100-form-btn">
                 <button class="contact100-form-btn">
                     Login
                 </button>
-                <button class="contact100-form-btn ml-1 bg-warn">
+                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="contact100-form-btn ml-1 bg-warn">
                     Register
-                </button>
+                </a>
             </div>
-          
+
         </form>
 
         <div class="contact100-more flex-col-c-m" style="background-image: url(img/HomePage/bg-01.jpg);">

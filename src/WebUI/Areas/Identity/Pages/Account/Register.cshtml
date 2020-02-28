@@ -101,46 +101,51 @@
 
 <div class="container-contact100">
     <div class="wrap-contact100">
-        <form class="contact100-form validate-form">
+        <form method="post" class="contact100-form validate-form">
             <span class="contact100-form-title">
                 Sign Up for Free
             </span>
 
-            <label class="label-input100" for="phone">Username</label>
+            <label asp-for="Input.Username" class="label-input100">Username</label>
             <div class="wrap-input100">
-                <input id="phone" class="input100" type="text" name="phone" placeholder="Set a username">
-                <span class="focus-input100"></span>
+                <input asp-for="Input.Username" class="input100">
+                <span asp-validation-for="Input.Username" class="focus-input100"></span>
             </div>
 
-            <label class="label-input100" for="first-name">Tell us your name *</label>
-            <div class="wrap-input100 rs1-wrap-input100 validate-input" data-validate="Type first name">
-                <input id="first-name" class="input100" type="text" name="first-name" placeholder="First name">
-                <span class="focus-input100"></span>
+            <label asp-for="Input.FirstName" class="label-input100"></label>
+            <div class="wrap-input100 rs1-wrap-input100 validate-input">
+                <input asp-for="Input.FirstName" class="input100">
+                <span asp-validation-for="Input.FirstName" class="focus-input100"></span>
             </div>
-            <div class="wrap-input100 rs2-wrap-input100 validate-input" data-validate="Type last name">
-                <input class="input100" type="text" name="last-name" placeholder="Last name">
-                <span class="focus-input100"></span>
+            <div class="wrap-input100 rs2-wrap-input100 validate-input">
+                <input asp-for="Input.LastName" class="input100">
+                <span asp-validation-for="Input.LastName" class="focus-input100"></span>
             </div>
 
 
-            <label class="label-input100" for="phone">Password</label>
+            <label asp-for="Input.Password" class="label-input100">Password</label>
             <div class="wrap-input100">
-                <input id="phone" class="input100" type="text" name="phone" placeholder="Set a password">
-                <span class="focus-input100"></span>
+                <input asp-for="Input.Password" class="input100">
+                <span asp-validation-for="Input.Password" class="focus-input100"></span>
             </div>
 
 
-            <label class="label-input100" for="email">Enter your email *</label>
-            <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
-                <input id="email" class="input100" type="text" name="email" placeholder="Eg. example@email.com">
-                <span class="focus-input100"></span>
+            <label asp-for="Input.Email" class="label-input100">Enter your email *</label>
+            <div class="wrap-input100 validate-input">
+                <input asp-for="Input.Email" class="input100">
+                <span asp-validation-for="Input.Email" class="focus-input100"></span>
+            </div>
+
+            <div class="label-input100">
+                <div class="g-recaptcha" data-sitekey="@ViewData["recaptcha"]"></div>
+                <span asp-validation-for="Input.Recaptcha" class="focus-input100"></span>
             </div>
 
             <div class="form-group row mt-30 ml-1">
                 <div class="col">Are you an adult?</div>
                 <div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="gridCheck1">
+                        <input asp-for="Input.IsAdult" class="form-check-input">
                     </div>
                 </div>
             </div>
