@@ -30,6 +30,15 @@ namespace Application.Search.Queries.SearchHotelRooms
             var currencyCode = new RegionInfo(countryCode).ISOCurrencySymbol;
             var currency = _currencyConversion.ConvertFromCountryCode(currencyCode);
 
+            var count = await _hotelRoom.SearchedHotelRoomsCount(
+                request.Term,
+                request.AvailableFrom,
+                request.AvailableTo,
+                request.Capacity,
+                request.RoomType,
+                cancellationToken
+            );
+
             return new SearchHotelRoomsResponse
             {
                 HotelRooms = await _hotelRoom.SearchHotelRooms(
@@ -44,22 +53,15 @@ namespace Application.Search.Queries.SearchHotelRooms
                         request.SortBy,
                         cancellationToken
                     ),
-                Count = await _hotelRoom.SearchedHotelRoomsCount(
+                Count = count,
+                HighestPrice = count > 0 ? await _hotelRoom.HighestPricesRoomSearch(
                         request.Term,
                         request.AvailableFrom,
                         request.AvailableTo,
                         request.Capacity,
                         request.RoomType,
                         cancellationToken
-                    ),
-                HighestPrice = await _hotelRoom.HighestPricesRoomSearch(
-                        request.Term,
-                        request.AvailableFrom,
-                        request.AvailableTo,
-                        request.Capacity,
-                        request.RoomType,
-                        cancellationToken
-                    ),
+                    ) : 0,
                 CurrencyCode = currencyCode
             };
         }
