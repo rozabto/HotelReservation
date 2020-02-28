@@ -36,15 +36,10 @@
 
             <label asp-for="UserId" class="label-input100">User</label>
             <div class="wrap-input100">
-                <input id="userId" list="list-of-users" asp-for="UserId" />
+                <input id="userId" list="list-of-users" class="input100" asp-for="UserId" />
                 <span asp-validation-for="UserId" class="focus-input100"></span>
 
                 <datalist id="list-of-users">
-                    <option value="Chocolate"></option>
-                    <option value="Coconut"></option>
-                    <option value="Mint"></option>
-                    <option value="Strawberry"></option>
-                    <option value="Vanilla"></option>
                 </datalist>
             </div>
 
@@ -64,13 +59,20 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
         (() => {
-            var userId = $('#userId');
+            const userId = $('#userId');
             userId.on('change', async () => {
                 await fetch('api/user/' + userId.val())
                     .then((resp) => resp.json())
                     .then(function (data) {
-                        console.log(data);
-                        $('#list-of-users');
+                        const list = $('#list-of-users');
+                        list.html('');
+                        for (const user of data) {
+                            const option = $('<option></option>');
+                            option.html(user.fullName);
+                            option.attr('value', user.id);
+
+                            list.append(option);
+                        }
                     });
             });
         })();

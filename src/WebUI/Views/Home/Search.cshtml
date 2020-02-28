@@ -72,12 +72,12 @@
                         <p class="widget-title2 mb-30">Price</p>
                         <div class="widget-desc">
                             <div class="slider-range">
-                                <div data-min="0" data-max="100" data-unit="" class="slider-range-price ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" data-value-min="00" data-value-max="100" data-label-result="BGN">
+                                <div data-min="0" data-max="@Model.HighestPrice" data-unit="" class="slider-range-price ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" data-value-min="00" data-value-max="@Model.HighestPrice" data-label-result="@Model.CurrencyCode">
                                     <div class="ui-slider-range ui-widget-header ui-corner-all"></div>
                                     <span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0"></span>
                                     <span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0"></span>
                                 </div>
-                                <div class="range-price">BGN 0 - 100</div>
+                                <div class="range-price">@Model.CurrencyCode - @Model.HighestPrice</div>
                             </div>
                         </div>
                     </div>
@@ -127,7 +127,7 @@
                                         <a asp-action="Details" asp-route-id="@room.Id">
                                             <h6>@room.Name</h6>
                                         </a>
-                                        <p class="product-price"> @room.Price</p>
+                                        <p class="product-price">@room.Price @Model.CurrencyCode</p>
                                     </div>
                                 </div>
                             </div>

@@ -4,37 +4,6 @@
     var employee = ViewData["Employee"] as EmployeeVm;
 }
 
-@*<h1>Edit</h1>
-
-    <h4>EditEmployeeCommand</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-action="Edit">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input asp-for="Id" type="hidden" value="@employee.Id" class="form-control" />
-                <div class="form-group">
-                    <label asp-for="MiddleName" class="control-label"></label>
-                    <input asp-for="MiddleName" value="@employee.FullName.Split()[1]" class="form-control" />
-                    <span asp-validation-for="MiddleName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="EGN" class="control-label"></label>
-                    <input asp-for="EGN" value="@employee.EGN" class="form-control" />
-                    <span asp-validation-for="EGN" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div>
-        <a asp-action="Index">Back to List</a>
-    </div>*@
-
-
 <div class="breadcumb_area bg-img" style="background-image: url(img/core-img/breadcumb.jpg);margin-top:90px; ">
     <div class="container h-100">
         <div class="row h-100 align-items-center">
@@ -51,8 +20,9 @@
     <div class="wrap-contact100">
         <form asp-action="Create" class="contact100-form validate-form">
             <span class="contact100-form-title">
-              Edit
+                Edit
             </span>
+            <input asp-for="Id" type="hidden" value="@employee.Id" class="form-control" />
 
             <label asp-for="MiddleName" class="label-input100">Middle name</label>
             <div class="wrap-input100">
@@ -64,20 +34,6 @@
             <div class="wrap-input100">
                 <input asp-for="EGN" class="input100">
                 <span asp-validation-for="EGN" class="focus-input100"></span>
-            </div>
-
-            <label asp-for="UserId" class="label-input100">User</label>
-            <div class="wrap-input100">
-                <input id="userId" list="list-of-users" asp-for="UserId" />
-                <span asp-validation-for="UserId" class="focus-input100"></span>
-
-                <datalist id="list-of-users">
-                    <option value="Chocolate"></option>
-                    <option value="Coconut"></option>
-                    <option value="Mint"></option>
-                    <option value="Strawberry"></option>
-                    <option value="Vanilla"></option>
-                </datalist>
             </div>
 
             <div class="container-contact100-form-btn">
