@@ -36,8 +36,16 @@
 
             <label asp-for="UserId" class="label-input100">User</label>
             <div class="wrap-input100">
-                <input asp-for="UserId" class="input100">
+                <input id="userId" list="list-of-users" asp-for="UserId" />
                 <span asp-validation-for="UserId" class="focus-input100"></span>
+
+                <datalist id="list-of-users">
+                    <option value="Chocolate"></option>
+                    <option value="Coconut"></option>
+                    <option value="Mint"></option>
+                    <option value="Strawberry"></option>
+                    <option value="Vanilla"></option>
+                </datalist>
             </div>
 
             <div class="container-contact100-form-btn">
@@ -54,6 +62,19 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        (() => {
+            var userId = $('#userId');
+            userId.on('change', async () => {
+                await fetch('api/user/' + userId.val())
+                    .then((resp) => resp.json())
+                    .then(function (data) {
+                        console.log(data);
+                        $('#list-of-users');
+                    });
+            });
+        })();
+    </script>
 }
 
 @section Styles {
