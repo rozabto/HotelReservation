@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
+using Application.Data.Commands.CurrencyConversion;
 using Application.Data.Commands.EmployeeActivity;
 using Application.Data.Commands.ExpiredReservations;
 using Common;
@@ -16,34 +17,40 @@ namespace WebUI.Common.Services
     internal class TimedHostedService : IHostedService, IDisposable
     {
         private readonly ILogger<TimedHostedService> _logger;
-        private readonly IServiceScopeFactory _serviceScopeFactory;
-        private Timer _timer;
+        private readonly IServiceScopeFactory _scopeFactory;
+        private Timer _10MinTimer;
+        private Timer _hourTimer;
         private AppUser _admin;
 
-        public TimedHostedService(ILogger<TimedHostedService> logger, IServiceScopeFactory serviceScopeFactory)
+        public TimedHostedService(ILogger<TimedHostedService> logger, IServiceScopeFactory scopeFactory)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _serviceScopeFactory = serviceScopeFactory ?? throw new ArgumentNullException(nameof(serviceScopeFactory));
+            _scopeFactory = scopeFactory ?? throw new ArgumentNullException(nameof(scopeFactory));
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Timed Background Service is starting.");
 
-            _timer = new Timer(DoWork, null, TimeSpan.Zero,
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                var userManager = services.GetRequiredService<IUserManager>();
+                _admin = await userManager.GetUserByEmail("adminUser@hotelReservation.com");
+            }
+
+            _10MinTimer = new Timer(On10MinPassed, null, TimeSpan.Zero,
                 TimeSpan.FromMinutes(10));
 
-            using var scope = _serviceScopeFactory.CreateScope();
-            var services = scope.ServiceProvider;
-
-            var userManager = services.GetRequiredService<IUserManager>();
-            _admin = await userManager.GetUserByEmail("adminUser@hotelReservation.com");
+            _hourTimer = new Timer(OnHourPassed, null, TimeSpan.Zero,
+                TimeSpan.FromHours(1));
         }
 
-        private async void DoWork(object state)
+        private async void On10MinPassed(object state)
         {
-            _logger.LogInformation("Timed Background Service is doing work.");
-            using var scope = _serviceScopeFactory.CreateScope();
+            _logger.LogInformation("10 Minute Timed Background Service is doing work.");
+            using var scope = _scopeFactory.CreateScope();
 
             var currentUser = scope.ServiceProvider.GetRequiredService<ICurrentUserService>();
             currentUser.IsAuthenticated = true;
@@ -54,16 +61,29 @@ namespace WebUI.Common.Services
             await mediator.Send(new EmployeeActivityCommand());
         }
 
+        private async void OnHourPassed(object state)
+        {
+            _logger.LogInformation("1 Hour Timed Background Service is doing work.");
+            using var scope = _scopeFactory.CreateScope();
+
+            var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+            await mediator.Send(new CurrencyConversionCommand());
+        }
+
         public Task StopAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Timed Background Service is stopping.");
 
-            _timer?.Change(Timeout.Infinite, 0);
+            _10MinTimer?.Change(Timeout.Infinite, 0);
+            _hourTimer?.Change(Timeout.Infinite, 0);
 
             return Task.CompletedTask;
         }
 
-        public void Dispose() =>
-            _timer?.Dispose();
+        public void Dispose()
+        {
+            _10MinTimer?.Dispose();
+            _hourTimer?.Dispose();
+        }
     }
 }

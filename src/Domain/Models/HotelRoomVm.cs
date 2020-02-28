@@ -11,12 +11,16 @@ namespace Domain.Models
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public decimal PriceForAdults { get; set; }
+        public decimal Price { get; set; }
         public string Image { get; set; }
 
-        public void Mapping(Profile profile) =>
+        public void Mapping(Profile profile)
+        {
+            decimal conversionRate = 1;
             profile.CreateMap<HotelRoom, HotelRoomShortVm>()
-                .ForMember(f => f.Image, f => f.MapFrom(s => s.RoomImages.Select(w => w.Image).FirstOrDefault()));
+                .ForMember(f => f.Image, f => f.MapFrom(s => s.RoomImages.Select(w => w.Image).FirstOrDefault()))
+                .ForMember(f => f.Price, f => f.MapFrom(s => (s.PriceForAdults ?? s.RoomPrice).Value * conversionRate));
+        }
     }
 
     public class HotelRoomVm : IMapFrom<HotelRoom>
@@ -31,8 +35,14 @@ namespace Domain.Models
         public int RoomNumber { get; set; }
         public IReadOnlyList<string> Images { get; set; }
 
-        public void Mapping(Profile profile) =>
+        public void Mapping(Profile profile)
+        {
+            decimal conversionRate = 1;
             profile.CreateMap<HotelRoom, HotelRoomVm>()
-                .ForMember(f => f.Images, f => f.MapFrom(s => s.RoomImages.Select(w => w.Image).ToArray()));
+                .ForMember(f => f.Images, f => f.MapFrom(s => s.RoomImages.Select(w => w.Image).ToArray()))
+                .ForMember(f => f.PriceForAdults, f => f.MapFrom(s => s.PriceForAdults.HasValue ? s.PriceForAdults * conversionRate : null))
+                .ForMember(f => f.PriceForChildren, f => f.MapFrom(s => s.PriceForChildren.HasValue ? s.PriceForChildren * conversionRate : null))
+                .ForMember(f => f.RoomPrice, f => f.MapFrom(s => s.RoomPrice.HasValue ? s.RoomPrice * conversionRate : null));
+        }
     }
 }

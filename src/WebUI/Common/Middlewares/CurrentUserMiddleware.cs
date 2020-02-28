@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
@@ -12,10 +13,12 @@ namespace WebUI.Common.Middlewares
     public class CurrentUserMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly bool isEnvProd;
 
         public CurrentUserMiddleware(RequestDelegate next)
         {
             _next = next;
+            isEnvProd = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production";
         }
 
         public async Task Invoke(HttpContext httpContext, ICurrentUserService currentUser, IUserManager userManager, IMemoryService memory)
@@ -39,7 +42,10 @@ namespace WebUI.Common.Middlewares
                     }
                     currentUser.User = user;
                 }
-                currentUser.Ip = httpContext.Connection.RemoteIpAddress.ToString();
+
+                currentUser.Ip = isEnvProd
+                    ? httpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault()
+                    : httpContext.Connection.RemoteIpAddress.ToString();
             }
             catch (UnauthorizedAccessException ex)
             {

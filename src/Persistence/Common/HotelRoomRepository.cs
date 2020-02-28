@@ -27,47 +27,37 @@ namespace Persistence.Common
             Query.Include(f => f.Reservations.Where(f => f.ReservedForDate < date))
                 .FirstOrDefaultAsync(f => f.Id == id, token);
 
-        public Task<HotelRoomVm> GetVmById(string id, CancellationToken token) =>
+        public Task<HotelRoomVm> GetVmById(string id, decimal conversionRate, CancellationToken token) =>
             Query.Where(f => f.Id == id)
-                .ProjectTo<HotelRoomVm>(_mapper.ConfigurationProvider)
+                .ProjectTo<HotelRoomVm>(_mapper.ConfigurationProvider, new { conversionRate })
                 .FirstOrDefaultAsync(token);
+
+        public Task<decimal> HighestPricesRoomSearch(string term, DateTime? from, DateTime? to, int? capacity, RoomType? type, CancellationToken token)
+        {
+            var query = Query.Where(f => f.DeletedOn == null);
+            query = query.Include(f => f.Reservations);
+
+            query = FilterSearch(query, term, from, to, capacity, type);
+
+            return query.MaxAsync(f => (f.PriceForAdults ?? f.RoomPrice).Value, token);
+        }
 
         public Task<int> SearchedHotelRoomsCount(string term, DateTime? from, DateTime? to, int? capacity, RoomType? type, CancellationToken token)
         {
             var query = Query.Where(f => f.DeletedOn == null);
             query = query.Include(f => f.Reservations);
 
-            if (from.HasValue && to.HasValue)
-                query = query.Where(f => !f.Reservations.Any(f => f.ReservedForDate < to && from < f.ReservedUntilDate));
-
-            if (!string.IsNullOrWhiteSpace(term))
-                query = query.Where(f => f.Name == term);
-
-            if (capacity.HasValue)
-                query = query.Where(f => f.Capacity >= capacity);
-
-            if (type.HasValue)
-                query = query.Where(f => f.RoomType == type);
+            query = FilterSearch(query, term, from, to, capacity, type);
 
             return query.CountAsync(token);
         }
 
-        public Task<List<HotelRoomShortVm>> SearchHotelRooms(string term, DateTime? from, DateTime? to, int? capacity, int page, int pageCount, RoomType? type, SortBy sort, CancellationToken token)
+        public Task<List<HotelRoomShortVm>> SearchHotelRooms(string term, decimal conversionRate, DateTime? from, DateTime? to, int? capacity, int page, int pageCount, RoomType? type, SortBy sort, CancellationToken token)
         {
             var query = Query.Where(f => f.DeletedOn == null);
             query = query.Include(f => f.Reservations);
 
-            if (from.HasValue && to.HasValue)
-                query = query.Where(f => !f.Reservations.Any(f => f.ReservedForDate < to && from < f.ReservedUntilDate));
-
-            if (!string.IsNullOrWhiteSpace(term))
-                query = query.Where(f => f.Name == term);
-
-            if (capacity.HasValue)
-                query = query.Where(f => f.Capacity >= capacity);
-
-            if (type.HasValue)
-                query = query.Where(f => f.RoomType == type);
+            query = FilterSearch(query, term, from, to, capacity, type);
 
             switch (sort)
             {
@@ -93,8 +83,25 @@ namespace Persistence.Common
 
             query = query.Take(pageCount);
 
-            return query.ProjectTo<HotelRoomShortVm>(_mapper.ConfigurationProvider)
+            return query.ProjectTo<HotelRoomShortVm>(_mapper.ConfigurationProvider, new { conversionRate })
                 .ToListAsync(token);
+        }
+
+        private IQueryable<HotelRoom> FilterSearch(IQueryable<HotelRoom> query, string term, DateTime? from, DateTime? to, int? capacity, RoomType? type)
+        {
+            if (from.HasValue && to.HasValue)
+                query = query.Where(f => !f.Reservations.Any(f => f.ReservedForDate < to && from < f.ReservedUntilDate));
+
+            if (!string.IsNullOrWhiteSpace(term))
+                query = query.Where(f => f.Name == term);
+
+            if (capacity.HasValue)
+                query = query.Where(f => f.Capacity >= capacity);
+
+            if (type.HasValue)
+                query = query.Where(f => f.RoomType == type);
+
+            return query;
         }
     }
 }

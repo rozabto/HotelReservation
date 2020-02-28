@@ -7,5 +7,7 @@ namespace Application.Search.Queries.SearchHotelRooms
     {
         public IReadOnlyList<HotelRoomShortVm> HotelRooms { get; set; }
         public int Count { get; set; }
+        public decimal HighestPrice { get; set; }
+        public string CurrencyCode { get; set; }
     }
 }

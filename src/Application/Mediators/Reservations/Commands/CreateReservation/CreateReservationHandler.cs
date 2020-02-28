@@ -54,7 +54,7 @@ namespace Application.Reservations.Commands.CreateReservation
                 ReservedForDate = request.From,
                 ReservedUntilDate = request.To,
                 ReservedRoomId = request.RoomId,
-                TransactionId = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development" ? (ulong?)0 : null
+                TransactionId = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production" ? null :(ulong?)0
             };
 
             await _reservation.Create(reservation, cancellationToken);

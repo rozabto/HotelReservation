@@ -67,9 +67,9 @@ namespace Application.Reservations.Queries.Checkout
                 { "user_token", "auto" },
                 { "total_amount", price },
                 { "userId", _currentUser.User.Id },
-                { "notify_url", Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development"
-                    ? "https://sandbox.safecharge.com/lib/demo_process_request/response.php"
-                    : "https://hotel-reservation-manager.herokuapp.com/api/safecharge" }
+                { "notify_url", Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production"
+                    ? "https://hotel-reservation-manager.herokuapp.com/api/safecharge"
+                    : "https://sandbox.safecharge.com/lib/demo_process_request/response.php" }
             };
         }
     }

@@ -16,22 +16,15 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration, bool isDevelopment)
         {
-            var account = new Account(
-                configuration.GetValue<string>("Key:Cloudinary:Name"),
-                configuration.GetValue<string>("Key:Cloudinary:Api_Key"),
-                configuration.GetValue<string>("Key:Cloudinary:Api_Secret")
-            );
-            var cloudinary = new Cloudinary(account);
-
-            services.AddSingleton(_ => cloudinary);
             services.AddSingleton<IMemoryService, MemoryService>();
+            services.AddSingleton<ICurrencyConversionService, CurrencyConversionService>();
 
             services.AddScoped<IUserManager, UserManagerService>();
             services.AddScoped<IRoleManager, RoleManagerService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IDateTime, UniversalDateTime>();
-            services.AddTransient<IImageService, ImageService>();
             services.AddTransient<ICheckoutService, CheckoutService>();
+            services.AddTransient<ICountryService, CountryService>();
 
             var identity = services.AddDefaultIdentity<AppUser>(options =>
             {
@@ -47,8 +40,26 @@ namespace Infrastructure
                 .AddDefaultUI();
 
             if (isDevelopment)
+            {
                 identity.AddEntityFrameworkStores<DevelopmentDbContext>();
-            else identity.AddEntityFrameworkStores<ProductionDbContext>();
+
+                services.AddTransient<IImageService, ImageService>();
+            }
+            else
+            {
+                identity.AddEntityFrameworkStores<ProductionDbContext>();
+
+                var account = new Account(
+                    configuration.GetValue<string>("Key:Cloudinary:Name"),
+                    configuration.GetValue<string>("Key:Cloudinary:Api_Key"),
+                    configuration.GetValue<string>("Key:Cloudinary:Api_Secret")
+                );
+                var cloudinary = new Cloudinary(account);
+
+                services.AddSingleton(_ => cloudinary);
+
+                services.AddTransient<IImageService, ProductionImageService>();
+            }
 
             return services;
         }

@@ -11,12 +11,14 @@ namespace Application.Common.Repositories
 {
     public interface IHotelRoomRepository : IRepository<HotelRoom>
     {
-        Task<HotelRoomVm> GetVmById(string id, CancellationToken token);
+        Task<HotelRoomVm> GetVmById(string id, decimal conversionRate, CancellationToken token);
 
         Task<HotelRoom> GetRoomWithReservationsOverDate(string id, DateTime date, CancellationToken token);
 
-        Task<List<HotelRoomShortVm>> SearchHotelRooms(string term, DateTime? from, DateTime? to, int? capacity, int page, int pageCount, RoomType? type, SortBy sort, CancellationToken token);
+        Task<List<HotelRoomShortVm>> SearchHotelRooms(string term, decimal conversionRate, DateTime? from, DateTime? to, int? capacity, int page, int pageCount, RoomType? type, SortBy sort, CancellationToken token);
 
         Task<int> SearchedHotelRoomsCount(string term, DateTime? from, DateTime? to, int? capacity, RoomType? type, CancellationToken token);
+
+        Task<decimal> HighestPricesRoomSearch(string term, DateTime? from, DateTime? to, int? capacity, RoomType? type, CancellationToken token);
     }
 }
