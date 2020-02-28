@@ -32,15 +32,16 @@ namespace Application.Home.Queries.GetHotelRoom
 
             var countryCode = await _country.GetCountryCode(_currentUser.Ip);
             var currencyCode = new RegionInfo(countryCode).ISOCurrencySymbol;
-            var currency = _currencyConversion.ConvertFromCountryCode(currencyCode);
+            var conversionRate = _currencyConversion.ConvertFromCountryCode(currencyCode);
 
-            var room = await _hotelRoom.GetVmById(request.Id, currency, cancellationToken)
+            var room = await _hotelRoom.GetVmById(request.Id, conversionRate, cancellationToken)
                 ?? throw new NotFoundException("Room", request.Id);
 
             return new GetHotelRoomResponse
             {
                 Room = room,
-                CurrencyCode = currencyCode
+                CurrencyCode = currencyCode,
+                ConversionRate = conversionRate
             };
         }
     }

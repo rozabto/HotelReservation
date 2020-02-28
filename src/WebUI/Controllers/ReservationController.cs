@@ -17,7 +17,7 @@ namespace WebUI.Controllers
 
         public async Task<IActionResult> Create(string id)
         {
-            ViewData["Room"] = (await Mediator.Send(new GetHotelRoomQuery { Id = id })).Room;
+            ViewData["Room"] = await Mediator.Send(new GetHotelRoomQuery { Id = id });
             return View();
         }
 
@@ -35,7 +35,7 @@ namespace WebUI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewData["Room"] = (await Mediator.Send(new GetHotelRoomQuery { Id = command.RoomId })).Room;
+                ViewData["Room"] = await Mediator.Send(new GetHotelRoomQuery { Id = command.RoomId });
                 return View();
             }
 

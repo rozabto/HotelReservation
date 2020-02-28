@@ -6,5 +6,6 @@ namespace Application.Home.Queries.GetHotelRoom
     {
         public HotelRoomVm Room { get; set; }
         public string CurrencyCode { get; set; }
+        public decimal ConversionRate { get; set; }
     }
 }

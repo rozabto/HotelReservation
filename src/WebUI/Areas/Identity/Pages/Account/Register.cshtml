@@ -48,7 +48,7 @@
                 <span asp-validation-for="Input.IsAdult" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <div class="g-recaptcha" data-sitekey="6LeMYtcUAAAAAA_6N4CJwLM3MQ-zbxVce1zOyWGh"></div>
+                <div class="g-recaptcha" data-sitekey="@ViewData["recaptcha"]"></div>
                 <span asp-validation-for="Input.Recaptcha" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-primary">Register</button>

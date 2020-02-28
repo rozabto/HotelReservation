@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 
@@ -27,14 +28,16 @@ namespace WebUI.Areas.Identity.Pages.Account
         private readonly SignInManager<AppUser> _signInManager;
         private readonly UserManager<AppUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
+        private readonly IConfiguration _configuration;
         private readonly IEmailSender _emailSender;
         private readonly IDateTime _date;
 
-        public RegisterModel(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, ILogger<RegisterModel> logger, IEmailSender emailSender, IDateTime date)
+        public RegisterModel(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, ILogger<RegisterModel> logger, IConfiguration configuration, IEmailSender emailSender, IDateTime date)
         {
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
             _date = date ?? throw new ArgumentNullException(nameof(date));
         }
@@ -92,6 +95,7 @@ namespace WebUI.Areas.Identity.Pages.Account
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            ViewData["recaptcha"] = _configuration.GetValue<string>("Key:Recaptcha:Key");
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -153,15 +157,18 @@ namespace WebUI.Areas.Identity.Pages.Account
 
         public async Task<bool> IsReCaptchValid()
         {
-            var result = false;
             var captchaResponse = Request.Form["g-recaptcha-response"];
+
             if (string.IsNullOrEmpty(captchaResponse))
                 return false;
-            var secretKey = "6LeMYtcUAAAAAE5KNMRyuHeL_6-rD0jiQuSlL2PR";
+
+            var secretKey = _configuration.GetValue<string>("Key:Recaptcha:Secret");
             const string apiUrl = "https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}";
+
             var requestUri = string.Format(apiUrl, secretKey, captchaResponse);
             var request = (HttpWebRequest)WebRequest.Create(requestUri);
 
+            var result = false;
             using (var response = await request.GetResponseAsync())
             {
                 using var stream = new StreamReader(response.GetResponseStream());

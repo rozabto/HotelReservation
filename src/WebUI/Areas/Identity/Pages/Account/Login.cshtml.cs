@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authentication;
@@ -8,7 +11,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 
 namespace WebUI.Areas.Identity.Pages.Account
 {
@@ -17,11 +22,13 @@ namespace WebUI.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly IConfiguration _configuration;
 
-        public LoginModel(SignInManager<AppUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<AppUser> signInManager, ILogger<LoginModel> logger, IConfiguration configuration)
         {
-            _signInManager = signInManager;
-            _logger = logger;
+            _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         [BindProperty]
@@ -43,6 +50,8 @@ namespace WebUI.Areas.Identity.Pages.Account
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
+            public string Recaptcha { get; set; }
+
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
         }
@@ -62,11 +71,19 @@ namespace WebUI.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             ReturnUrl = returnUrl;
+
+            ViewData["recaptcha"] = _configuration.GetValue<string>("Key:Recaptcha:Key");
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
+
+            if (!await IsReCaptchValid())
+            {
+                ModelState.AddModelError("Recaptcha", "You must complete the reCaptcha to continue");
+                return Page();
+            }
 
             if (ModelState.IsValid)
             {
@@ -96,6 +113,29 @@ namespace WebUI.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return Page();
+        }
+
+        public async Task<bool> IsReCaptchValid()
+        {
+            var captchaResponse = Request.Form["g-recaptcha-response"];
+
+            if (string.IsNullOrEmpty(captchaResponse))
+                return false;
+
+            var secretKey = _configuration.GetValue<string>("Key:Recaptcha:Secret");
+            const string apiUrl = "https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}";
+
+            var requestUri = string.Format(apiUrl, secretKey, captchaResponse);
+            var request = (HttpWebRequest)WebRequest.Create(requestUri);
+
+            var result = false;
+            using (var response = await request.GetResponseAsync())
+            {
+                using var stream = new StreamReader(response.GetResponseStream());
+                var jResponse = JObject.Parse(await stream.ReadToEndAsync());
+                result = jResponse.Value<bool>("success");
+            }
+            return result;
         }
     }
 }

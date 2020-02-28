@@ -1,7 +1,8 @@
-﻿@model Application.Reservations.Commands.CreateReservation.CreateReservationCommand
+﻿@using Application.Home.Queries.GetHotelRoom
+@model Application.Reservations.Commands.CreateReservation.CreateReservationCommand
 @{
     ViewData["Title"] = "Create";
-    var room = ViewData["Room"] as HotelRoomVm;
+    var room = ViewData["Room"] as GetHotelRoomResponse;
 }
 
 <div class="container">
@@ -12,7 +13,7 @@
     <div class="row">
         <div class="col-md-4">
             <form asp-action="Create">
-                <input asp-for="RoomId" type="hidden" class="form-control" value="@room.Id" />
+                <input asp-for="RoomId" type="hidden" class="form-control" value="@room.Room.Id" />
                 <div class="form-group">
                     <label asp-for="From" class="control-label"></label>
                     <input asp-for="From" type="date" class="form-control" />
@@ -35,7 +36,7 @@
                         @Html.DisplayNameFor(model => model.AllInclusive)
                     </label>
                 </div>
-                @if (room.RoomPrice == null)
+                @if (room.Room.RoomPrice == null)
                 {
                     <div class="form-group">
                         <label asp-for="Children" class="control-label"></label>
