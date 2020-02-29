@@ -84,13 +84,13 @@
             <label asp-for="From" class="label-input100">From</label>
             <div class="wrap-input100">
                 <input asp-for="From" type="date" class="input100">
-                <span asp-validation-for="From" class="focus-input100"></span>
+                <span asp-validation-for="From" class="text-danger"></span>
             </div>
 
             <label asp-for="To" class="label-input100">To</label>
             <div class="wrap-input100">
                 <input asp-for="To" type="date" class="input100">
-                <span asp-validation-for="To" class="focus-input100"></span>
+                <span asp-validation-for="To" class="text-danger"></span>
             </div>
 
             @if (room.Room.RoomPrice == null)
@@ -98,13 +98,13 @@
                 <label asp-for="Children" class="label-input100">Children</label>
                 <div class="wrap-input100">
                     <input asp-for="Children"  class="input100">
-                    <span asp-validation-for="Children" class="focus-input100"></span>
+                    <span asp-validation-for="Children" class="text-danger"></span>
                 </div>
 
                 <label asp-for="Adults" class="label-input100">Adults</label>
                 <div class="wrap-input100">
                     <input asp-for="Adults" class="input100">
-                    <span asp-validation-for="Adults" class="focus-input100"></span>
+                    <span asp-validation-for="Adults" class="text-danger"></span>
                 </div>
             }
 
