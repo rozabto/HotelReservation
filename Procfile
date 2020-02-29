@@ -1,1 +1,1 @@
-web: cd $HOME/heroku_output/wwwroot && npm i && cd ../ && ./WebUI 
+web: npm packageInstall && cd $HOME/heroku_output && ./WebUI 

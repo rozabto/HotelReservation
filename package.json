@@ -1,0 +1,19 @@
+{
+  "name": "hotelreservation",
+  "scripts": {
+    "packageInstall": "cd ./heroku_output/wwwroot && npm i && cd ../../"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rozabto/HotelReservation.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rozabto/HotelReservation/issues"
+  },
+  "homepage": "https://github.com/rozabto/HotelReservation#readme",
+  "engines": {
+    "node": "10.16.3",
+    "npm": "6.9.0"
+  }
+}
