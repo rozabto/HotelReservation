@@ -19,8 +19,8 @@
     </div>
     <!-- Single Product Description -->
     <div class="single_product_desc clearfix">
-        <h2> BEST WESTERN City Hotel, BW Premier Collection </h2>
-        <span> 4-star hotel with restaurant </span>
+        <h2> @Model.Room.Name </h2>
+        <span> Capacity @Model.Room.Capacity </span>
         @if (Model.Room.RoomPrice.HasValue)
         {
             <p class="m-0">Room price</p>
@@ -33,12 +33,12 @@
             <p class="m-0">Price per child</p>
             <p class="product-price">@Math.Round(Model.Room.PriceForChildren.Value, 2) @Model.CurrencyCode</p>
         }
-        <p class="product-desc">
-            Main amenities
-            61 guestrooms
-            Childcare
-            Terrace
-        </p>
+    <p class="product-desc">
+        @string.Join(' ', Regex.Split(Model.Room.RoomType.ToString().ToString(), "(?<!^)(?=[A-Z0-9])"))
+        <br />
+        Is Empty
+        @Model.Room.IsEmpty
+    </p>
 
         <a class="btn essence-btn" asp-controller="Reservation" asp-action="Create" asp-route-id="@Model.Room.Id">
             Reserve now

@@ -1,4 +1,5 @@
-﻿@inject Common.ICurrentUserService currentUser
+﻿@using Application.Common.Models
+@inject Common.ICurrentUserService currentUser
 
 <!DOCTYPE html>
 <html lang="en">
@@ -99,12 +100,12 @@
                 <div class="col-12 col-md-6">
                     <div class="single_widget_area mb-30">
                         <ul class="footer_widget_menu">
-                            <li><a href="#">About us</a></li>
+                            <li><a>About us</a></li>
                             <li><a asp-controller="Home" asp-action="Privacy">User terms & Privacy</a></li>
                             <li><a asp-controller="Home" asp-action="Contacts">Contacts</a></li>
-                            <li><a href="#">Top destinations</a></li>
-                            <li><a href="#">Support & FAQs</a></li>
-                            <li><a href="#">Website feedback</a></li>
+                            <li><a asp-controller="Home" asp-action="Search" asp-route-sort="@((int)SortBy.Popular)">Top destinations</a></li>
+                            <li><a>Support & FAQs</a></li>
+                            <li><a>Website feedback</a></li>
                         </ul>
                     </div>
                 </div>
