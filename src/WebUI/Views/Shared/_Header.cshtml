@@ -1,0 +1,60 @@
+﻿@inject Common.ICurrentUserService currentUser
+
+<header class="header_area">
+    <div class="classy-nav-container breakpoint-off d-flex align-items-center justify-content-between">
+        <!-- Classy Menu -->
+        <nav class="classy-navbar" id="essenceNav">
+            <!-- Logo -->
+            <a class="nav-brand" asp-controller="Home" asp-action="Index"><img src="img/core-img/Logo.png" alt=""></a>
+            <!-- Navbar Toggler -->
+            <div class="classy-navbar-toggler">
+                <span class="navbarToggler"></span>
+            </div>
+            <!-- Menu -->
+            <div class="classy-menu">
+                <!-- close btn -->
+                <div class="classycloseIcon">
+                    <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                </div>
+                <!-- Nav Start -->
+                <div class="classynav">
+                    <ul>
+                        <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a asp-controller="Home" asp-action="Search">Destinations</a></li>
+                        <li><a asp-controller="Home" asp-action="Contacts">Contacts</a></li>
+                        @if (currentUser.IsAuthenticated)
+                        {
+                            if (currentUser.User.UsersRoles.Any(f => f.Role.Name == "Employee" || f.Role.Name == "Admin"))
+                            {
+                                <li><a asp-controller="Employee" asp-action="Create">Employee</a></li>
+                            }
+                            if (currentUser.User.UsersRoles.Any(f => f.Role.Name == "Admin"))
+                            {
+                                <li><a asp-controller="Admin" asp-action="Index">Admin</a></li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Nav End -->
+        <!-- Header Meta Data -->
+        <div class="header-meta d-flex clearfix justify-content-end">
+            <!-- Favourite Area -->
+            <div class="favourite-area">
+                <a asp-controller="Reservation" asp-action="Index"><img src="img/core-img/format-list-checks.svg" alt=""></a>
+            </div>
+            <!-- User Login Info -->
+            <div class="user-login-info">
+                @if (currentUser.IsAuthenticated)
+                {
+                    <a asp-area="Identity" asp-page="/Account/Manage/Index"><img src="img/core-img/user.svg" alt=""></a>
+                }
+                else
+                {
+                    <a asp-area="Identity" asp-page="/Account/Login"><img src="img/core-img/user.svg" alt=""></a>
+                }
+            </div>
+        </div>
+    </div>
+</header>

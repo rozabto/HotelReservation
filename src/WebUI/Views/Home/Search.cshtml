@@ -32,22 +32,22 @@
                                 <li data-toggle="collapse" data-target="#capacity">
                                     <a class="link">Room capacity</a>
                                     <ul class="sub-menu collapse show" id="capacity">
-                                        <li><a href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = 1, page = Context.Request.Query["page"], type = Context.Request.Query["type"], sort = Context.Request.Query["sort"] })">1 adults</a></li>
-                                        <li><a href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = 2, page = Context.Request.Query["page"], type = Context.Request.Query["type"], sort = Context.Request.Query["sort"] })">2 adults</a></li>
-                                        <li><a href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = 3, page = Context.Request.Query["page"], type = Context.Request.Query["type"], sort = Context.Request.Query["sort"] })">3 adults</a></li>
-                                        <li><a href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = 4, page = Context.Request.Query["page"], type = Context.Request.Query["type"], sort = Context.Request.Query["sort"] })">4 adults</a></li>
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <li><a href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = i, page = Context.Request.Query["page"], type = Context.Request.Query["type"], start = Context.Request.Query["start"], end = Context.Request.Query["end"], sort = Context.Request.Query["sort"] })">@(i) adults</a></li>
+                                        }
                                     </ul>
                                 </li>
                                 <!-- Single Item -->
-                                <li data-toggle="collapse" data-target="#plants1" class="collapsed">
+                                <li data-toggle="collapse" data-target="#roomType">
                                     <a class="link">Room type</a>
-                                    <ul class="sub-menu collapse" id="plants1">
+                                    <ul class="sub-menu collapse show" id="roomType">
                                         @{
                                             var enums = (RoomType[])Enum.GetValues(typeof(RoomType));
                                             for (int i = 0; i < enums.Length; i++)
                                             {
                                                 <li>
-                                                    <a href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = Context.Request.Query["capacity"], page = Context.Request.Query["page"], type = i, sort = Context.Request.Query["sort"] })">
+                                                    <a href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = Context.Request.Query["capacity"], page = Context.Request.Query["page"], type = i, start = Context.Request.Query["start"], end = Context.Request.Query["end"], sort = Context.Request.Query["sort"] })">
                                                         @string.Join(' ', Regex.Split(enums[i].ToString(), "(?<!^)(?=[A-Z0-9])"))
                                                     </a>
                                                 </li>
@@ -65,12 +65,8 @@
                         <p class="widget-title2 mb-30">Price</p>
                         <div class="widget-desc">
                             <div class="slider-range">
-                                <div data-min="0" data-max="@Model.HighestPrice" data-unit="" class="slider-range-price ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" data-value-min="00" data-value-max="@Model.HighestPrice" data-label-result="@Model.CurrencyCode">
-                                    <div class="ui-slider-range ui-widget-header ui-corner-all"></div>
-                                    <span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0"></span>
-                                    <span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0"></span>
-                                </div>
-                                <div class="range-price">@Model.CurrencyCode 0 - @Model.HighestPrice</div>
+                                <div id="priceSlider"></div>
+                                <div id="priceValues" class="range-price">@Model.CurrencyCode @(int.TryParse(Context.Request.Query["start"], out var minPrice) ? minPrice : 0) - @(int.TryParse(Context.Request.Query["end"], out var maxPrice) ? maxPrice : Model.HighestPrice)</div>
                             </div>
                         </div>
                     </div>
@@ -89,27 +85,24 @@
                                 <!-- Sorting -->
                                 <div class="product-sorting d-flex">
                                     <p>Sorted by</p>
-                                    <form action="#" method="get">
-                                        <select name="select" id="sortByselect">
-                                            @{
-                                                var sorts = (SortBy[])Enum.GetValues(typeof(SortBy));
-                                                var current = int.TryParse(Context.Request.Query["sort"], out var result) ? result : 0;
-                                                for (int i = 0; i < sorts.Length; i++)
+                                    <select name="select" id="sortByselect">
+                                        @{
+                                            var sorts = (SortBy[])Enum.GetValues(typeof(SortBy));
+                                            var current = int.TryParse(Context.Request.Query["sort"], out var result) ? result : 0;
+                                            for (int i = 0; i < sorts.Length; i++)
+                                            {
+                                                var split = string.Join(' ', Regex.Split(sorts[i].ToString(), "(?<!^)(?=[A-Z0-9])"));
+                                                if (current == i)
                                                 {
-                                                    var split = string.Join(' ', Regex.Split(sorts[i].ToString(), "(?<!^)(?=[A-Z0-9])"));
-                                                    if (current == i)
-                                                    {
-                                                        <option value="@i" selected>@split</option>
-                                                    }
-                                                    else
-                                                    {
-                                                        <option value="@i">@split</option>
-                                                    }
+                                                    <option value="@i" selected>@split</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@i">@split</option>
                                                 }
                                             }
-                                        </select>
-                                        <input type="submit" class="d-none" value="">
-                                    </form>
+                                        }
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -141,25 +134,25 @@
                     <ul class="pagination mt-50 mb-70">
                         @{
                             var currentPage = int.TryParse(Context.Request.Query["term"], out var count) ? count : 0;
-                            <li class="page-item"><a class="page-link" href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = Context.Request.Query["capacity"], page = currentPage > 0 ? currentPage - 1 : 0, type = Context.Request.Query["type"], sort = Context.Request.Query["sort"] })"><i class="fa fa-angle-left"></i></a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = Context.Request.Query["capacity"], page = currentPage > 0 ? currentPage - 1 : 0, type = Context.Request.Query["type"], start = Context.Request.Query["start"], end = Context.Request.Query["end"], sort = Context.Request.Query["sort"] })"><i class="fa fa-angle-left"></i></a></li>
                             if (currentPage > 0)
                             {
                                 currentPage -= currentPage > 2 ? 2 : currentPage;
-                                <li class="page-item"><a class="page-link" href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = Context.Request.Query["capacity"], page = 0, type = Context.Request.Query["type"], sort = Context.Request.Query["sort"] })">1</a></li>
+                                <li class="page-item"><a class="page-link" href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = Context.Request.Query["capacity"], page = 0, type = Context.Request.Query["type"], start = Context.Request.Query["start"], end = Context.Request.Query["end"], sort = Context.Request.Query["sort"] })">1</a></li>
                                 <li class="page-item"><a class="page-link">...</a></li>
                             }
                             var length = currentPage > 0 ? currentPage + 3 : 1;
                             for (int i = currentPage; i < length; i++)
                             {
 
-                                <li class="page-item"><a class="page-link" href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = Context.Request.Query["capacity"], page = i, type = Context.Request.Query["type"], sort = Context.Request.Query["sort"] })">@(i + 1)</a></li>
+                                <li class="page-item"><a class="page-link" href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = Context.Request.Query["capacity"], page = i, type = Context.Request.Query["type"], start = Context.Request.Query["start"], end = Context.Request.Query["end"], sort = Context.Request.Query["sort"] })">@(i + 1)</a></li>
                             }
                             if (currentPage < Model.Count - 2)
                             {
                                 <li class="page-item"><a class="page-link">...</a></li>
-                                <li class="page-item"><a class="page-link" href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = Context.Request.Query["capacity"], page = Model.Count / 20 - 1, type = Context.Request.Query["type"], sort = Context.Request.Query["sort"] })">@Model.Count</a></li>
+                                <li class="page-item"><a class="page-link" href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = Context.Request.Query["capacity"], page = Model.Count / 20 - 1, type = Context.Request.Query["type"], start = Context.Request.Query["start"], end = Context.Request.Query["end"], sort = Context.Request.Query["sort"] })">@Model.Count</a></li>
                             }
-                            <li class="page-item"><a class="page-link" href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = Context.Request.Query["capacity"], page = Model.Count / 20 > 0 ? Model.Count : 0, type = Context.Request.Query["type"], sort = Context.Request.Query["sort"] })"><i class="fa fa-angle-right"></i></a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = Context.Request.Query["capacity"], page = Model.Count / 20 > 0 ? Model.Count : 0, type = Context.Request.Query["type"], start = Context.Request.Query["start"], end = Context.Request.Query["end"], sort = Context.Request.Query["sort"] })"><i class="fa fa-angle-right"></i></a></li>
                         }
                     </ul>
                 </nav>
@@ -167,18 +160,36 @@
         </div>
     </div>
 </section>
+
 @section Styles {
     <link rel="stylesheet" type="text/css" href="css/util.css">
     <link rel="stylesheet" type="text/css" href="css/main-contacts.css" />
-           <link href="node_modules\jquery-ui\themes\base\slider.css" rel="stylesheet" />
+    <link href="node_modules\jquery-ui\themes\base\slider.css" rel="stylesheet" />
 }
 
 @section Scripts {
     <script src="js/jquery-ui.min.js"></script>
     <script>
         (() => {
-            $('#sortByselect').on('change', (event) => {
-                document.location.href = document.location.origin + @Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = Context.Request.Query["capacity"], page = Context.Request.Query["page"], type = Context.Request.Query["type"] }) + '&sort=' + event.target.nodeValue;
+            const url = '@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = Context.Request.Query["capacity"], page = Context.Request.Query["page"], type = Context.Request.Query["type"], start = Context.Request.Query["start"], end = Context.Request.Query["end"] })';
+            $('#sortByselect').on('change', function () {
+                document.location.href = document.location.origin + (url === '/Home/Search' ? url + '?' : url + '&') + 'sort=' + this.value;
+            });
+
+            const url2 = '@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = Context.Request.Query["capacity"], page = Context.Request.Query["page"], type = Context.Request.Query["type"], sort = Context.Request.Query["sort"] })';
+            const priceValues = $('#priceValues');
+            $('#priceSlider').slider({
+                range: true,
+                min: 0,
+                max: @(Model.HighestPrice),
+                values: [@(int.TryParse(Context.Request.Query["start"], out var minPrice) ? minPrice : 0), @(int.TryParse(Context.Request.Query["end"], out var maxPrice) ? maxPrice : Model.HighestPrice)],
+                slide: function (_, ui) {
+                    var result = '@Model.CurrencyCode' + ' ' + ui.values[0] + ' - ' + ui.values[1];
+                    priceValues.html(result);
+                },
+                stop: function (_, ui) {
+                    document.location.href = document.location.origin + (url2 === '/Home/Search' ? url2 + '?' : url2 + '&') + 'start=' + ui.values[0] + '&end=' + ui.values[1];
+                }
             });
         })();
     </script>

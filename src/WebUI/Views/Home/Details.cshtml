@@ -35,9 +35,11 @@
         }
     <p class="product-desc">
         @string.Join(' ', Regex.Split(Model.Room.RoomType.ToString().ToString(), "(?<!^)(?=[A-Z0-9])"))
-        <br />
-        Is Empty
-        @Model.Room.IsEmpty
+        @if (Model.Room.IsEmpty)
+        {
+            <br />
+            @:Room Is Empty
+       }
     </p>
 
         <a class="btn essence-btn" asp-controller="Reservation" asp-action="Create" asp-route-id="@Model.Room.Id">

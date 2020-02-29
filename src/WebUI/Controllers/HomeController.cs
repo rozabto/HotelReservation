@@ -21,7 +21,10 @@ namespace WebUI.Controllers
 
         public IActionResult Contacts() => View();
 
-        public async Task<IActionResult> Search(string term, DateTime? from, DateTime? to, int? capacity, int? page, RoomType? type, SortBy sort = default) =>
+        [HttpPost]
+        public IActionResult Contacts(object model) => Redirect("/");
+
+        public async Task<IActionResult> Search(string term, DateTime? from, DateTime? to, int? capacity, int? page, RoomType? type, decimal? start, decimal? end, SortBy sort = default) =>
             View(await Mediator.Send(new SearchHotelRoomsQuery
             {
                 Term = term,
@@ -30,6 +33,8 @@ namespace WebUI.Controllers
                 Capacity = capacity,
                 Page = page ?? 0,
                 RoomType = type,
+                Start = start,
+                End = end,
                 SortBy = sort
             }));
 

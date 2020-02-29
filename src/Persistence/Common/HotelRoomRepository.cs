@@ -32,32 +32,32 @@ namespace Persistence.Common
                 .ProjectTo<HotelRoomVm>(_mapper.ConfigurationProvider, new { conversionRate })
                 .FirstOrDefaultAsync(token);
 
-        public Task<decimal> HighestPricesRoomSearch(string term, DateTime? from, DateTime? to, int? capacity, RoomType? type, CancellationToken token)
+        public Task<decimal> HighestPricesRoomSearch(string term, DateTime? from, DateTime? to, int? capacity, RoomType? type, decimal? start, decimal? end, CancellationToken token)
         {
             var query = Query.Where(f => f.DeletedOn == null);
             query = query.Include(f => f.Reservations);
 
-            query = FilterSearch(query, term, from, to, capacity, type);
+            query = FilterSearch(query, term, from, to, capacity, type, start, end);
 
             return query.MaxAsync(f => (f.PriceForAdults ?? f.RoomPrice).Value, token);
         }
 
-        public Task<int> SearchedHotelRoomsCount(string term, DateTime? from, DateTime? to, int? capacity, RoomType? type, CancellationToken token)
+        public Task<int> SearchedHotelRoomsCount(string term, DateTime? from, DateTime? to, int? capacity, RoomType? type, decimal? start, decimal? end, CancellationToken token)
         {
             var query = Query.Where(f => f.DeletedOn == null);
             query = query.Include(f => f.Reservations);
 
-            query = FilterSearch(query, term, from, to, capacity, type);
+            query = FilterSearch(query, term, from, to, capacity, type, start, end);
 
             return query.CountAsync(token);
         }
 
-        public Task<List<HotelRoomShortVm>> SearchHotelRooms(string term, decimal conversionRate, DateTime? from, DateTime? to, int? capacity, int page, int pageCount, RoomType? type, SortBy sort, CancellationToken token)
+        public Task<List<HotelRoomShortVm>> SearchHotelRooms(string term, decimal conversionRate, DateTime? from, DateTime? to, int? capacity, int page, int pageCount, RoomType? type, decimal? start, decimal? end, SortBy sort, CancellationToken token)
         {
             var query = Query.Where(f => f.DeletedOn == null);
             query = query.Include(f => f.Reservations);
 
-            query = FilterSearch(query, term, from, to, capacity, type);
+            query = FilterSearch(query, term, from, to, capacity, type, start, end);
 
             switch (sort)
             {
@@ -87,7 +87,7 @@ namespace Persistence.Common
                 .ToListAsync(token);
         }
 
-        private IQueryable<HotelRoom> FilterSearch(IQueryable<HotelRoom> query, string term, DateTime? from, DateTime? to, int? capacity, RoomType? type)
+        private IQueryable<HotelRoom> FilterSearch(IQueryable<HotelRoom> query, string term, DateTime? from, DateTime? to, int? capacity, RoomType? type, decimal? start, decimal? end)
         {
             if (from.HasValue && to.HasValue)
                 query = query.Where(f => !f.Reservations.Any(f => f.ReservedForDate < to && from < f.ReservedUntilDate));
@@ -100,6 +100,12 @@ namespace Persistence.Common
 
             if (type.HasValue)
                 query = query.Where(f => f.RoomType == type);
+
+            if (start.HasValue)
+                query = query.Where(f => (f.RoomPrice ?? f.PriceForAdults).Value >= start.Value);
+
+            if (end.HasValue)
+                query = query.Where(f => (f.RoomPrice ?? f.PriceForAdults).Value <= end.Value);
 
             return query;
         }

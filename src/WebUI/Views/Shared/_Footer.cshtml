@@ -1,0 +1,65 @@
+﻿@using Application.Common.Models
+
+<footer class="footer_area clearfix">
+    <div class="container">
+        <div class="row">
+            <!-- Single Widget Area -->
+            <div class="col-12 col-md-6">
+                <div class="single_widget_area d-flex mb-30">
+                    <!-- Logo -->
+                    <div class="footer-logo mr-50">
+                        <a class="nav-brand" asp-controller="Home" asp-action="Index">
+                            <img src="~/img/core-img/Logo-white.png" alt="">
+                        </a>
+                    </div>
+                    <!-- Footer Menu -->
+                    <div class="footer_menu">
+                        <ul>
+                            <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li><a asp-controller="Home" asp-action="Search">Destinations</a></li>
+                            <li><a asp-controller="Home" asp-action="Contacts">Contacts</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Single Widget Area -->
+            <div class="col-12 col-md-6">
+                <div class="single_widget_area mb-30">
+                    <ul class="footer_widget_menu">
+                        <li><a>About us</a></li>
+                        <li><a asp-controller="Home" asp-action="Privacy">User terms & Privacy</a></li>
+                        <li><a asp-controller="Home" asp-action="Contacts">Contacts</a></li>
+                        <li><a asp-controller="Home" asp-action="Search" asp-route-sort="@((int)SortBy.Popular)">Top destinations</a></li>
+                        <li><a>Support & FAQs</a></li>
+                        <li><a>Website feedback</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row align-items-end">
+            <!-- Single Widget Area -->
+            <div class="col-12 col-md-6">
+                <div class="single_widget_area">
+                    <div class="footer_heading mb-30">
+                        <h6>Subscribe</h6>
+                    </div>
+                    <div class="subscribtion_form">
+                        <form action="#" method="post">
+                            <input type="email" name="mail" class="mail" placeholder="Your email here">
+                            <button type="submit" class="submit">
+                                <i class="fa fa-long-arrow-right"
+                                   aria-hidden="true"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-12 text-center">
+            </div>
+        </div>
+    </div>
+</footer>

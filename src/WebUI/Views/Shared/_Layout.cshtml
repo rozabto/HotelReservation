@@ -1,13 +1,11 @@
-﻿@using Application.Common.Models
-@inject Common.ICurrentUserService currentUser
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] | Hotel Reservation</title>
     <base href="~/">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
     @RenderSection("Styles", required: false)
     <link href="node_modules\bootstrap\dist\css\bootstrap.min.css" rel="stylesheet" />
     <link href="node_modules\owl.carousel\dist\assets\owl.carousel.min.css" rel="stylesheet" />
@@ -15,154 +13,14 @@
     <link href="css/main.css" rel="stylesheet" />
 </head>
 <body>
-    <header class="header_area">
-        <div class="classy-nav-container breakpoint-off d-flex align-items-center justify-content-between">
-            <!-- Classy Menu -->
-            <nav class="classy-navbar" id="essenceNav">
-                <!-- Logo -->
-                <a class="nav-brand" asp-controller="Home" asp-action="Index"><img src="img/core-img/Logo.png" alt=""></a>
-                <!-- Navbar Toggler -->
-                <div class="classy-navbar-toggler">
-                    <span class="navbarToggler"></span>
-                </div>
-                <!-- Menu -->
-                <div class="classy-menu">
-                    <!-- close btn -->
-                    <div class="classycloseIcon">
-                        <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
-                    </div>
-                    <!-- Nav Start -->
-                    <div class="classynav">
-                        <ul>
-                            <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                            <li><a asp-controller="Home" asp-action="Search">Destinations</a></li>
-                            <li><a asp-controller="Home" asp-action="Contacts">Contacts</a></li>
-                            @if (currentUser.IsAuthenticated)
-                            {
-                                if (currentUser.User.UsersRoles.Any(f => f.Role.Name == "Employee" || f.Role.Name == "Admin"))
-                                {
-                                    <li><a asp-controller="Employee" asp-action="Create">Employee</a></li>
-                                }
-                                if (currentUser.User.UsersRoles.Any(f => f.Role.Name == "Admin"))
-                                {
-                                    <li><a asp-controller="Admin" asp-action="Index">Admin</a></li>
-                                }
-                            }
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-            <!-- Nav End -->
-            <!-- Header Meta Data -->
-            <div class="header-meta d-flex clearfix justify-content-end">
-                <!-- Favourite Area -->
-                <div class="favourite-area">
-                    <a asp-controller="Reservation" asp-action="Index"><img src="img/core-img/format-list-checks.svg" alt=""></a>
-                </div>
-                <!-- User Login Info -->
-                <div class="user-login-info">
-                    @if (currentUser.IsAuthenticated)
-                    {
-                        <a asp-area="Identity" asp-page="/Account/Manage/Index"><img src="img/core-img/user.svg" alt=""></a>
-                    }
-                    else
-                    {
-                        <a asp-area="Identity" asp-page="/Account/Login"><img src="img/core-img/user.svg" alt=""></a>
-                    }
-                </div>
-            </div>
-        </div>
-    </header>
+    <partial name="_Header" />
 
     @RenderBody()
 
-    <footer class="footer_area clearfix">
-        <div class="container">
-            <div class="row">
-                <!-- Single Widget Area -->
-                <div class="col-12 col-md-6">
-                    <div class="single_widget_area d-flex mb-30">
-                        <!-- Logo -->
-                        <div class="footer-logo mr-50">
-                            <a class="nav-brand" asp-controller="Home" asp-action="Index"><img src="~/img/core-img/Logo-white.png" alt=""></a>
-                        </div>
-                        <!-- Footer Menu -->
-                        <div class="footer_menu">
-                            <ul>
-                                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                                <li><a asp-controller="Home" asp-action="Search">Destinations</a></li>
-                                <li><a asp-controller="Home" asp-action="Contacts">Contacts</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- Single Widget Area -->
-                <div class="col-12 col-md-6">
-                    <div class="single_widget_area mb-30">
-                        <ul class="footer_widget_menu">
-                            <li><a>About us</a></li>
-                            <li><a asp-controller="Home" asp-action="Privacy">User terms & Privacy</a></li>
-                            <li><a asp-controller="Home" asp-action="Contacts">Contacts</a></li>
-                            <li><a asp-controller="Home" asp-action="Search" asp-route-sort="@((int)SortBy.Popular)">Top destinations</a></li>
-                            <li><a>Support & FAQs</a></li>
-                            <li><a>Website feedback</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row align-items-end">
-                <!-- Single Widget Area -->
-                <div class="col-12 col-md-6">
-                    <div class="single_widget_area">
-                        <div class="footer_heading mb-30">
-                            <h6>Subscribe</h6>
-                        </div>
-                        <div class="subscribtion_form">
-                            <form action="#" method="post">
-                                <input type="email" name="mail" class="mail" placeholder="Your email here">
-                                <button type="submit" class="submit">
-                                    <i class="fa fa-long-arrow-right"
-                                       aria-hidden="true"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <!-- Single Widget Area -->
-                <div class="col-12 col-md-6">
-                    <div class="single_widget_area">
-                        <div class="footer_social_area">
-                            <a href="#" data-toggle="tooltip" data-placement="top" title="Facebook">
-                                <i class="fa fa-facebook" aria-hidden="true"></i>
-                            </a>
-                            <a href="#" data-toggle="tooltip" data-placement="top" title="Instagram">
-                                <i class="fa fa-instagram" aria-hidden="true"></i>
-                            </a>
-                            <a href="#" data-toggle="tooltip" data-placement="top" title="Twitter">
-                                <i class="fa fa-twitter" aria-hidden="true"></i>
-                            </a>
-                            <a href="#" data-toggle="tooltip" data-placement="top" title="Pinterest">
-                                <i class="fa fa-pinterest" aria-hidden="true"></i>
-                            </a>
-                            <a href="#" data-toggle="tooltip" data-placement="top" title="Youtube">
-                                <i class="fa fa-youtube-play" aria-hidden="true"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mt-5">
-                <div class="col-md-12 text-center">
-                </div>
-            </div>
-        </div>
-    </footer>
+    <partial name="_Footer" />
 
     <script src="node_modules\jquery\dist\jquery.min.js"></script>
-    <script src="node_modules\@@popperjs\core\dist\umd\popper-lite.min.js"></script>
-    <script src="node_modules\bootstrap\dist\js\bootstrap.min.js"></script>
+    <script src="node_modules\bootstrap\dist\js\bootstrap.bundle.min.js"></script>
     <script src="node_modules\owl.carousel\dist\owl.carousel.min.js"></script>
     @RenderSection("Scripts", required: false)
     <script src="js/active.js"></script>

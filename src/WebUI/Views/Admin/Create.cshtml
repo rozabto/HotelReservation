@@ -34,7 +34,7 @@
                 <span asp-validation-for="EGN" class="text-danger"></span>
             </div>
 
-            <label asp-for="UserId" class="label-input100">User</label>
+            <label asp-for="UserId" class="label-input100">User<i id="userInfo" tabindex="0" class="fa fa-exclamation-circle ml-1"></i></label>
             <div class="wrap-input100">
                 <input id="userId" list="list-of-users" class="input100" asp-for="UserId" autocomplete="off" />
                 <span asp-validation-for="UserId" class="text-danger"></span>
@@ -96,6 +96,11 @@
                         }
                     });
             }
+
+            $('#userInfo').popover({
+                trigger: 'focus',
+                content: 'Type the name of the user and select him to get his ID'
+            });
         })();
     </script>
 }

@@ -30,12 +30,20 @@ namespace Application.Search.Queries.SearchHotelRooms
             var currencyCode = new RegionInfo(countryCode).ISOCurrencySymbol;
             var currency = _currencyConversion.ConvertFromCountryCode(currencyCode);
 
+            if (request.Start.HasValue)
+                request.Start = Math.Round(request.Start.Value / currency);
+
+            if (request.End.HasValue)
+                request.End = Math.Round(request.End.Value / currency);
+
             var count = await _hotelRoom.SearchedHotelRoomsCount(
                 request.Term,
                 request.AvailableFrom,
                 request.AvailableTo,
                 request.Capacity,
                 request.RoomType,
+                request.Start,
+                request.End,
                 cancellationToken
             );
 
@@ -50,6 +58,8 @@ namespace Application.Search.Queries.SearchHotelRooms
                         request.Page,
                         20,
                         request.RoomType,
+                        request.Start,
+                        request.End,
                         request.SortBy,
                         cancellationToken
                     ),
@@ -60,9 +70,11 @@ namespace Application.Search.Queries.SearchHotelRooms
                         request.AvailableTo,
                         request.Capacity,
                         request.RoomType,
+                        request.Start,
+                        request.End,
                         cancellationToken
                     ) * currency)) : 0,
-                CurrencyCode = currencyCode
+                CurrencyCode = currencyCode,
             };
         }
     }
