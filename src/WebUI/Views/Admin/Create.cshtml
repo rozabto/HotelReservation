@@ -25,19 +25,19 @@
             <label asp-for="MiddleName" class="label-input100">Middle name</label>
             <div class="wrap-input100">
                 <input asp-for="MiddleName" class="input100">
-                <span asp-validation-for="MiddleName" class="focus-input100"></span>
+                <span asp-validation-for="MiddleName" class="text-danger"></span>
             </div>
 
             <label asp-for="EGN" class="label-input100">EGN</label>
             <div class="wrap-input100">
                 <input asp-for="EGN" class="input100">
-                <span asp-validation-for="EGN" class="focus-input100"></span>
+                <span asp-validation-for="EGN" class="text-danger"></span>
             </div>
 
             <label asp-for="UserId" class="label-input100">User</label>
             <div class="wrap-input100">
                 <input id="userId" list="list-of-users" class="input100" asp-for="UserId" autocomplete="off" />
-                <span asp-validation-for="UserId" class="focus-input100"></span>
+                <span asp-validation-for="UserId" class="text-danger"></span>
 
                 <datalist id="list-of-users">
                 </datalist>

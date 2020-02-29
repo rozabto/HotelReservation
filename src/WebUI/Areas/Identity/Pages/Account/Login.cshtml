@@ -30,13 +30,13 @@
             <label asp-for="Input.Username" class="label-input100">Username</label>
             <div class="wrap-input100">
                 <input asp-for="Input.Username" class="input100">
-                <span asp-validation-for="Input.Username" class="focus-input100"></span>
+                <span asp-validation-for="Input.Username" class="text-danger"></span>
             </div>
 
             <label asp-for="Input.Password" class="label-input100">Password</label>
             <div class="wrap-input100">
                 <input asp-for="Input.Password" class="input100">
-                <span asp-validation-for="Input.Password" class="focus-input100"></span>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
 
             <div class="form-group row mt-30 ml-1">
@@ -50,7 +50,7 @@
 
             <div class="label-input100">
                 <div class="g-recaptcha" data-sitekey="@ViewData["recaptcha"]"></div>
-                <span asp-validation-for="Input.Recaptcha" class="focus-input100"></span>
+                <span asp-validation-for="Input.Recaptcha" class="text-danger"></span>
             </div>
 
             <div class="container-contact100-form-btn">
