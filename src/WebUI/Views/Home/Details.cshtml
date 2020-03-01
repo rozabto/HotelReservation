@@ -48,7 +48,7 @@
 
         @if (currentUser.IsAuthenticated && currentUser.User.UsersRoles.Any(f => f.Role.Name == "Employee" || f.Role.Name == "Admin"))
         {
-            <a class="btn essence-btn" asp-controller="Reservation" asp-action="Delete" asp-route-id="@Model.Room.Id">
+            <a class="btn essence-btn" asp-controller="Employee" asp-action="Delete" asp-route-id="@Model.Room.Id">
                 Delete
             </a>
         }
