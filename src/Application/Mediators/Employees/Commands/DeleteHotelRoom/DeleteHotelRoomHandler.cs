@@ -36,7 +36,7 @@ namespace Application.Employees.Commands.DeleteHotelRoom
 
         public async Task<Unit> Handle(DeleteHotelRoomCommand request, CancellationToken cancellationToken)
         {
-            var room = await _hotelRoom.GetRoomWithReservationsOverDate(request.Id, _date.Now, cancellationToken)
+            var room = await _hotelRoom.GetById(request.Id, cancellationToken)
                 ?? throw new NotFoundException("Hotel Room Id", request.Id);
 
             foreach (var reservation in room.Reservations)
