@@ -15,10 +15,12 @@ namespace Persistence.Common
     public class ReservationRepository : BaseRepository<Reservation>, IReservationRepository
     {
         private readonly IMapper _mapper;
+        private readonly bool isEnvProd;
 
         public ReservationRepository(IMapper mapper, IHotelReservationContext context) : base(context)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            isEnvProd = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production";
         }
 
         public Task<bool> CanReserve(string roomId, string userId, DateTime to, DateTime from, CancellationToken token) =>
@@ -28,8 +30,10 @@ namespace Persistence.Common
             Query.AnyAsync(f => f.ReservedRoomId == roomId && f.CreatedById == userId && !f.TransactionId.HasValue && f.DeletedOn == null, token);
 
         public Task DeleteExpired(DateTime date, CancellationToken token) =>
-            Query.Where(f => f.TransactionId == null && date.Hour - f.CreatedOn.Hour > 1)
-                .DeleteFromQueryAsync(token);
+            isEnvProd ? Query.Where(f => f.TransactionId == null && (date - f.CreatedOn).TotalHours > 1)
+                    .DeleteFromQueryAsync(token)
+                : Query.Where(f => f.TransactionId == null && EF.Functions.DateDiffHour(date, f.CreatedOn) > 1)
+                    .DeleteFromQueryAsync(token);
 
         public Task<Reservation> FindByRoomId(string roomId, string userId, CancellationToken token) =>
             Query.FirstOrDefaultAsync(f => f.ReservedRoomId == roomId && f.CreatedById == userId, token);

@@ -15,13 +15,15 @@ namespace Application.Search.Queries.SearchHotelRooms
         private readonly ICountryService _country;
         private readonly ICurrentUserService _currentUser;
         private readonly ICurrencyConversionService _currencyConversion;
+        private readonly ITimeZoneService _timeZone;
 
-        public SearchHotelRoomsHandler(IHotelRoomRepository hotelRoom, ICountryService country, ICurrentUserService currentUser, ICurrencyConversionService currencyConversion)
+        public SearchHotelRoomsHandler(IHotelRoomRepository hotelRoom, ICountryService country, ICurrentUserService currentUser, ICurrencyConversionService currencyConversion, ITimeZoneService timeZone)
         {
             _hotelRoom = hotelRoom ?? throw new ArgumentNullException(nameof(hotelRoom));
             _country = country ?? throw new ArgumentNullException(nameof(country));
             _currentUser = currentUser ?? throw new ArgumentNullException(nameof(currentUser));
             _currencyConversion = currencyConversion ?? throw new ArgumentNullException(nameof(currencyConversion));
+            _timeZone = timeZone ?? throw new ArgumentNullException(nameof(timeZone));
         }
 
         public async Task<SearchHotelRoomsResponse> Handle(SearchHotelRoomsQuery request, CancellationToken cancellationToken)
@@ -35,6 +37,12 @@ namespace Application.Search.Queries.SearchHotelRooms
 
             if (request.End.HasValue)
                 request.End = Math.Round(request.End.Value / currency);
+
+            if (request.AvailableFrom.HasValue)
+                request.AvailableFrom = _timeZone.ConvertDateFromCountryCode(countryCode, request.AvailableFrom.Value.Date).Date;
+
+            if (request.AvailableTo.HasValue)
+                request.AvailableTo = _timeZone.ConvertDateFromCountryCode(countryCode, request.AvailableTo.Value.Date).Date;
 
             var count = await _hotelRoom.SearchedHotelRoomsCount(
                 request.Term,

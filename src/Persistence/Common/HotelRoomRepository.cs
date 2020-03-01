@@ -90,7 +90,7 @@ namespace Persistence.Common
         private IQueryable<HotelRoom> FilterSearch(IQueryable<HotelRoom> query, string term, DateTime? from, DateTime? to, int? capacity, RoomType? type, decimal? start, decimal? end)
         {
             if (from.HasValue && to.HasValue)
-                query = query.Where(f => !f.Reservations.Any(f => f.ReservedForDate < to && from < f.ReservedUntilDate));
+                query = query.Where(f => !f.Reservations.Any(f => f.ReservedForDate < to.Value && from.Value < f.ReservedUntilDate));
 
             if (!string.IsNullOrWhiteSpace(term))
                 query = query.Where(f => f.Name == term);

@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
+using Application.Common.Interfaces;
 using Application.Common.Repositories;
 using Common;
 using Domain.Entities;
@@ -14,18 +15,24 @@ namespace Application.Reservations.Commands.CreateReservation
         private readonly IReservationRepository _reservation;
         private readonly IHotelRoomRepository _hotelRoom;
         private readonly ICurrentUserService _currentUser;
+        private readonly ICountryService _country;
+        private readonly ITimeZoneService _timeZone;
 
-        public CreateReservationHandler(IReservationRepository reservation, IHotelRoomRepository hotelRoom, ICurrentUserService currentUser)
+        public CreateReservationHandler(IReservationRepository reservation, IHotelRoomRepository hotelRoom, ICurrentUserService currentUser, ICountryService country, ITimeZoneService timeZone)
         {
             _reservation = reservation ?? throw new ArgumentNullException(nameof(reservation));
             _hotelRoom = hotelRoom ?? throw new ArgumentNullException(nameof(hotelRoom));
             _currentUser = currentUser ?? throw new ArgumentNullException(nameof(currentUser));
+            _country = country ?? throw new ArgumentNullException(nameof(country));
+            _timeZone = timeZone ?? throw new ArgumentNullException(nameof(timeZone));
         }
 
         public async Task<string> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
         {
-            request.To = request.To.Date;
-            request.From = request.From.Date;
+            var countryCode = await _country.GetCountryCode(_currentUser.Ip);
+
+            request.To = _timeZone.ConvertDateFromCountryCode(countryCode, request.To.Date).Date;
+            request.From = _timeZone.ConvertDateFromCountryCode(countryCode, request.From.Date).Date;
 
             var room = await _hotelRoom.GetById(request.RoomId, cancellationToken)
                 ?? throw new NotFoundException("Room Id", request.RoomId);
@@ -54,7 +61,7 @@ namespace Application.Reservations.Commands.CreateReservation
                 ReservedForDate = request.From,
                 ReservedUntilDate = request.To,
                 ReservedRoomId = request.RoomId,
-                TransactionId = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production" ? null :(ulong?)0
+                TransactionId = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production" ? null : (ulong?)0
             };
 
             await _reservation.Create(reservation, cancellationToken);

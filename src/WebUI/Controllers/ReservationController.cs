@@ -40,7 +40,7 @@ namespace WebUI.Controllers
             }
 
             var id = await Mediator.Send(command);
-            return Redirect(nameof(Checkout) + '/' + id);
+            return Redirect("/Reservation/" + nameof(Checkout) + '/' + id);
         }
     }
 }
