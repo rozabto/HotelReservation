@@ -18,7 +18,7 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm]CreateHotelRoomCommand command)
+        public async Task<IActionResult> Create(CreateHotelRoomCommand command)
         {
             if (!ModelState.IsValid)
                 return View();
