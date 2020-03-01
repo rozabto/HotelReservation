@@ -30,7 +30,7 @@ namespace Persistence.Common
             Query.AnyAsync(f => f.ReservedRoomId == roomId && f.CreatedById == userId && !f.TransactionId.HasValue && f.DeletedOn == null, token);
 
         public Task DeleteExpired(DateTime date, CancellationToken token) =>
-            isEnvProd ? Query.Where(f => f.TransactionId == null && (date - f.CreatedOn).TotalHours > 1)
+            isEnvProd ? Query.Where(f => f.TransactionId == null && date - f.CreatedOn > TimeSpan.FromHours(1))
                     .DeleteFromQueryAsync(token)
                 : Query.Where(f => f.TransactionId == null && EF.Functions.DateDiffHour(date, f.CreatedOn) > 1)
                     .DeleteFromQueryAsync(token);
