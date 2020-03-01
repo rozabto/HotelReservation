@@ -9,7 +9,7 @@ namespace Application.Common.Repositories
 {
     public interface IReservationRepository : IRepository<Reservation>
     {
-        Task<bool> CanReserve(string roomId, string userId, DateTime to, DateTime from, CancellationToken token);
+        Task<bool> CanReserve(string roomId, DateTime to, DateTime from, CancellationToken token);
 
         Task<bool> CheckIfExists(string roomId, string userId, CancellationToken token);
 

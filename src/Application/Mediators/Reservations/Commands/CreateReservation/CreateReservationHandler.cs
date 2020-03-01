@@ -46,7 +46,7 @@ namespace Application.Reservations.Commands.CreateReservation
                     throw new BadRequestException("Room can only store up to " + room.Capacity + " people");
             }
 
-            if (await _reservation.CanReserve(request.RoomId, _currentUser.User.Id, request.To, request.From, cancellationToken))
+            if (await _reservation.CanReserve(request.RoomId, request.To, request.From, cancellationToken))
                 throw new BadRequestException("You can't reserve already reserved rooms");
 
             var reservation = new Reservation

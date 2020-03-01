@@ -31,7 +31,7 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm]CreateReservationCommand command)
+        public async Task<IActionResult> Create(CreateReservationCommand command)
         {
             if (!ModelState.IsValid)
             {
