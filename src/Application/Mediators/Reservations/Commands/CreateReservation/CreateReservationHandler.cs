@@ -29,10 +29,13 @@ namespace Application.Reservations.Commands.CreateReservation
 
         public async Task<string> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
         {
-            var countryCode = await _country.GetCountryCode(_currentUser.Ip);
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Production")
+            {
+                var countryCode = await _country.GetCountryCode(_currentUser.Ip);
 
-            request.To = _timeZone.ConvertDateFromCountryCode(countryCode, request.To).Date;
-            request.From = _timeZone.ConvertDateFromCountryCode(countryCode, request.From).Date;
+                request.To = _timeZone.ConvertDateFromCountryCode(countryCode, request.To).Date;
+                request.From = _timeZone.ConvertDateFromCountryCode(countryCode, request.From).Date;
+            }
 
             var room = await _hotelRoom.GetById(request.RoomId, cancellationToken)
                 ?? throw new NotFoundException("Room Id", request.RoomId);

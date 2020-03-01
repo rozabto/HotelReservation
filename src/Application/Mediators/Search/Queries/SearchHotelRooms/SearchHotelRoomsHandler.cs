@@ -38,11 +38,14 @@ namespace Application.Search.Queries.SearchHotelRooms
             if (request.End.HasValue)
                 request.End = Math.Round(request.End.Value / currency);
 
-            if (request.AvailableFrom.HasValue)
-                request.AvailableFrom = _timeZone.ConvertDateFromCountryCode(countryCode, request.AvailableFrom.Value).Date;
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Production")
+            {
+                if (request.AvailableFrom.HasValue)
+                    request.AvailableFrom = _timeZone.ConvertDateFromCountryCode(countryCode, request.AvailableFrom.Value).Date;
 
-            if (request.AvailableTo.HasValue)
-                request.AvailableTo = _timeZone.ConvertDateFromCountryCode(countryCode, request.AvailableTo.Value).Date;
+                if (request.AvailableTo.HasValue)
+                    request.AvailableTo = _timeZone.ConvertDateFromCountryCode(countryCode, request.AvailableTo.Value).Date;
+            }
 
             var count = await _hotelRoom.SearchedHotelRoomsCount(
                 request.Term,
