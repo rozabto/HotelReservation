@@ -5,9 +5,7 @@
     ViewData["Title"] = "Product";
 }
 
-<h1>Product</h1>
-<!-- ##### Single Product Details Area Start ##### -->
-<section class="single_product_details_area d-flex align-items-center">
+<section class="single_product_details_area d-flex align-items-center mt-100">
     <!-- Single Product Thumb -->
     <div class="single_product_thumb clearfix">
         <div class="product_thumbnail_slides owl-carousel">
@@ -33,14 +31,16 @@
             <p class="m-0">Price per child</p>
             <p class="product-price">@Math.Round(Model.Room.PriceForChildren.Value, 2) @Model.CurrencyCode</p>
         }
-    <p class="product-desc">
-        @string.Join(' ', Regex.Split(Model.Room.RoomType.ToString().ToString(), "(?<!^)(?=[A-Z0-9])"))
-        @if (Model.Room.IsEmpty)
-        {
-            <br />
-            @:Room Is Empty
-       }
-    </p>
+        <p class="product-desc">
+            @string.Join(' ', Regex.Split(Model.Room.RoomType.ToString().ToString(), "(?<!^)(?=[A-Z0-9])"))
+            @if (Model.Room.IsEmpty)
+            {
+                <br />
+                @:Room Is Empty
+            }
+        </p>
+
+        <div id="timeline" style="max-height: 100px"></div>
 
         <a class="btn essence-btn" asp-controller="Reservation" asp-action="Create" asp-route-id="@Model.Room.Id">
             Reserve now
@@ -54,4 +54,30 @@
         }
     </div>
 </section>
-<!-- ##### Single Product Details Area End ##### -->
+
+@if (Model.Room.Reservations.Any())
+{
+    @section Scripts {
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script>
+        google.charts.load('current', { 'packages': ['timeline'] });
+        google.charts.setOnLoadCallback(() => {
+            var container = document.getElementById('timeline');
+            var chart = new google.visualization.Timeline(container);
+            var dataTable = new google.visualization.DataTable();
+
+            dataTable.addColumn({ type: 'string', id: 'Role' });
+            dataTable.addColumn({ type: 'date', id: 'Start' });
+            dataTable.addColumn({ type: 'date', id: 'End' });
+            dataTable.addRows([
+                @foreach (var reservation in Model.Room.Reservations)
+                {
+                    @:['Reservations', new Date(@(reservation.ReservedForDate.Year), @(reservation.ReservedForDate.Month), @(reservation.ReservedForDate.Day)), new Date(@(reservation.ReservedUntilDate.Year), @(reservation.ReservedUntilDate.Month), @(reservation.ReservedUntilDate.Day))],
+                }
+            ]);
+
+            chart.draw(dataTable);
+        });
+        </script>
+    }
+}

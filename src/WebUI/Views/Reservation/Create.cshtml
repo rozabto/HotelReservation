@@ -1,4 +1,5 @@
-﻿@using Application.Home.Queries.GetHotelRoom
+﻿@using Application.Common.Models
+@using Application.Home.Queries.GetHotelRoom
 @model Application.Reservations.Commands.CreateReservation.CreateReservationCommand
 @{
     ViewData["Title"] = "Create";
@@ -23,6 +24,9 @@
             <span class="contact100-form-title">
                 Create a new reservation
             </span>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <input asp-for="RoomId" type="hidden" class="form-control" value="@room.Room.Id" />
 
             <label asp-for="From" class="label-input100">From</label>
@@ -37,11 +41,22 @@
                 <span asp-validation-for="To" class="text-danger"></span>
             </div>
 
+            <label asp-for="Include" class="label-input100">Include</label>
+            <div class="wrap-input100">
+                <select asp-for="Include" class="form-control">
+                    @foreach (var item in (ReservationInclude[])Enum.GetValues(typeof(ReservationInclude)))
+                    {
+                        <option value="@((int)item)">@item.ToString()</option>
+                    }
+                </select>
+                <span asp-validation-for="Include" class="text-danger"></span>
+            </div>
+
             @if (room.Room.RoomPrice == null)
             {
                 <label asp-for="Children" class="label-input100">Children</label>
                 <div class="wrap-input100">
-                    <input asp-for="Children"  class="input100">
+                    <input asp-for="Children" class="input100">
                     <span asp-validation-for="Children" class="text-danger"></span>
                 </div>
 
@@ -51,6 +66,8 @@
                     <span asp-validation-for="Adults" class="text-danger"></span>
                 </div>
             }
+
+            <h2 id="priceResult" class="mt-3"></h2>
 
             <div class="container-contact100-form-btn">
                 <button class="contact100-form-btn">
@@ -66,6 +83,66 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        (() => {
+            const result = $('#priceResult');
+            const isNormalRoom = @((room.Room.RoomPrice != null).ToString().ToLower());
+            const roomPrice = @(room.Room.RoomPrice.HasValue ? (room.Room.RoomPrice.Value * room.ConversionRate).ToString().Replace(',', '.') : "0");
+            const adultPrice = @(room.Room.PriceForAdults.HasValue ? (room.Room.PriceForAdults.Value * room.ConversionRate).ToString().Replace(',', '.') : "0");
+            const childPrice = @(room.Room.PriceForChildren.HasValue ? (room.Room.PriceForChildren.Value * room.ConversionRate).ToString().Replace(',', '.') : "0");
+
+            let from = new Date($('#From').val());
+            let to = new Date($('#To').val());
+            let children = $('#Children').val();
+            let adults = $('#Adults').val();
+            let include = $('#Include').val();
+
+            calculateResult();
+
+            $('#From').on('change', (event) => {
+                from = event.target.valueAsDate;
+                calculateResult();
+            });
+
+            $('#To').on('change', (event) => {
+                to = event.target.valueAsDate;
+                calculateResult();
+            });
+
+            $('#Include').on('input', (event) => {
+                include = event.target.selectedIndex;
+                calculateResult();
+            });
+
+            $('#Children').on('change input', (event) => {
+                children = event.target.valueAsNumber ?? 0;
+                calculateResult();
+            });
+
+            $('#Adults').on('change input', (event) => {
+                adults = event.target.valueAsNumber ?? 0;
+                calculateResult();
+            });
+
+            function dateDiffInDays(a, b) {
+                if (!a || !b)
+                    return 0;
+
+                const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+                const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+                return Math.floor((utc2 - utc1) / (1000 * 60 * 60 * 24));
+            }
+
+            function calculateResult() {
+                const diffDays = dateDiffInDays(from, to);
+                result.html((diffDays
+                    * (isNormalRoom ? roomPrice : (adultPrice * adults + childPrice * children))
+                    + (include == 1 ? @((room.Room.FoodPrice * room.ConversionRate).ToString().Replace(',', '.')) : 0)
+                    + (include == 2 ? @(((room.Room.FoodPrice + 50m) * room.ConversionRate).ToString().Replace(',', '.')) : 0)).toFixed(2) + ' @room.CurrencyCode');
+            }
+        })();
+    </script>
 }
 
 @section Styles {

@@ -16,13 +16,15 @@ namespace Application.Home.Queries.GetHotelRoom
         private readonly ICountryService _country;
         private readonly ICurrencyConversionService _currencyConversion;
         private readonly ICurrentUserService _currentUser;
+        private readonly IDateTime _date;
 
-        public GetHotelRoomHandler(IHotelRoomRepository hotelRoom, ICountryService country, ICurrencyConversionService currencyConversion, ICurrentUserService currentUser)
+        public GetHotelRoomHandler(IHotelRoomRepository hotelRoom, ICountryService country, ICurrencyConversionService currencyConversion, ICurrentUserService currentUser, IDateTime date)
         {
             _hotelRoom = hotelRoom ?? throw new ArgumentNullException(nameof(hotelRoom));
             _country = country ?? throw new ArgumentNullException(nameof(country));
             _currencyConversion = currencyConversion ?? throw new ArgumentNullException(nameof(currencyConversion));
             _currentUser = currentUser ?? throw new ArgumentNullException(nameof(currentUser));
+            _date = date ?? throw new ArgumentNullException(nameof(date));
         }
 
         public async Task<GetHotelRoomResponse> Handle(GetHotelRoomQuery request, CancellationToken cancellationToken)
@@ -34,7 +36,7 @@ namespace Application.Home.Queries.GetHotelRoom
             var currencyCode = new RegionInfo(countryCode).ISOCurrencySymbol;
             var conversionRate = _currencyConversion.ConvertFromCountryCode(currencyCode);
 
-            var room = await _hotelRoom.GetVmById(request.Id, conversionRate, cancellationToken)
+            var room = await _hotelRoom.GetVmById(request.Id, conversionRate, _date.Now.AddMonths(-3).Date, cancellationToken)
                 ?? throw new NotFoundException("Room", request.Id);
 
             return new GetHotelRoomResponse

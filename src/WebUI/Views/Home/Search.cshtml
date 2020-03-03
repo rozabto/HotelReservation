@@ -133,26 +133,31 @@
                 <nav aria-label="navigation">
                     <ul class="pagination mt-50 mb-70">
                         @{
-                            var currentPage = int.TryParse(Context.Request.Query["term"], out var count) ? count : 0;
+                            var countToPage = (int)Math.Ceiling(Model.Count / 20d);
+                            var currentPage = int.TryParse(Context.Request.Query["page"], out var pageResult) ? pageResult : 0;
                             <li class="page-item"><a class="page-link" href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = Context.Request.Query["capacity"], page = currentPage > 0 ? currentPage - 1 : 0, type = Context.Request.Query["type"], start = Context.Request.Query["start"], end = Context.Request.Query["end"], sort = Context.Request.Query["sort"] })"><i class="fa fa-angle-left"></i></a></li>
-                            if (currentPage > 0)
+                            if (currentPage > 2)
                             {
-                                currentPage -= currentPage > 2 ? 2 : currentPage;
                                 <li class="page-item"><a class="page-link" href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = Context.Request.Query["capacity"], page = 0, type = Context.Request.Query["type"], start = Context.Request.Query["start"], end = Context.Request.Query["end"], sort = Context.Request.Query["sort"] })">1</a></li>
+                            }
+                            if (currentPage > 3)
+                            {
                                 <li class="page-item"><a class="page-link">...</a></li>
                             }
-                            var length = currentPage > 0 ? currentPage + 3 : 1;
-                            for (int i = currentPage; i < length; i++)
+                            var length = currentPage + 1 > countToPage ? countToPage : currentPage + 1;
+                            for (int i = currentPage > 0 ? (currentPage > 1 ? currentPage - 2 : currentPage - 1) : currentPage; i < length; i++)
                             {
-
                                 <li class="page-item"><a class="page-link" href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = Context.Request.Query["capacity"], page = i, type = Context.Request.Query["type"], start = Context.Request.Query["start"], end = Context.Request.Query["end"], sort = Context.Request.Query["sort"] })">@(i + 1)</a></li>
                             }
-                            if (currentPage < Model.Count - 2)
+                            if (currentPage < countToPage - 2)
                             {
                                 <li class="page-item"><a class="page-link">...</a></li>
-                                <li class="page-item"><a class="page-link" href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = Context.Request.Query["capacity"], page = Model.Count / 20 - 1, type = Context.Request.Query["type"], start = Context.Request.Query["start"], end = Context.Request.Query["end"], sort = Context.Request.Query["sort"] })">@Model.Count</a></li>
                             }
-                            <li class="page-item"><a class="page-link" href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = Context.Request.Query["capacity"], page = Model.Count / 20 > 0 ? Model.Count : 0, type = Context.Request.Query["type"], start = Context.Request.Query["start"], end = Context.Request.Query["end"], sort = Context.Request.Query["sort"] })"><i class="fa fa-angle-right"></i></a></li>
+                            if (currentPage < countToPage - 1)
+                            {
+                                <li class="page-item"><a class="page-link" href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = Context.Request.Query["capacity"], page = countToPage - 1, type = Context.Request.Query["type"], start = Context.Request.Query["start"], end = Context.Request.Query["end"], sort = Context.Request.Query["sort"] })">@(countToPage)</a></li>
+                            }
+                            <li class="page-item"><a class="page-link" href="@Url.Action("Search", "Home", new { term = Context.Request.Query["term"], from = Context.Request.Query["from"], to = Context.Request.Query["to"], capacity = Context.Request.Query["capacity"], page = countToPage > 0 ? countToPage - 1 : 0, type = Context.Request.Query["type"], start = Context.Request.Query["start"], end = Context.Request.Query["end"], sort = Context.Request.Query["sort"] })"><i class="fa fa-angle-right"></i></a></li>
                         }
                     </ul>
                 </nav>

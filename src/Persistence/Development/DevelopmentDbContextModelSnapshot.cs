@@ -338,12 +338,9 @@ namespace Persistence.Development
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedById")
-                        .IsUnique();
+                    b.HasIndex("CreatedById");
 
-                    b.HasIndex("EditedById")
-                        .IsUnique()
-                        .HasFilter("[EditedById] IS NOT NULL");
+                    b.HasIndex("EditedById");
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -415,9 +412,7 @@ namespace Persistence.Development
 
                     b.HasIndex("CreatedById");
 
-                    b.HasIndex("EditedById")
-                        .IsUnique()
-                        .HasFilter("[EditedById] IS NOT NULL");
+                    b.HasIndex("EditedById");
 
                     b.ToTable("HotelRooms");
                 });
@@ -514,9 +509,7 @@ namespace Persistence.Development
 
                     b.HasIndex("CreatedById");
 
-                    b.HasIndex("EditedById")
-                        .IsUnique()
-                        .HasFilter("[EditedById] IS NOT NULL");
+                    b.HasIndex("EditedById");
 
                     b.HasIndex("ReservedRoomId");
 
@@ -577,14 +570,14 @@ namespace Persistence.Development
             modelBuilder.Entity("Domain.Entities.Employee", b =>
                 {
                     b.HasOne("Domain.Entities.AppUser", "CreatedBy")
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.Employee", "CreatedById")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.AppUser", "EditedBy")
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.Employee", "EditedById")
+                        .WithMany()
+                        .HasForeignKey("EditedById")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Domain.Entities.AppUser", "User")
@@ -603,8 +596,8 @@ namespace Persistence.Development
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.AppUser", "EditedBy")
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.HotelRoom", "EditedById")
+                        .WithMany()
+                        .HasForeignKey("EditedById")
                         .OnDelete(DeleteBehavior.NoAction);
                 });
 
@@ -626,8 +619,8 @@ namespace Persistence.Development
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.AppUser", "EditedBy")
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.Reservation", "EditedById")
+                        .WithMany()
+                        .HasForeignKey("EditedById")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Domain.Entities.HotelRoom", "ReservedRoom")

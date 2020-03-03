@@ -22,6 +22,8 @@
                 Create a hotel room
             </span>
 
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <label asp-for="Name" class="label-input100">Name</label>
             <div class="wrap-input100">
                 <input asp-for="Name" class="input100">
@@ -64,6 +66,12 @@
             <div class="wrap-input100">
                 <input asp-for="RoomPrice" class="input100">
                 <span asp-validation-for="RoomPrice" class="text-danger"></span>
+            </div>
+
+            <label asp-for="FoodPrice" class="label-input100">Food Price</label>
+            <div class="wrap-input100">
+                <input asp-for="FoodPrice" class="input100">
+                <span asp-validation-for="FoodPrice" class="text-danger"></span>
             </div>
 
             <label class="label-input100" asp-for="RoomNumber">Room number</label>

@@ -2,27 +2,29 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using Persistence.Production;
+using Persistence.Development;
 
-namespace Persistence.Production
+namespace Persistence.Development
 {
-    [DbContext(typeof(ProductionDbContext))]
-    partial class ProductionDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(DevelopmentDbContext))]
+    [Migration("20200303141937_AuditableEntity")]
+    partial class AuditableEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
                 .HasAnnotation("ProductVersion", "3.1.1")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Domain.Entities.AppRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("character(32)")
+                        .HasColumnType("char(32)")
                         .IsFixedLength(true)
                         .HasMaxLength(32)
                         .IsUnicode(false);
@@ -30,19 +32,19 @@ namespace Persistence.Production
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .IsRequired()
-                        .HasColumnType("character varying(256)")
+                        .HasColumnType("varchar(256)")
                         .HasMaxLength(256)
                         .IsUnicode(false);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("varchar(50)")
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
                     b.Property<string>("NormalizedName")
                         .IsRequired()
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("varchar(50)")
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
@@ -59,22 +61,22 @@ namespace Persistence.Production
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("varchar(50)")
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("varchar(50)")
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("character(32)")
+                        .HasColumnType("char(32)")
                         .IsFixedLength(true)
                         .HasMaxLength(32)
                         .IsUnicode(false);
@@ -89,88 +91,88 @@ namespace Persistence.Production
             modelBuilder.Entity("Domain.Entities.AppUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("character(32)")
+                        .HasColumnType("char(32)")
                         .IsFixedLength(true)
                         .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .IsRequired()
-                        .HasColumnType("character(36)")
+                        .HasColumnType("nchar(36)")
                         .IsFixedLength(true)
                         .HasMaxLength(36);
 
                     b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("character varying(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<bool>("IsAdult")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
                         .IsRequired()
-                        .HasColumnType("character varying(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("NormalizedUserName")
                         .IsRequired()
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("varchar(50)")
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("character varying(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("varchar(50)")
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
                         .IsRequired()
-                        .HasColumnType("character(32)")
+                        .HasColumnType("char(32)")
                         .IsFixedLength(true)
                         .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("varchar(50)")
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
@@ -190,22 +192,22 @@ namespace Persistence.Production
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("varchar(50)")
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("varchar(50)")
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("character(32)")
+                        .HasColumnType("char(32)")
                         .IsFixedLength(true)
                         .HasMaxLength(32)
                         .IsUnicode(false);
@@ -220,20 +222,20 @@ namespace Persistence.Production
             modelBuilder.Entity("Domain.Entities.AppUserLogin", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("character varying(128)")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("character varying(128)")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("character(32)")
+                        .HasColumnType("char(32)")
                         .IsFixedLength(true)
                         .HasMaxLength(32)
                         .IsUnicode(false);
@@ -248,13 +250,13 @@ namespace Persistence.Production
             modelBuilder.Entity("Domain.Entities.AppUserRole", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("character(32)")
+                        .HasColumnType("char(32)")
                         .IsFixedLength(true)
                         .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("character(32)")
+                        .HasColumnType("char(32)")
                         .IsFixedLength(true)
                         .HasMaxLength(32)
                         .IsUnicode(false);
@@ -269,21 +271,21 @@ namespace Persistence.Production
             modelBuilder.Entity("Domain.Entities.AppUserToken", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("character(32)")
+                        .HasColumnType("char(32)")
                         .IsFixedLength(true)
                         .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("character varying(128)")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<string>("Name")
-                        .HasColumnType("character varying(128)")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<string>("Value")
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.HasKey("UserId", "LoginProvider", "Name");
@@ -294,44 +296,44 @@ namespace Persistence.Production
             modelBuilder.Entity("Domain.Entities.Employee", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("character(32)")
+                        .HasColumnType("char(32)")
                         .IsFixedLength(true)
                         .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<string>("CreatedById")
                         .IsRequired()
-                        .HasColumnType("character(32)")
+                        .HasColumnType("char(32)")
                         .IsFixedLength(true)
                         .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<decimal>("EGN")
-                        .HasColumnType("numeric(20,0)");
+                        .HasColumnType("decimal(20,0)");
 
                     b.Property<string>("EditedById")
-                        .HasColumnType("character(32)")
+                        .HasColumnType("char(32)")
                         .IsFixedLength(true)
                         .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<DateTime?>("EditedOn")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("MiddleName")
                         .IsRequired()
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("character(32)")
+                        .HasColumnType("char(32)")
                         .IsFixedLength(true)
                         .HasMaxLength(32)
                         .IsUnicode(false);
@@ -351,62 +353,62 @@ namespace Persistence.Production
             modelBuilder.Entity("Domain.Entities.HotelRoom", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("character(32)")
+                        .HasColumnType("char(32)")
                         .IsFixedLength(true)
                         .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<int>("Capacity")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("CreatedById")
                         .IsRequired()
-                        .HasColumnType("character(32)")
+                        .HasColumnType("char(32)")
                         .IsFixedLength(true)
                         .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("EditedById")
-                        .HasColumnType("character(32)")
+                        .HasColumnType("char(32)")
                         .IsFixedLength(true)
                         .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<DateTime?>("EditedOn")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<decimal>("FoodPrice")
-                        .HasColumnType("numeric");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("IsEmpty")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("varchar(50)")
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
                     b.Property<decimal?>("PriceForAdults")
-                        .HasColumnType("numeric");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("PriceForChildren")
-                        .HasColumnType("numeric");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("RoomNumber")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<decimal?>("RoomPrice")
-                        .HasColumnType("numeric");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("RoomType")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -420,21 +422,21 @@ namespace Persistence.Production
             modelBuilder.Entity("Domain.Entities.HotelRoomImage", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("character(32)")
+                        .HasColumnType("char(32)")
                         .IsFixedLength(true)
                         .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<string>("HotelRoomId")
                         .IsRequired()
-                        .HasColumnType("character(32)")
+                        .HasColumnType("char(32)")
                         .IsFixedLength(true)
                         .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<string>("Image")
                         .IsRequired()
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("varchar(100)")
                         .HasMaxLength(100)
                         .IsUnicode(false);
 
@@ -448,62 +450,62 @@ namespace Persistence.Production
             modelBuilder.Entity("Domain.Entities.Reservation", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("character(32)")
+                        .HasColumnType("char(32)")
                         .IsFixedLength(true)
                         .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<bool>("AllInclusive")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("AuthCode")
-                        .HasColumnType("character varying(35)")
+                        .HasColumnType("varchar(35)")
                         .HasMaxLength(35)
                         .IsUnicode(false);
 
                     b.Property<string>("CreatedById")
                         .IsRequired()
-                        .HasColumnType("character(32)")
+                        .HasColumnType("char(32)")
                         .IsFixedLength(true)
                         .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("EditedById")
-                        .HasColumnType("character(32)")
+                        .HasColumnType("char(32)")
                         .IsFixedLength(true)
                         .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<DateTime?>("EditedOn")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IncludeFood")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("ReservedForDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ReservedRoomId")
                         .IsRequired()
-                        .HasColumnType("character(32)")
+                        .HasColumnType("char(32)")
                         .IsFixedLength(true)
                         .HasMaxLength(32)
                         .IsUnicode(false);
 
                     b.Property<DateTime>("ReservedUntilDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<decimal?>("TransactionId")
-                        .HasColumnType("numeric(20,0)");
+                        .HasColumnType("decimal(20,0)");
 
                     b.HasKey("Id");
 

@@ -27,9 +27,9 @@ namespace Persistence.Common
             Query.Include(f => f.Reservations.Where(f => f.ReservedForDate < date))
                 .FirstOrDefaultAsync(f => f.Id == id, token);
 
-        public Task<HotelRoomVm> GetVmById(string id, decimal conversionRate, CancellationToken token) =>
+        public Task<HotelRoomVm> GetVmById(string id, decimal conversionRate, DateTime afterDate, CancellationToken token) =>
             Query.Where(f => f.Id == id)
-                .ProjectTo<HotelRoomVm>(_mapper.ConfigurationProvider, new { conversionRate })
+                .ProjectTo<HotelRoomVm>(_mapper.ConfigurationProvider, new { conversionRate, afterDate })
                 .FirstOrDefaultAsync(token);
 
         public Task<decimal> HighestPricesRoomSearch(string term, DateTime? from, DateTime? to, int? capacity, RoomType? type, decimal? start, decimal? end, CancellationToken token)

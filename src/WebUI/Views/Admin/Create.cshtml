@@ -22,6 +22,8 @@
                 Create a new employee
             </span>
 
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <label asp-for="MiddleName" class="label-input100">Middle name</label>
             <div class="wrap-input100">
                 <input asp-for="MiddleName" class="input100">

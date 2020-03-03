@@ -27,7 +27,7 @@ namespace Application.Admin.Commands.CreateEmployee
         public async Task<Unit> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
         {
             var user = await _userManager.GetUserById(request.UserId)
-                ?? throw new NotFoundException("User Id", request.UserId);
+                ?? throw new ModelStateException(new[] { nameof(request.UserId) }, "User id not found");
 
             await _employee.Create(new Employee
             {

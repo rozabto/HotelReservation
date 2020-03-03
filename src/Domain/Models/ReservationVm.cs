@@ -19,4 +19,14 @@ namespace Domain.Models
             profile.CreateMap<Reservation, ReservationVm>()
                 .ForMember(f => f.ReservedRoom, f => f.MapFrom(s => s.ReservedRoom));
     }
+
+    public class ReservationShortVm : IMapFrom<Reservation>
+    {
+        public string Id { get; set; }
+        public DateTime ReservedForDate { get; set; }
+        public DateTime ReservedUntilDate { get; set; }
+
+        public void Mapping(Profile profile) =>
+            profile.CreateMap<Reservation, ReservationShortVm>();
+    }
 }

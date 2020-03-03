@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Domain.Common;
@@ -33,17 +34,21 @@ namespace Domain.Models
         public decimal? PriceForAdults { get; set; }
         public decimal? PriceForChildren { get; set; }
         public decimal? RoomPrice { get; set; }
+        public decimal FoodPrice { get; set; }
         public int RoomNumber { get; set; }
         public IReadOnlyList<string> Images { get; set; }
+        public IEnumerable<ReservationShortVm> Reservations { get; set; }
 
         public void Mapping(Profile profile)
         {
             decimal conversionRate = 1;
+            DateTime afterDate = default;
             profile.CreateMap<HotelRoom, HotelRoomVm>()
                 .ForMember(f => f.Images, f => f.MapFrom(s => s.RoomImages.Select(w => w.Image).ToArray()))
                 .ForMember(f => f.PriceForAdults, f => f.MapFrom(s => s.PriceForAdults.HasValue ? s.PriceForAdults * conversionRate : null))
                 .ForMember(f => f.PriceForChildren, f => f.MapFrom(s => s.PriceForChildren.HasValue ? s.PriceForChildren * conversionRate : null))
-                .ForMember(f => f.RoomPrice, f => f.MapFrom(s => s.RoomPrice.HasValue ? s.RoomPrice * conversionRate : null));
+                .ForMember(f => f.RoomPrice, f => f.MapFrom(s => s.RoomPrice.HasValue ? s.RoomPrice * conversionRate : null))
+                .ForMember(f => f.Reservations, f => f.MapFrom(s => s.Reservations.Where(w => w.CreatedOn > afterDate)));
         }
     }
 }

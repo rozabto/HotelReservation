@@ -22,6 +22,9 @@
             <span class="contact100-form-title">
                 Edit
             </span>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <input asp-for="Id" type="hidden" value="@employee.Id" class="form-control" />
 
             <label asp-for="MiddleName" class="label-input100">Middle name</label>

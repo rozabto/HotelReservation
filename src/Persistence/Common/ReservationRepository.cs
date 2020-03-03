@@ -26,9 +26,6 @@ namespace Persistence.Common
         public Task<bool> CanReserve(string roomId, DateTime to, DateTime from, CancellationToken token) =>
             Query.AnyAsync(f => f.ReservedRoomId == roomId && f.ReservedForDate < to && from < f.ReservedUntilDate && f.DeletedOn == null, token);
 
-        public Task<bool> CheckIfExists(string roomId, string userId, CancellationToken token) =>
-            Query.AnyAsync(f => f.ReservedRoomId == roomId && f.CreatedById == userId && !f.TransactionId.HasValue && f.DeletedOn == null, token);
-
         public Task DeleteExpired(DateTime date, CancellationToken token) =>
             isEnvProd ? Query.Where(f => f.TransactionId == null && date - f.CreatedOn > TimeSpan.FromHours(1))
                     .DeleteFromQueryAsync(token)

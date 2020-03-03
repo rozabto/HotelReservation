@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Application.Common.Models;
 using Application.Common.Validators;
 using MediatR;
 
@@ -22,10 +23,7 @@ namespace Application.Reservations.Commands.CreateReservation
         public DateTime To { get; set; }
 
         [Required]
-        public bool IncludeFood { get; set; }
-
-        [Required]
-        public bool AllInclusive { get; set; }
+        public ReservationInclude Include { get; set; }
 
         [Range(0, 1000)]
         public int? Children { get; set; }

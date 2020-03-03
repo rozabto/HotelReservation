@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Application.Common.Exceptions;
 using Application.Home.Queries.GetHotelRoom;
 using Application.Reservations.Commands.CreateReservation;
 using Application.Reservations.Commands.DeleteReservation;
@@ -39,8 +40,26 @@ namespace WebUI.Controllers
                 return View();
             }
 
-            var id = await Mediator.Send(command);
-            return Redirect("/Reservation/" + nameof(Checkout) + '/' + id);
+            try
+            {
+                var id = await Mediator.Send(command);
+                return Redirect("/Reservation/" + nameof(Checkout) + '/' + id);
+            }
+            catch (ModelStateException ex)
+            {
+                if (ex.ModelStates.Count > 0)
+                {
+                    foreach (var key in ex.ModelStates)
+                        ModelState.AddModelError(key, ex.Message);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                }
+
+                ViewData["Room"] = await Mediator.Send(new GetHotelRoomQuery { Id = command.RoomId });
+                return View();
+            }
         }
     }
 }

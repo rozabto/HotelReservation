@@ -25,7 +25,6 @@ namespace Infrastructure
             services.AddTransient<IDateTime, UniversalDateTime>();
             services.AddTransient<ICheckoutService, CheckoutService>();
             services.AddTransient<ICountryService, CountryService>();
-            services.AddTransient<ITimeZoneService, TimeZoneService>();
 
             var identity = services.AddDefaultIdentity<AppUser>(options =>
             {

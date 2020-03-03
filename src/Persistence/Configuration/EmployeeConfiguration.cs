@@ -40,11 +40,11 @@ namespace Persistence.Configuration
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(f => f.CreatedBy)
-                .WithOne()
+                .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(f => f.EditedBy)
-                .WithOne()
+                .WithMany()
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }
